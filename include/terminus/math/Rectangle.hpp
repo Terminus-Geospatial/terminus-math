@@ -5,6 +5,9 @@
 */
 #pragma once
 
+// Terminus Libraries
+#include "Point.hpp"
+
 namespace tmns::math {
 
 /**
@@ -27,5 +30,10 @@ class Rectangle
         ValueT m_height;
 
 }; // End of Box class
+
+// Common aliases
+using Rect2i = Rectangle<int>;
+using Rect2f = Rectangle<float>;
+using Rect2d = Rectangle<double>;
 
 } // end of tmns::math

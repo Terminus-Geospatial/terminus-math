@@ -31,6 +31,16 @@ class Quaternion
                     double y,
                     double z );
 
+        /**
+         * Get the real component
+        */
+        double real() const;
+
+        /**
+         * Get the imaginary component
+        */
+        Vector3d imag() const;
+
     private:
 
         /// Real Component

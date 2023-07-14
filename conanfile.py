@@ -1,4 +1,4 @@
-from conan import ConanFile
+from conan import ConanFile, tools
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 from conan.tools.files import copy
 
@@ -64,10 +64,7 @@ class ConanProject(ConanFile):
         cmake.install()
 
     def package_info(self):
-        # For header-only packages, libdirs and bindirs are not used
-         # so it's necessary to set those as empty.
-         self.cpp_info.bindirs = []
-         self.cpp_info.libdirs = []
+        self.cpp_info.libs = tools.files.collect_libs(self)
 
     def package_id(self):
         self.info.clear()
