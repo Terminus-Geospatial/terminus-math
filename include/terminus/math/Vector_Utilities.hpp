@@ -14,9 +14,9 @@ namespace tmns::math {
  * Convert 3 scalars to 3D vector
  */
 template <typename ValueT>
-Vector3_<ValueT> ToVector3( double x,
-                            double y,
-                            double z )
+Vector3_<ValueT> ToVector3( const ValueT& x,
+                            const ValueT& y,
+                            const ValueT& z )
 {
     return {{ x, y, z }};
 }

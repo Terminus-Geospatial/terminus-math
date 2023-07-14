@@ -76,6 +76,20 @@ class Vector_
             return m_data.at(2);
         }
 
+        /**
+         * Addition Operator
+        */
+        template< typename OtherValueT>
+        Vector_<ValueT,Dims> operator + ( const Vector_<OtherValueT,Dims>& rhs )
+        {
+            Vector_<ValueT,Dims> result;
+            for( size_t i=0; i<m_data.size(); i++ )
+            {
+                result.m_data[i] = m_data[i] + rhs.m_data[i];
+            }
+            return result;
+        }
+
     private:
 
         std::array<ValueT,Dims> m_data { 0 };

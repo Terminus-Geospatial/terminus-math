@@ -23,6 +23,54 @@ class Rectangle
         */
         Rectangle() = default;
 
+        /**
+         * Get the Width
+        */
+        ValueT width() const
+        {
+            return m_width;
+        }
+
+        /**
+         * Get the height
+        */
+        ValueT height() const
+        {
+            return m_height;
+        }
+
+        /**
+         * Get the bottom-left corner
+        */
+        Point2_<ValueT> bl() const
+        {
+            return m_bl;
+        }
+
+        /**
+         * Get the top-left corner
+        */
+        Point2_<ValueT> tl() const
+        {
+            return ( m_bl + ;
+        }
+
+        /**
+         * Get the bottom-left corner
+        */
+        Point2_<ValueT> bl() const
+        {
+            return m_bl;
+        }
+
+        /**
+         * Get the bottom-left corner
+        */
+        Point2_<ValueT> bl() const
+        {
+            return m_bl;
+        }
+
     private:
 
         Point2_<ValueT> m_bl;

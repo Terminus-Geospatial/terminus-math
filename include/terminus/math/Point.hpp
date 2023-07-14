@@ -27,6 +27,14 @@ class Point_ : public Vector_<ValueT,Dims>
         */
         Point_() = default;
 
+        /**
+         * Parameterized Constructor
+        */
+        Point_( std::array<ValueT,Dims> data )
+          : Vector_<ValueT,Dims>( std::move(data) )
+        {
+        }
+
 
 }; // End of Point class
 
