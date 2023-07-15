@@ -12,6 +12,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/include )
 set( TEST ${PROJECT_NAME}_test )
 add_executable( ${TEST}
     TEST_Point.cpp
+    TEST_Rectangle.cpp
 )
 
 target_link_libraries( ${TEST} PRIVATE

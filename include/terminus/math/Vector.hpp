@@ -77,10 +77,42 @@ class Vector_
         }
 
         /**
+         * Get copy of internal data at specific index
+        */
+        ValueT operator[] ( size_t idx ) const
+        {
+            return m_data[idx];
+        }
+
+        /**
+         * Get reference to internal data at specific index
+        */
+        ValueT& operator[] ( size_t idx )
+        {
+            return m_data[idx];
+        }
+
+        /**
+         * @brief Return copy of internal data array
+        */
+        std::array<ValueT,Dims> data() const
+        {
+            return m_data;
+        }
+
+        /**
+         * @brief Return reference of internal data array
+        */
+        std::array<ValueT,Dims>& data()
+        {
+            return m_data;
+        }
+
+        /**
          * Addition Operator
         */
         template< typename OtherValueT>
-        Vector_<ValueT,Dims> operator + ( const Vector_<OtherValueT,Dims>& rhs )
+        Vector_<ValueT,Dims> operator + ( const Vector_<OtherValueT,Dims>& rhs ) const
         {
             Vector_<ValueT,Dims> result;
             for( size_t i=0; i<m_data.size(); i++ )
@@ -90,7 +122,21 @@ class Vector_
             return result;
         }
 
-    private:
+        /**
+         * Subtraction Operator
+        */
+        template< typename OtherValueT>
+        Vector_<ValueT,Dims> operator - ( const Vector_<OtherValueT,Dims>& rhs ) const
+        {
+            Vector_<ValueT,Dims> result;
+            for( size_t i=0; i<m_data.size(); i++ )
+            {
+                result.m_data[i] = m_data[i] - rhs.m_data[i];
+            }
+            return result;
+        }
+
+    protected:
 
         std::array<ValueT,Dims> m_data { 0 };
 

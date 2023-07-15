@@ -6,7 +6,10 @@
 #pragma once
 
 // Terminus Libraries
-#include "Point.hpp"
+#include "Point_Utilities.hpp"
+
+// C++ Libraries
+#include <cmath>
 
 namespace tmns::math {
 
@@ -22,6 +25,55 @@ class Rectangle
          * Default constructor
         */
         Rectangle() = default;
+
+        /**
+         * Parameterized Constructor
+         *
+         * @param x
+         * @param y
+         * @param width
+         * @param height
+        */
+        Rectangle( const ValueT& x,
+                   const ValueT& y,
+                   const ValueT& width,
+                   const ValueT& height )
+          : m_bl( ToPoint2<ValueT>( x, y ) ),
+            m_width( width ),
+            m_height( height )
+        {}
+
+        /**
+         * Parameterized Constructor
+         *
+         * @param bl Bottom-Left Corner
+         * @param width
+         * @param height
+        */
+        Rectangle( const Point2_<ValueT>& bl,
+                   const ValueT&          width,
+                   const ValueT&          height )
+          : m_bl( bl ),
+            m_width( width ),
+            m_height( height )
+        {}
+
+        /**
+         * Parameterized Constructor
+         *
+         * @param min_corner
+         * @param max_corner
+        */
+        Rectangle( const Point2_<ValueT>& min_corner,
+                   const Point2_<ValueT>& max_corner )
+          : m_bl( ToPoint2<ValueT>( std::min( min_corner.x(),
+                                              max_corner.x() ),
+                                    std::min( min_corner.y(),
+                                              max_corner.y() ) ) ),
+            m_width(  std::fabs( max_corner.x() - min_corner.x() ) ),
+            m_height( std::fabs( max_corner.y() - min_corner.y() ) )
+        {}
+
 
         /**
          * Get the Width
@@ -52,23 +104,24 @@ class Rectangle
         */
         Point2_<ValueT> tl() const
         {
-            return ( m_bl + ;
+            return m_bl + math::ToPoint2<double>( 0, m_height );
         }
 
         /**
          * Get the bottom-left corner
         */
-        Point2_<ValueT> bl() const
+        Point2_<ValueT> tr() const
         {
-            return m_bl;
+            return m_bl + math::ToPoint2<double>( m_width,
+                                                  m_height );
         }
 
         /**
          * Get the bottom-left corner
         */
-        Point2_<ValueT> bl() const
+        Point2_<ValueT> br() const
         {
-            return m_bl;
+            return m_bl + math::ToPoint2<double>( m_width, 0 );
         }
 
     private:

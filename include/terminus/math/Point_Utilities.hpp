@@ -5,6 +5,9 @@
 */
 #pragma once
 
+// Terminus Libraries
+#include "Point.hpp"
+
 namespace tmns::math {
 
 /**

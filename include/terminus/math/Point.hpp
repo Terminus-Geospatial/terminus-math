@@ -35,6 +35,34 @@ class Point_ : public Vector_<ValueT,Dims>
         {
         }
 
+        /**
+         * Addition Operator
+        */
+        template< typename OtherValueT>
+        Point_<ValueT,Dims> operator + ( const Point_<OtherValueT,Dims>& rhs ) const
+        {
+            Point_<ValueT,Dims> result;
+            for( size_t i=0; i < this->m_data.size(); i++ )
+            {
+                result.m_data[i] = this->m_data[i] + rhs.m_data[i];
+            }
+            return result;
+        }
+
+        /**
+         * Subtraction Operator
+        */
+        template< typename OtherValueT>
+        Point_<ValueT,Dims> operator - ( const Point_<OtherValueT,Dims>& rhs ) const
+        {
+            Point_<ValueT,Dims> result;
+            for( size_t i=0; i < this->m_data.size(); i++ )
+            {
+                result.m_data[i] = this->m_data[i] - rhs.m_data[i];
+            }
+            return result;
+        }
+
 
 }; // End of Point class
 
