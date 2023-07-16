@@ -19,12 +19,16 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect1.bl().y(), 0, 0.0001 );
     ASSERT_NEAR( rect1.width(),  0, 0.0001 );
     ASSERT_NEAR( rect1.height(), 0, 0.0001 );
+    ASSERT_NEAR( rect1.min().x(), 0, 0.0001 );
+    ASSERT_NEAR( rect1.min().y(), 0, 0.0001 );
 
     tmns::math::Rectangle<double> rect2( 1, 2, 3, 4);
     ASSERT_NEAR( rect2.bl().x(), 1, 0.0001 );
     ASSERT_NEAR( rect2.bl().y(), 2, 0.0001 );
     ASSERT_NEAR( rect2.width(),  3, 0.0001 );
     ASSERT_NEAR( rect2.height(), 4, 0.0001 );
+    ASSERT_NEAR( rect2.min().x(), 1, 0.0001 );
+    ASSERT_NEAR( rect2.min().y(), 2, 0.0001 );
 
     tmns::math::Rectangle<double> rect3( tmns::math::ToPoint2<double>( 1, 2 ), 3, 4);
     ASSERT_NEAR( rect3.bl().x(), 1, 0.0001 );
@@ -44,6 +48,8 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect4.tl().y(),  4, 0.0001 );
     ASSERT_NEAR( rect4.width(),   4, 0.0001 );
     ASSERT_NEAR( rect4.height(),  6, 0.0001 );
+    ASSERT_NEAR( rect4.min().x(), -3, 0.0001 );
+    ASSERT_NEAR( rect4.min().y(), -2, 0.0001 );
 }
 
 /****************************************************/

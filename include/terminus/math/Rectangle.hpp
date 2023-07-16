@@ -125,6 +125,14 @@ class Rectangle
         }
 
         /**
+         * Return point of the minimum range
+        */
+        Point2_<ValueT> min() const
+        {
+            return bl();
+        }
+
+        /**
          * Check if point inside bounding box.
         */
         template <typename PointValueT>
