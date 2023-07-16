@@ -136,8 +136,6 @@ class Vector_
             return result;
         }
 
-    protected:
-
         std::array<ValueT,Dims> m_data { 0 };
 
 }; // End of Vector class

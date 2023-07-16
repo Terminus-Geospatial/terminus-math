@@ -124,6 +124,18 @@ class Rectangle
             return m_bl + math::ToPoint2<double>( m_width, 0 );
         }
 
+        /**
+         * Check if point inside bounding box.
+        */
+        template <typename PointValueT>
+        bool is_inside( const Point2_<PointValueT>& pt ) const
+        {
+            return ( pt.x() >= bl().x() &&
+                     pt.x() <= tr().x() &&
+                     pt.y() >= bl().y() &&
+                     pt.y() <= tr().y() );
+        }
+
     private:
 
         Point2_<ValueT> m_bl;

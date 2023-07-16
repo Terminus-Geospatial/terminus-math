@@ -45,3 +45,16 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect4.width(),   4, 0.0001 );
     ASSERT_NEAR( rect4.height(),  6, 0.0001 );
 }
+
+/****************************************************/
+/*      Check if point is inside rectangle          */
+/****************************************************/
+TEST( Rectangle, is_inside )
+{
+    // Create a big rectangle
+    tmns::math::Rectangle<int> test_rect01( -5, -4, 10, 12 );
+    ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>( 0, 0 ) ) );
+    ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>(-5,-4 ) ) );
+    ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>( 5, 6 ) ) );
+    ASSERT_FALSE( test_rect01.is_inside( tmns::math::ToPoint2<double>(-6, 0 ) ) );
+}
