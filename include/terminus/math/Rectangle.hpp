@@ -144,6 +144,28 @@ class Rectangle
                      pt.y() <= tr().y() );
         }
 
+        /**
+         * Check if rectangle is inside bounding box
+        */
+        template <typename OtherValueT>
+        bool is_inside( const Rectangle<OtherValueT>& obox ) const
+        {
+            return ( bl().x() <= obox.bl().x() &&
+                     bl().y() <= obox.bl().y() &&
+                     tr().x() >= obox.tr().x() &&
+                     tr().y() >= obox.tr().y() );
+        }
+
+        /**
+         * Print to log-friendly string
+        */
+        std::string to_string() const
+        {
+            std::stringstream sout;
+            sout << "Rectangle<>: bl: " << bl().to_string() << ", width: " << width() << ", height: " << height();
+            return sout.str();
+        }
+
     private:
 
         Point2_<ValueT> m_bl;

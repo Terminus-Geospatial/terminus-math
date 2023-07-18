@@ -8,6 +8,9 @@
 // Terminus Libraries
 #include "Vector.hpp"
 
+// C++ Libraries
+#include <sstream>
+
 namespace tmns::math {
 
 /**
@@ -61,6 +64,24 @@ class Point_ : public Vector_<ValueT,Dims>
                 result.m_data[i] = this->m_data[i] - rhs.m_data[i];
             }
             return result;
+        }
+
+        /**
+         * Print to string
+        */
+        std::string to_string() const
+        {
+            std::stringstream sout;
+            sout << "Point (Dims: " << Dims << "): ";
+            for( size_t i = 0; i < this->m_data.size(); i++ )
+            {
+                if( i != 0 )
+                {
+                    sout << ", ";
+                }
+                sout << this->m_data[i];
+            }
+            return sout.str();
         }
 
 

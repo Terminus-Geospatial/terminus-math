@@ -7,6 +7,7 @@
 
 // C++ Libraries
 #include <array>
+#include <sstream>
 
 namespace tmns::math {
 
@@ -134,6 +135,24 @@ class Vector_
                 result.m_data[i] = m_data[i] - rhs.m_data[i];
             }
             return result;
+        }
+
+        /**
+         * Print to string
+        */
+        std::string to_string() const
+        {
+            std::stringstream sout;
+            sout << "Vector (Dims: " << Dims << "): ";
+            for( size_t i = 0; i < this->m_data.size(); i++ )
+            {
+                if( i != 0 )
+                {
+                    sout << ", ";
+                }
+                sout << this->m_data[i];
+            }
+            return sout.str();
         }
 
         std::array<ValueT,Dims> m_data { 0 };

@@ -55,7 +55,7 @@ TEST( Rectangle, Constructors_and_Getters )
 /****************************************************/
 /*      Check if point is inside rectangle          */
 /****************************************************/
-TEST( Rectangle, is_inside )
+TEST( Rectangle, is_inside_point )
 {
     // Create a big rectangle
     tmns::math::Rectangle<int> test_rect01( -5, -4, 10, 12 );
@@ -63,4 +63,20 @@ TEST( Rectangle, is_inside )
     ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>(-5,-4 ) ) );
     ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>( 5, 6 ) ) );
     ASSERT_FALSE( test_rect01.is_inside( tmns::math::ToPoint2<double>(-6, 0 ) ) );
+}
+
+/********************************************************/
+/*          Check if rectangle is inside rectangle      */
+/********************************************************/
+TEST( Rectangle, is_inside_rectangle )
+{
+    // Create a big rectangle
+    tmns::math::Rectangle<int> test_rect01( -5, -4, 10, 12 );
+
+    // Valid cases
+    ASSERT_TRUE( test_rect01.is_inside( tmns::math::Rect2d( -1, -1, 1, 1 ) ) );
+    ASSERT_TRUE( test_rect01.is_inside( test_rect01 ) );
+
+    // Invalid cases
+    ASSERT_FALSE( test_rect01.is_inside( tmns::math::Rect2f( -6, -4, 1, 1 ) ) );
 }
