@@ -3,14 +3,15 @@
 #    Date:    7/12/2023
 #
 #    Purpose:  Build terminus-math API
-#
+
+#  Set CMake Version
 cmake_minimum_required( VERSION 3.0 FATAL_ERROR )
 
 #  Configure Conan Search Paths
 include( "${CMAKE_BINARY_DIR}/conan_toolchain.cmake" )
 set( CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE )
 
-
+#  Set the Project-Name
 project( ${CONAN_PKG_NAME}
             VERSION ${CONAN_PKG_VERSION}
             HOMEPAGE_URL ${CONAN_PKG_URL}
@@ -18,7 +19,7 @@ project( ${CONAN_PKG_NAME}
             LANGUAGES CXX
      )
 
-# set some common default compiler options
+#  Set C++ 20 Support
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
