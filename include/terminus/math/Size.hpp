@@ -15,16 +15,64 @@ namespace tmns::math {
  * Rectangle is a good class for size, but it has corners.
 */
 template <typename ValueT, int Dims>
-class Size
+class Size_
 {
     public:
 
+        /// Default Constructor
+        Size() = default;
+
+        /**
+         * Parameterized Constructor
+        */
+        Size( const std::array<ValueT,Dims>& data )
+         : m_data( data )
+        {
+        }
+
+        /**
+         * Get the width
+        */
+        ValueT width() const
+        {
+            return m_data.x();
+        }
+
+        /**
+         * Get the width value
+        */
+        ValueT& width()
+        {
+            return m_data.x();
+        }
+
+        /**
+         * Get the height
+        */
+        ValueT height() const
+        {
+            return m_data.y();
+        }
+
+        /**
+         * Get the height value
+        */
+        ValueT& height()
+        {
+            return m_data.y();
+        }
 
     private:
 
         /// Underlying Data Structure
-        Vector_<ValueT,Dims> m_data;
+        Vector_<ValueT,Dims> m_data { 0 };
 
 }; // End of Size Class
+
+/// Simple Aliases
+using Size2i = Size_<int,2>;
+using Size3i = Size_<int,3>;
+using Size2d = Size_<double,2>;
+using Size3d = Size_<double,3>;
 
 } // End of tmns::math namespace
