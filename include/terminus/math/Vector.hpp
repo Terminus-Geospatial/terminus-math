@@ -24,9 +24,20 @@ class Vector_
         */
         Vector_() = default;
 
+        /**
+         * Constructor given an array
+        */
         Vector_( std::array<ValueT,Dims> data )
           : m_data( std::move(data) )
         {
+        }
+
+        /**
+         * Constructor given a fill value
+        */
+        Vector_( const ValueT& fill_value )
+        {
+            m_data.fill( fill_value );
         }
 
         /**

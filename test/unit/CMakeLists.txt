@@ -13,6 +13,8 @@ set( TEST ${PROJECT_NAME}_test )
 add_executable( ${TEST}
     TEST_Point.cpp
     TEST_Rectangle.cpp
+    TEST_Size.cpp
+    TEST_Vector.cpp
 )
 
 target_link_libraries( ${TEST} PRIVATE

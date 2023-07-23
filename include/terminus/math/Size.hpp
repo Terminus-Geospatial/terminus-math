@@ -20,12 +20,12 @@ class Size_
     public:
 
         /// Default Constructor
-        Size() = default;
+        Size_() = default;
 
         /**
          * Parameterized Constructor
         */
-        Size( const std::array<ValueT,Dims>& data )
+        Size_( const std::array<ValueT,Dims>& data )
          : m_data( data )
         {
         }
@@ -62,16 +62,30 @@ class Size_
             return m_data.y();
         }
 
+        /**
+         * Get the depth value
+        */
+        ValueT& depth()
+        {
+            if( Dims < 3 )
+            {
+                throw std::runtime_error("Cannot call a 3d member on structure with < 3 dimensions." );
+            }
+            return m_data.z();
+        }
+
     private:
 
         /// Underlying Data Structure
-        Vector_<ValueT,Dims> m_data { 0 };
+        Vector_<ValueT,Dims> m_data { { 0 } };
 
 }; // End of Size Class
 
 /// Simple Aliases
 using Size2i = Size_<int,2>;
 using Size3i = Size_<int,3>;
+using Size2f = Size_<float,2>;
+using Size3f = Size_<float,3>;
 using Size2d = Size_<double,2>;
 using Size3d = Size_<double,3>;
 
