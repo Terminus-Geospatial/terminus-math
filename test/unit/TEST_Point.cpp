@@ -69,3 +69,27 @@ TEST( Point, Subtraction_Operator )
     ASSERT_NEAR( pt6.z(), 10, 0.001 );
 
 }
+
+/***********************************************/
+/*      Test the elementwise min Function      */
+/***********************************************/
+TEST( Point, elementwise_min )
+{
+    // Create a bunch of points
+    auto pt1 = tmns::math::ToPoint3<double>(  0,  1,  2 );
+    auto pt2 = tmns::math::ToPoint3<double>(  1,  0, -1 );
+    auto pt3 = tmns::math::ToPoint3<double>( -2, -3,  4 );
+
+    // Answer should be [0, 0, -1]
+    auto pt_res1 = tmns::math::Point3d::elementwise_min( pt1, pt2 );
+    ASSERT_NEAR( pt_res1[0], 0, 0.001 );
+    ASSERT_NEAR( pt_res1[1], 0, 0.001 );
+    ASSERT_NEAR( pt_res1[2],-1, 0.001 );
+
+    // Answer should be [-2, -3, -1]
+    auto pt_res2 = tmns::math::Point3d::elementwise_min( pt1, pt2, pt3 );
+    ASSERT_NEAR( pt_res2[0],-2, 0.001 );
+    ASSERT_NEAR( pt_res2[1],-3, 0.001 );
+    ASSERT_NEAR( pt_res2[2],-1, 0.001 );
+
+}

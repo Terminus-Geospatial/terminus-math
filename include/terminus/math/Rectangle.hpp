@@ -133,6 +133,14 @@ class Rectangle
         }
 
         /**
+         * Return point of the maximum range
+        */
+        Point2_<ValueT> max() const
+        {
+            return tr();
+        }
+
+        /**
          * Check if point inside bounding box.
         */
         template <typename PointValueT>
@@ -154,6 +162,19 @@ class Rectangle
                      bl().y() <= obox.bl().y() &&
                      tr().x() >= obox.tr().x() &&
                      tr().y() >= obox.tr().y() );
+        }
+
+        /**
+         * Compute the Rectangle Intersection
+        */
+        template <typename ValueT1, typename ValueT2>
+        static Rectangle<ValueT1> intersection( const Rectangle<ValueT1>& rect1,
+                                                const Rectangle<ValueT2>& rect2 )
+        {
+            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_max( rect1.min(),
+                                                                          rect2.min() ),
+                                       Point2_<ValueT1>::elementwise_min( rect1.max(),
+                                                                          rect2.max() ) );
         }
 
         /**

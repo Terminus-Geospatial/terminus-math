@@ -39,6 +39,22 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
+         * Index Operator
+        */
+        ValueT operator[]( size_t idx ) const
+        {
+            return this->m_data[idx];
+        }
+
+        /**
+         * Index Reference Operator
+         */
+        ValueT& operator[]( size_t idx )
+        {
+            return this->m_data[idx];
+        }
+
+        /**
          * Addition Operator
         */
         template< typename OtherValueT>
@@ -53,6 +69,14 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
+         * Return the number of elements or "dimensions"
+        */
+        size_t size() const
+        {
+            return this->m_data.size();
+        }
+
+        /**
          * Subtraction Operator
         */
         template< typename OtherValueT>
@@ -64,6 +88,65 @@ class Point_ : public Vector_<ValueT,Dims>
                 result.m_data[i] = this->m_data[i] - rhs.m_data[i];
             }
             return result;
+        }
+
+        /**
+         * Return the element-wise min of N points
+         *
+         * Really F-ing cool solution:
+         *  https://stackoverflow.com/a/63330289/2142228
+        */
+        template< typename    Point1,
+                  typename    Point2,
+                  typename... Tail>
+        static constexpr Point1 elementwise_min( const Point1&  point1,
+                                                 const Point2&  point2,
+                                                 const Tail&... tail )
+        {
+            if constexpr (sizeof...(tail) == 0)
+            {
+                Point1 result;
+                for( size_t i=0; i < result.size(); i++ )
+                {
+                    result[i] = std::min( point1[i],
+                                          point2[i] );
+                }
+                return std::move( result );
+            }
+            else
+            {
+                return elementwise_min( elementwise_min( point1,
+                                                         point2 ),
+                                        tail... );
+            }
+        }
+
+        /**
+         * Return the element-wise max of N points
+        */
+        template< typename    Point1,
+                  typename    Point2,
+                  typename... Tail>
+        static constexpr Point1 elementwise_max( const Point1&  point1,
+                                                 const Point2&  point2,
+                                                 const Tail&... tail )
+        {
+            if constexpr (sizeof...(tail) == 0)
+            {
+                Point1 result;
+                for( size_t i=0; i < result.size(); i++ )
+                {
+                    result[i] = std::max( point1[i],
+                                          point2[i] );
+                }
+                return std::move( result );
+            }
+            else
+            {
+                return elementwise_max( elementwise_max( point1,
+                                                         point2 ),
+                                        tail... );
+            }
         }
 
         /**

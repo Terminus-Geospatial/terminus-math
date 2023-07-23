@@ -80,3 +80,23 @@ TEST( Rectangle, is_inside_rectangle )
     // Invalid cases
     ASSERT_FALSE( test_rect01.is_inside( tmns::math::Rect2f( -6, -4, 1, 1 ) ) );
 }
+
+/********************************************/
+/*      Test the Intersection Function      */
+/********************************************/
+TEST( Rectangle, intersection )
+{
+    // Create 2 rectangles
+    tmns::math::Rect2d rect1( tmns::math::ToPoint2<double>(-1, 1 ),
+                              tmns::math::ToPoint2<double>( 3, 3 ) );
+    tmns::math::Rect2d rect2( tmns::math::ToPoint2<double>( 1, 0 ),
+                              tmns::math::ToPoint2<double>( 4, 2 ) );
+
+    // Intersection should be [[1, 1], [3, 2]]
+    auto res_1 = tmns::math::Rect2d::intersection( rect1, rect2 );
+    ASSERT_NEAR( res_1.min().x(), 1, 0.0001 );
+    ASSERT_NEAR( res_1.min().y(), 1, 0.0001 );
+    ASSERT_NEAR( res_1.max().x(), 3, 0.0001 );
+    ASSERT_NEAR( res_1.max().y(), 2, 0.0001 );
+    
+}
