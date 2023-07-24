@@ -151,6 +151,16 @@ class Rectangle
         }
 
         /**
+         * Shift the rectangle by the specified amount
+         */
+        Rectangle<ValueT> operator - ( const Point2_<ValueT>& offset ) const
+        {
+            return Rectangle<ValueT>( bl() - offset,
+                                      width(),
+                                      height() );
+        }
+
+        /**
          * Check if point inside bounding box.
         */
         template <typename PointValueT>

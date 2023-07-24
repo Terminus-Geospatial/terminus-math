@@ -53,6 +53,27 @@ TEST( Rectangle, Constructors_and_Getters )
 }
 
 /****************************************************/
+/*          Addition and Subtraction Operators      */
+/****************************************************/
+TEST( Rectangle, Addition_Subtraction_Operators )
+{
+    // Create Rectangle
+    tmns::math::Rectangle<double> r1( 0, 0, 10, 20 );
+    auto r2 = r1 + tmns::math::ToPoint2<double>( 7, 3 );
+    ASSERT_NEAR( r2.bl().x(), 7, 0.0001 );
+    ASSERT_NEAR( r2.bl().y(), 3, 0.0001 );
+    ASSERT_NEAR( r2.width(),  10, 0.001 );
+    ASSERT_NEAR( r2.height(), 20, 0.001 );
+
+    auto r3 = r1 - tmns::math::ToPoint2<double>( 7, 3 );
+    ASSERT_NEAR( r3.bl().x(),-7, 0.0001 );
+    ASSERT_NEAR( r3.bl().y(),-3, 0.0001 );
+    ASSERT_NEAR( r3.width(),  10, 0.001 );
+    ASSERT_NEAR( r3.height(), 20, 0.001 );
+
+}
+
+/****************************************************/
 /*      Check if point is inside rectangle          */
 /****************************************************/
 TEST( Rectangle, is_inside_point )
@@ -98,5 +119,5 @@ TEST( Rectangle, intersection )
     ASSERT_NEAR( res_1.min().y(), 1, 0.0001 );
     ASSERT_NEAR( res_1.max().x(), 3, 0.0001 );
     ASSERT_NEAR( res_1.max().y(), 2, 0.0001 );
-    
+
 }
