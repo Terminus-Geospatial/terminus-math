@@ -11,6 +11,16 @@
 namespace tmns::math {
 
 /**
+ * Convert 2 scalars to 2D vector
+ */
+template <typename ValueT>
+Vector2_<ValueT> ToVector2( const ValueT& x,
+                            const ValueT& y )
+{
+    return {{ x, y }};
+}
+
+/**
  * Convert 3 scalars to 3D vector
  */
 template <typename ValueT>
