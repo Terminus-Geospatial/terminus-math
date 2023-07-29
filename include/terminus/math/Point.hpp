@@ -25,6 +25,8 @@ class Point_ : public Vector_<ValueT,Dims>
 {
     public:
 
+        typedef ValueT value_type;
+
         /**
          * Default Constructor
         */
@@ -83,6 +85,32 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
+         * Addition assignment operator
+        */
+        template <typename OtherT>
+        Point_<ValueT,Dims>& operator += ( const Point_<OtherT,Dims>& rhs )
+        {
+            for( size_t i = 0; i < this->m_data.size(); i++ )
+            {
+                this->m_data[i] += rhs.m_data[i];
+            }
+            return (*this);
+        }
+
+        /**
+         * Subtraction assignment operator
+        */
+        template <typename OtherT>
+        Point_<ValueT,Dims>& operator -= ( const Point_<OtherT,Dims>& rhs )
+        {
+            for( size_t i = 0; i < this->m_data.size(); i++ )
+            {
+                this->m_data[i] -= rhs.m_data[i];
+            }
+            return (*this);
+        }
+
+        /**
          * Return the number of elements or "dimensions"
         */
         size_t size() const
@@ -137,7 +165,7 @@ class Point_ : public Vector_<ValueT,Dims>
                 for( size_t i=0; i < result.size(); i++ )
                 {
                     result[i] = std::min( point1[i],
-                                          point2[i] );
+                                          static_cast<typename Point1::value_type>( point2[i] ) );
                 }
                 return std::move( result );
             }
@@ -165,7 +193,7 @@ class Point_ : public Vector_<ValueT,Dims>
                 for( size_t i=0; i < result.size(); i++ )
                 {
                     result[i] = std::max( point1[i],
-                                          point2[i] );
+                                          static_cast<typename Point1::value_type>( point2[i] ) );
                 }
                 return std::move( result );
             }

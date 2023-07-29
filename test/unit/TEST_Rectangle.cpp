@@ -71,6 +71,31 @@ TEST( Rectangle, Getter_Setter_References )
     ASSERT_EQ( rect1.tr().y(), 10 );
 }
 
+/************************************/
+/*          Set Min/Max             */
+/************************************/
+TEST( Rectangle, min_max_ops )
+{
+    // Create Rectangle
+    const tmns::math::Rectangle<int> test_rect01( 1, 2, 3, 4 );
+
+    // Set a new max (beyond the rectangle)
+    auto test_rect02 = test_rect01;
+    test_rect02.set_max( tmns::math::ToPoint2<size_t>( 9, 8 ) );
+    ASSERT_EQ( test_rect02.min().x(), 1 );
+    ASSERT_EQ( test_rect02.min().y(), 2 );
+    ASSERT_EQ( test_rect02.max().x(), 9 );
+    ASSERT_EQ( test_rect02.max().y(), 8 );
+
+    // Set a new max (inside the rectangle)
+    auto test_rect03 = test_rect01;
+    test_rect03.set_max( tmns::math::ToPoint2<double>( 3, 3 ) );
+    ASSERT_EQ( test_rect03.min().x(), 1 );
+    ASSERT_EQ( test_rect03.min().y(), 2 );
+    ASSERT_EQ( test_rect03.max().x(), 3 );
+    ASSERT_EQ( test_rect03.max().y(), 3 );
+}
+
 /****************************************************/
 /*          Addition and Subtraction Operators      */
 /****************************************************/

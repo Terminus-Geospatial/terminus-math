@@ -174,6 +174,38 @@ class Rectangle
         }
 
         /**
+         * Set the max corner of the rectangle
+         */
+        template<typename PointValueT, int PointDims>
+        void set_max( const Point_<PointValueT,PointDims>& new_max )
+        {
+            // need to compute a new min
+            m_bl = Point2_<ValueT>::elementwise_min( bl(), new_max );
+            auto max_pt = Point2_<ValueT>::elementwise_max( bl(), new_max );
+
+            m_width = max_pt.x() - min().x();
+            m_height = max_pt.y() - min().y();
+        }
+
+        /**
+         * Set a new max
+        */
+       template<typename PointValueT, int PointDims>
+        Rectangle<ValueT> set_max( const Point_<PointValueT,PointDims>& new_max ) const
+        {
+            Rectangle<ValueT> result;
+
+            // need to compute a new min
+            result.m_bl = Point2_<ValueT>::elementwise_min( bl(), new_max );
+            auto max_pt = Point2_<ValueT>::elementwise_max( bl(), new_max );
+
+            result.m_width = max_pt.x() - min().x();
+            result.m_height = max_pt.y() - min().y();
+
+            return std::move(result);
+        }
+
+        /**
          * Shift the rectangle by the specified amount
          */
         Rectangle<ValueT> operator + ( const Point2_<ValueT>& offset ) const
@@ -270,6 +302,11 @@ class Rectangle
         static Rectangle<ValueT1> set_union( const Rectangle<ValueT1>&   rect1,
                                              const Point_<ValueT2,Dim2>& point )
         {
+            // If the rectangle has no dimensions, use the point
+            if( rect1.width() <= 0 )
+            {
+
+            }
             return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_min( rect1.min(),
                                                                           point ),
                                        Point2_<ValueT1>::elementwise_max( rect1.max(),
