@@ -52,6 +52,25 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect4.min().y(), -2, 0.0001 );
 }
 
+/************************************/
+/*      Getter Reference Test       */
+/************************************/
+TEST( Rectangle, Getter_Setter_References )
+{
+    // Create a rectangle
+    tmns::math::Rectangle<int> rect1;
+
+    rect1.min().x() = 3;
+    rect1.min().y() = 4;
+    rect1.width() = 5;
+    rect1.height() = 6;
+
+    ASSERT_EQ( rect1.bl().x(), 3 );
+    ASSERT_EQ( rect1.bl().y(), 4 );
+    ASSERT_EQ( rect1.tr().x(), 8 );
+    ASSERT_EQ( rect1.tr().y(), 10 );
+}
+
 /****************************************************/
 /*          Addition and Subtraction Operators      */
 /****************************************************/

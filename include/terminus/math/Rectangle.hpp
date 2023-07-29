@@ -85,6 +85,14 @@ class Rectangle
         }
 
         /**
+         * Get the Width
+        */
+        ValueT& width()
+        {
+            return m_width;
+        }
+
+        /**
          * Get the height
         */
         ValueT height() const
@@ -93,9 +101,25 @@ class Rectangle
         }
 
         /**
+         * Get the height
+        */
+        ValueT& height()
+        {
+            return m_height;
+        }
+
+        /**
          * Get the bottom-left corner
         */
         Point2_<ValueT> bl() const
+        {
+            return m_bl;
+        }
+
+        /**
+         * Get the bottom-left corner reference
+        */
+        Point2_<ValueT>& bl()
         {
             return m_bl;
         }
@@ -129,6 +153,14 @@ class Rectangle
          * Return point of the minimum range
         */
         Point2_<ValueT> min() const
+        {
+            return bl();
+        }
+
+        /**
+         * Return point of the minimum range
+        */
+        Point2_<ValueT>& min()
         {
             return bl();
         }
