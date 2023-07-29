@@ -71,6 +71,20 @@ TEST( Rectangle, Addition_Subtraction_Operators )
     ASSERT_NEAR( r3.width(),  10, 0.001 );
     ASSERT_NEAR( r3.height(), 20, 0.001 );
 
+
+    // Test with vectors
+    auto r4 = r1 + tmns::math::ToVector2<double>( 7, 3 );
+    ASSERT_NEAR( r4.bl().x(), 7, 0.0001 );
+    ASSERT_NEAR( r4.bl().y(), 3, 0.0001 );
+    ASSERT_NEAR( r4.width(),  10, 0.001 );
+    ASSERT_NEAR( r4.height(), 20, 0.001 );
+
+    auto r5 = r1 - tmns::math::ToVector2<double>( 7, 3 );
+    ASSERT_NEAR( r5.bl().x(),-7, 0.0001 );
+    ASSERT_NEAR( r5.bl().y(),-3, 0.0001 );
+    ASSERT_NEAR( r5.width(),  10, 0.001 );
+    ASSERT_NEAR( r5.height(), 20, 0.001 );
+
 }
 
 /****************************************************/

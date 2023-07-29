@@ -74,6 +74,32 @@ class Size_
             return m_data.z();
         }
 
+        /**
+         * Indexing Operator (Const/Copy)
+        */
+        ValueT operator[]( size_t id ) const
+        {
+            return m_data[id];
+        }
+
+        /**
+         * Indexing Operator (Ref)
+        */
+        ValueT& operator[]( size_t id )
+        {
+            return m_data[id];
+        }
+
+        /**
+         * Convert to a string
+        */
+        std::string to_string() const
+        {
+            std::stringstream sout;
+            sout << "Size (Dims: " << Dims << ", Width: " << std::fixed << width() << ", Height: " << height() << ")";
+            return sout.str();
+        }
+
     private:
 
         /// Underlying Data Structure

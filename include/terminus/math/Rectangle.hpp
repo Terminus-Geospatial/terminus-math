@@ -7,6 +7,7 @@
 
 // Terminus Libraries
 #include "Point_Utilities.hpp"
+#include "Vector_Utilities.hpp"
 
 // C++ Libraries
 #include <cmath>
@@ -153,7 +154,27 @@ class Rectangle
         /**
          * Shift the rectangle by the specified amount
          */
+        Rectangle<ValueT> operator + ( const Vector2_<ValueT>& offset ) const
+        {
+            return Rectangle<ValueT>( bl() + offset,
+                                      width(),
+                                      height() );
+        }
+
+        /**
+         * Shift the rectangle by the specified amount
+         */
         Rectangle<ValueT> operator - ( const Point2_<ValueT>& offset ) const
+        {
+            return Rectangle<ValueT>( bl() - offset,
+                                      width(),
+                                      height() );
+        }
+
+        /**
+         * Shift the rectangle by the specified amount
+         */
+        Rectangle<ValueT> operator - ( const Vector2_<ValueT>& offset ) const
         {
             return Rectangle<ValueT>( bl() - offset,
                                       width(),
