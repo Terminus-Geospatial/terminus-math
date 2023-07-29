@@ -251,6 +251,32 @@ class Rectangle
         }
 
         /**
+         * Compute the Rectangle Union
+        */
+        template <typename ValueT1, typename ValueT2>
+        static Rectangle<ValueT1> set_union( const Rectangle<ValueT1>& rect1,
+                                             const Rectangle<ValueT2>& rect2 )
+        {
+            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_min( rect1.min(),
+                                                                          rect2.min() ),
+                                       Point2_<ValueT1>::elementwise_max( rect1.max(),
+                                                                          rect2.max() ) );
+        }
+
+        /**
+         * Compute the Rectangle Union
+        */
+        template <typename ValueT1, typename ValueT2, int Dim2>
+        static Rectangle<ValueT1> set_union( const Rectangle<ValueT1>&   rect1,
+                                             const Point_<ValueT2,Dim2>& point )
+        {
+            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_min( rect1.min(),
+                                                                          point ),
+                                       Point2_<ValueT1>::elementwise_max( rect1.max(),
+                                                                          point ) );
+        }
+
+        /**
          * Print to log-friendly string
         */
         std::string to_string() const

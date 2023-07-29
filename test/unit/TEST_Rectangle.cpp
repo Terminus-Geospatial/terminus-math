@@ -152,5 +152,33 @@ TEST( Rectangle, intersection )
     ASSERT_NEAR( res_1.min().y(), 1, 0.0001 );
     ASSERT_NEAR( res_1.max().x(), 3, 0.0001 );
     ASSERT_NEAR( res_1.max().y(), 2, 0.0001 );
+}
 
+/*******************************************************/
+/*      Expand the Rectangle to grab the coordinate    */
+/*******************************************************/
+TEST( Rectangle, set_union )
+{
+    // Create 2 rectangles
+    tmns::math::Rect2d rect_01( -1, -1, 2, 2 );
+    tmns::math::Rect2d rect_02( 3, 3, 4, 5 );
+
+    // Test 1 - 2 rectangle union
+    auto res_1 = tmns::math::Rect2i::set_union( rect_01,
+                                                rect_02 );
+
+    ASSERT_NEAR( res_1.bl().x(), -1, 0.001 );
+    ASSERT_NEAR( res_1.bl().y(), -1, 0.001 );
+    ASSERT_NEAR( res_1.tr().x(),  7, 0.001 );
+    ASSERT_NEAR( res_1.tr().y(),  8, 0.001 );
+
+    // Test 2 - 1 rectangle and a point
+    auto point_01 = tmns::math::ToPoint2<double>( 9, -1 );
+    auto res_2 = tmns::math::Rect2i::set_union( rect_01,
+                                                point_01 );
+
+    ASSERT_NEAR( res_2.bl().x(), -1, 0.001 );
+    ASSERT_NEAR( res_2.bl().y(), -1, 0.001 );
+    ASSERT_NEAR( res_2.tr().x(),  9, 0.001 );
+    ASSERT_NEAR( res_2.tr().y(),  1, 0.001 );
 }
