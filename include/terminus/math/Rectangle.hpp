@@ -174,6 +174,14 @@ class Rectangle
         }
 
         /**
+         * Get the area of the rectangle
+        */
+        double area() const
+        {
+            return ( width() * height() );
+        }
+
+        /**
          * Set the max corner of the rectangle
          */
         template<typename PointValueT, int PointDims>
@@ -190,7 +198,7 @@ class Rectangle
         /**
          * Set a new max
         */
-       template<typename PointValueT, int PointDims>
+        template<typename PointValueT, int PointDims>
         Rectangle<ValueT> set_max( const Point_<PointValueT,PointDims>& new_max ) const
         {
             Rectangle<ValueT> result;
