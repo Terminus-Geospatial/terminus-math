@@ -15,6 +15,7 @@ add_executable( ${TEST}
     TEST_Rectangle.cpp
     TEST_Size.cpp
     TEST_Vector.cpp
+    TEST_VectorN.cpp
 )
 
 target_link_libraries( ${TEST} PRIVATE

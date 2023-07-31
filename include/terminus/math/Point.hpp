@@ -41,31 +41,15 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
-         * Index Operator
-        */
-        ValueT operator[]( size_t idx ) const
-        {
-            return this->m_data[idx];
-        }
-
-        /**
-         * Index Reference Operator
-         */
-        ValueT& operator[]( size_t idx )
-        {
-            return this->m_data[idx];
-        }
-
-        /**
          * Addition Operator
         */
         template< typename OtherValueT>
         Point_<ValueT,Dims> operator + ( const Point_<OtherValueT,Dims>& rhs ) const
         {
             Point_<ValueT,Dims> result;
-            for( size_t i=0; i < this->m_data.size(); i++ )
+            for( size_t i=0; i < this->data().size(); i++ )
             {
-                result.m_data[i] = this->m_data[i] + rhs.m_data[i];
+                result.data()[i] = this->data()[i] + rhs.data()[i];
             }
             return result;
         }
@@ -77,9 +61,9 @@ class Point_ : public Vector_<ValueT,Dims>
         Point_<ValueT,Dims> operator + ( const Vector_<OtherValueT,Dims>& rhs ) const
         {
             Point_<ValueT,Dims> result;
-            for( size_t i=0; i < this->m_data.size(); i++ )
+            for( size_t i=0; i < this->data().size(); i++ )
             {
-                result.m_data[i] = this->m_data[i] + rhs.m_data[i];
+                result.data()[i] = this->data()[i] + rhs.data()[i];
             }
             return result;
         }
@@ -90,9 +74,9 @@ class Point_ : public Vector_<ValueT,Dims>
         template <typename OtherT>
         Point_<ValueT,Dims>& operator += ( const Point_<OtherT,Dims>& rhs )
         {
-            for( size_t i = 0; i < this->m_data.size(); i++ )
+            for( size_t i = 0; i < this->data().size(); i++ )
             {
-                this->m_data[i] += rhs.m_data[i];
+                this->data()[i] += rhs.data()[i];
             }
             return (*this);
         }
@@ -103,19 +87,11 @@ class Point_ : public Vector_<ValueT,Dims>
         template <typename OtherT>
         Point_<ValueT,Dims>& operator -= ( const Point_<OtherT,Dims>& rhs )
         {
-            for( size_t i = 0; i < this->m_data.size(); i++ )
+            for( size_t i = 0; i < this->data().size(); i++ )
             {
-                this->m_data[i] -= rhs.m_data[i];
+                this->data()[i] -= rhs.data()[i];
             }
             return (*this);
-        }
-
-        /**
-         * Return the number of elements or "dimensions"
-        */
-        size_t size() const
-        {
-            return this->m_data.size();
         }
 
         /**
@@ -125,9 +101,9 @@ class Point_ : public Vector_<ValueT,Dims>
         Point_<ValueT,Dims> operator - ( const Point_<OtherValueT,Dims>& rhs ) const
         {
             Point_<ValueT,Dims> result;
-            for( size_t i=0; i < this->m_data.size(); i++ )
+            for( size_t i=0; i < this->data().size(); i++ )
             {
-                result.m_data[i] = this->m_data[i] - rhs.m_data[i];
+                result.data()[i] = this->data()[i] - rhs.data()[i];
             }
             return result;
         }
@@ -139,9 +115,9 @@ class Point_ : public Vector_<ValueT,Dims>
         Point_<ValueT,Dims> operator - ( const Vector_<OtherValueT,Dims>& rhs ) const
         {
             Point_<ValueT,Dims> result;
-            for( size_t i=0; i < this->m_data.size(); i++ )
+            for( size_t i=0; i < this->data().size(); i++ )
             {
-                result.m_data[i] = this->m_data[i] - rhs.m_data[i];
+                result.data()[i] = this->data()[i] - rhs.data()[i];
             }
             return result;
         }
@@ -211,14 +187,14 @@ class Point_ : public Vector_<ValueT,Dims>
         std::string to_string() const
         {
             std::stringstream sout;
-            sout << "Point (Dims: " << Dims << "): ";
-            for( size_t i = 0; i < this->m_data.size(); i++ )
+            sout << "Point (Dims: " << this->size() << "): ";
+            for( size_t i = 0; i < this->size(); i++ )
             {
                 if( i != 0 )
                 {
                     sout << ", ";
                 }
-                sout << this->m_data[i];
+                sout << this->operator[](i);
             }
             return sout.str();
         }

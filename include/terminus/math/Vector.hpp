@@ -7,6 +7,7 @@
 
 // C++ Libraries
 #include <array>
+#include <iostream>
 #include <sstream>
 
 namespace tmns::math {
@@ -41,11 +42,19 @@ class Vector_
         }
 
         /**
+         * Get the size of the vector
+        */
+        virtual size_t size() const
+        {
+            return m_data.size();
+        }
+
+        /**
          * Get X Value
         */
         ValueT x() const
         {
-            return m_data.at(0);
+            return this->at(0);
         }
 
         /**
@@ -53,7 +62,7 @@ class Vector_
         */
         ValueT& x()
         {
-            return m_data.at(0);
+            return this->at(0);
         }
 
         /**
@@ -61,7 +70,7 @@ class Vector_
         */
         ValueT y() const
         {
-            return m_data.at(1);
+            return this->at(1);
         }
 
         /**
@@ -69,7 +78,7 @@ class Vector_
         */
         ValueT& y()
         {
-            return m_data.at(1);
+            return this->at(1);
         }
 
         /**
@@ -77,7 +86,7 @@ class Vector_
         */
         ValueT z() const
         {
-            return m_data.at(2);
+            return this->at(2);
         }
 
         /**
@@ -85,13 +94,13 @@ class Vector_
         */
         ValueT& z()
         {
-            return m_data.at(2);
+            return this->at(2);
         }
 
         /**
          * Get copy of internal data at specific index
         */
-        ValueT operator[] ( size_t idx ) const
+        virtual ValueT operator[] ( size_t idx ) const
         {
             return m_data[idx];
         }
@@ -99,9 +108,25 @@ class Vector_
         /**
          * Get reference to internal data at specific index
         */
-        ValueT& operator[] ( size_t idx )
+        virtual ValueT& operator[] ( size_t idx )
         {
             return m_data[idx];
+        }
+
+        /**
+         * Get copy of internal data at specific index
+        */
+        virtual ValueT at( size_t idx ) const
+        {
+            return m_data.at(idx);
+        }
+
+        /**
+         * Get reference to internal data at specific index
+        */
+        virtual ValueT& at( size_t idx )
+        {
+            return m_data.at(idx);
         }
 
         /**
@@ -165,6 +190,8 @@ class Vector_
             }
             return sout.str();
         }
+
+    private:
 
         std::array<ValueT,Dims> m_data { 0 };
 
