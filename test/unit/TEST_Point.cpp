@@ -70,6 +70,28 @@ TEST( Point, Subtraction_Operator )
 
 }
 
+/************************************/
+/*      Test the Mag2 Function      */
+/************************************/
+TEST( Point, magnitude_sq )
+{
+    auto pt1 = tmns::math::ToPoint3<double>( -1, 2, -3 );
+    
+    ASSERT_NEAR( pt1.magnitude_sq(), 14, 0.01 );
+}
+
+/****************************************/
+/*      Test the Distance Function      */
+/****************************************/
+TEST( Point, distance )
+{
+    auto pt1 = tmns::math::ToPoint3<double>( -1, -1, -1 );
+    auto pt2 = tmns::math::ToPoint3<double>(  5,  5,  5 );
+    auto method = tmns::math::DistanceType::L2;
+
+    ASSERT_NEAR( tmns::math::Point3d::distance( pt1, pt2, method ), 10.392, 0.01 );
+}
+
 /***********************************************/
 /*      Test the elementwise min Function      */
 /***********************************************/

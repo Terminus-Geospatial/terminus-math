@@ -6,6 +6,7 @@
 #pragma once
 
 // Terminus Libraries
+#include "Enums.hpp"
 #include "Vector.hpp"
 
 // C++ Libraries
@@ -123,6 +124,27 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
+         * Compute the vector magnitude
+        */
+        double magnitude() const
+        {
+            return std::sqrt( magnitude_sq() );
+        }
+
+        /**
+         * Compute the square of the magnitude
+        */
+        double magnitude_sq() const
+        {
+            double mag = 0;
+            for( const auto& elem : this->data() )
+            {
+                mag += elem * elem;
+            }
+            return mag;
+        }
+
+        /**
          * Return the element-wise min of N points
          *
          * Really F-ing cool solution:
@@ -182,6 +204,39 @@ class Point_ : public Vector_<ValueT,Dims>
         }
 
         /**
+         * Compute the distance between the 2 points
+         * 
+         * @param point1 - First point
+         * @param point2 - Second point (Doesn't need to be the same value-type)
+         * @param method - L1 or L2 
+         * 
+         * L1:  https://en.wikipedia.org/wiki/Taxicab_geometry
+         * L2:  Distance Formula
+        */
+        template <typename OtherValueT>
+        static constexpr double distance( const Point_<ValueT,Dims>&      point1,
+                                          const Point_<OtherValueT,Dims>& point2,
+                                          DistanceType                    method = DistanceType::L2 )
+        {
+            double dist = 0;
+
+            // Taxicab distance
+            if( method == DistanceType::L1 )
+            {
+                auto res = point1 - point2;
+                for( size_t i = 0; i < Dims; i++ )
+                {
+                    dist += std::fabs( res[i] );
+                }
+            }
+            else if( method == DistanceType::L2 )
+            {
+                dist = ( point1 - point2 ).magnitude();             
+            }
+            return dist;
+        }
+
+        /**
          * Print to string
         */
         std::string to_string() const
@@ -212,10 +267,19 @@ using Point2d = Point2_<double>;
 using Point3d = Point3_<double>;
 using Point4d = Point4_<double>;
 
+// Single-Precision Points
+using Point2f = Point2_<float>;
+using Point3f = Point3_<float>;
+using Point4f = Point4_<float>;
+
 // Integer Points
 using Point2i = Point2_<int>;
 using Point3i = Point3_<int>;
 using Point4i = Point4_<int>;
+
+using Point2l = Point2_<int64_t>;
+using Point3l = Point3_<int64_t>;
+using Point4l = Point4_<int64_t>;
 
 
 } // End of tmns::math
