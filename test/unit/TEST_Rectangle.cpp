@@ -14,7 +14,7 @@
 TEST( Rectangle, Constructors_and_Getters )
 {
     // Create a rectangle and check values
-    tmns::math::Rectangle<double> rect1;
+    tmns::math::Rectangle<double,2> rect1;
     ASSERT_NEAR( rect1.bl().x(), 0, 0.0001 );
     ASSERT_NEAR( rect1.bl().y(), 0, 0.0001 );
     ASSERT_NEAR( rect1.width(),  0, 0.0001 );
@@ -22,7 +22,7 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect1.min().x(), 0, 0.0001 );
     ASSERT_NEAR( rect1.min().y(), 0, 0.0001 );
 
-    tmns::math::Rectangle<double> rect2( 1, 2, 3, 4);
+    tmns::math::Rectangle<double,2> rect2( 1, 2, 3, 4);
     ASSERT_NEAR( rect2.bl().x(), 1, 0.0001 );
     ASSERT_NEAR( rect2.bl().y(), 2, 0.0001 );
     ASSERT_NEAR( rect2.width(),  3, 0.0001 );
@@ -30,13 +30,14 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect2.min().x(), 1, 0.0001 );
     ASSERT_NEAR( rect2.min().y(), 2, 0.0001 );
 
-    tmns::math::Rectangle<double> rect3( tmns::math::ToPoint2<double>( 1, 2 ), 3, 4);
+    tmns::math::Rectangle<double,2> rect3( tmns::math::ToPoint2<double>( 1, 2 ), 
+                                           { 3, 4 });
     ASSERT_NEAR( rect3.bl().x(), 1, 0.0001 );
     ASSERT_NEAR( rect3.bl().y(), 2, 0.0001 );
     ASSERT_NEAR( rect3.width(),  3, 0.0001 );
     ASSERT_NEAR( rect3.height(), 4, 0.0001 );
 
-    tmns::math::Rectangle<double> rect4( tmns::math::ToPoint2<double>(  1, -2 ),
+    tmns::math::Rectangle<double,2> rect4( tmns::math::ToPoint2<double>(  1, -2 ),
                                          tmns::math::ToPoint2<double>( -3,  4 ) );
     ASSERT_NEAR( rect4.bl().x(), -3, 0.0001 );
     ASSERT_NEAR( rect4.bl().y(), -2, 0.0001 );
@@ -58,7 +59,7 @@ TEST( Rectangle, Constructors_and_Getters )
 TEST( Rectangle, Getter_Setter_References )
 {
     // Create a rectangle
-    tmns::math::Rectangle<int> rect1;
+    tmns::math::Rectangle<int,2> rect1;
 
     rect1.min().x() = 3;
     rect1.min().y() = 4;
@@ -77,7 +78,7 @@ TEST( Rectangle, Getter_Setter_References )
 TEST( Rectangle, min_max_ops )
 {
     // Create Rectangle
-    const tmns::math::Rectangle<int> test_rect01( 1, 2, 3, 4 );
+    const tmns::math::Rectangle<int,2> test_rect01( 1, 2, 3, 4 );
 
     // Set a new max (beyond the rectangle)
     auto test_rect02 = test_rect01;
@@ -102,7 +103,7 @@ TEST( Rectangle, min_max_ops )
 TEST( Rectangle, Addition_Subtraction_Operators )
 {
     // Create Rectangle
-    tmns::math::Rectangle<double> r1( 0, 0, 10, 20 );
+    tmns::math::Rectangle<double,2> r1( 0, 0, 10, 20 );
     auto r2 = r1 + tmns::math::ToPoint2<double>( 7, 3 );
     ASSERT_NEAR( r2.bl().x(), 7, 0.0001 );
     ASSERT_NEAR( r2.bl().y(), 3, 0.0001 );
@@ -137,7 +138,7 @@ TEST( Rectangle, Addition_Subtraction_Operators )
 TEST( Rectangle, is_inside_point )
 {
     // Create a big rectangle
-    tmns::math::Rectangle<int> test_rect01( -5, -4, 10, 12 );
+    tmns::math::Rectangle<int,2> test_rect01( -5, -4, 10, 12 );
     ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>( 0, 0 ) ) );
     ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>(-5,-4 ) ) );
     ASSERT_TRUE(  test_rect01.is_inside( tmns::math::ToPoint2<double>( 5, 6 ) ) );
@@ -150,7 +151,7 @@ TEST( Rectangle, is_inside_point )
 TEST( Rectangle, is_inside_rectangle )
 {
     // Create a big rectangle
-    tmns::math::Rectangle<int> test_rect01( -5, -4, 10, 12 );
+    tmns::math::Rectangle<int,2> test_rect01( -5, -4, 10, 12 );
 
     // Valid cases
     ASSERT_TRUE( test_rect01.is_inside( tmns::math::Rect2d( -1, -1, 1, 1 ) ) );

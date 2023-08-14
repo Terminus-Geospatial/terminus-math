@@ -19,6 +19,12 @@ class Size_
 {
     public:
 
+        /// Value Type
+        typedef ValueT value_type;
+
+        /// Number of dimensions
+        
+
         /// Default Constructor
         Size_() = default;
 

@@ -17,7 +17,8 @@ namespace tmns::math {
 /**
  * Rectangle
 */
-template <typename ValueT>
+template <typename ValueT,
+          int      Dims>
 class Rectangle
 {
     public:
@@ -39,9 +40,9 @@ class Rectangle
                    const ValueT& y,
                    const ValueT& width,
                    const ValueT& height )
-          : m_bl( ToPoint2<ValueT>( x, y ) ),
-            m_width( width ),
-            m_height( height )
+          : m_bl( { x, y } ),
+            m_lengths( { width, 
+                         height } )
         {}
 
         /**
@@ -51,12 +52,10 @@ class Rectangle
          * @param width
          * @param height
         */
-        Rectangle( const Point2_<ValueT>& bl,
-                   const ValueT&          width,
-                   const ValueT&          height )
+        Rectangle( const Point_<ValueT,Dims>& bl,
+                   std::array<ValueT,Dims>    lengths )
           : m_bl( bl ),
-            m_width( width ),
-            m_height( height )
+            m_lengths( lengths )
         {}
 
         /**
@@ -65,23 +64,34 @@ class Rectangle
          * @param min_corner
          * @param max_corner
         */
-        Rectangle( const Point2_<ValueT>& min_corner,
-                   const Point2_<ValueT>& max_corner )
-          : m_bl( ToPoint2<ValueT>( std::min( min_corner.x(),
-                                              max_corner.x() ),
-                                    std::min( min_corner.y(),
-                                              max_corner.y() ) ) ),
-            m_width(  std::fabs( max_corner.x() - min_corner.x() ) ),
-            m_height( std::fabs( max_corner.y() - min_corner.y() ) )
-        {}
+        Rectangle( const Point_<ValueT,Dims>& min_corner,
+                   const Point_<ValueT,Dims>& max_corner )
+        {
+            m_bl = Point_<ValueT,Dims>::elementwise_min( min_corner,
+                                                         max_corner );
+            
+            auto min_point = Point_<ValueT,Dims>::elementwise_min( min_corner,
+                                                                   max_corner );
+            auto max_point = Point_<ValueT,Dims>::elementwise_max( min_corner,
+                                                                   max_corner );
 
+            m_lengths = ( max_point - min_point ).data();
+        }
+
+        /**
+         * Get the dimensions
+        */
+        size_t dimensions() const
+        {
+            return Dims;
+        }
 
         /**
          * Get the Width
         */
         ValueT width() const
         {
-            return m_width;
+            return m_lengths.at(0);
         }
 
         /**
@@ -89,7 +99,7 @@ class Rectangle
         */
         ValueT& width()
         {
-            return m_width;
+            return m_lengths[0];
         }
 
         /**
@@ -97,7 +107,7 @@ class Rectangle
         */
         ValueT height() const
         {
-            return m_height;
+            return m_lengths.at(1);
         }
 
         /**
@@ -105,13 +115,45 @@ class Rectangle
         */
         ValueT& height()
         {
-            return m_height;
+            return m_lengths[1];
+        }
+
+        /**
+         * Get the depth
+        */
+        ValueT depth() const
+        {
+            return m_lengths.at(2);
+        }
+
+        /**
+         * Get the depth
+        */
+        ValueT& depth()
+        {
+            return m_lengths[2];
+        }
+
+        /**
+         * Get the length
+        */
+        ValueT length( size_t offset ) const
+        {
+            return m_lengths.at( offset );
+        }
+
+        /**
+         * Get the length
+        */
+        ValueT& length( size_t offset )
+        {
+            return m_lengths[offset];
         }
 
         /**
          * Get the bottom-left corner
         */
-        Point2_<ValueT> bl() const
+        Point_<ValueT,Dims> bl() const
         {
             return m_bl;
         }
@@ -119,7 +161,7 @@ class Rectangle
         /**
          * Get the bottom-left corner reference
         */
-        Point2_<ValueT>& bl()
+        Point_<ValueT,Dims>& bl()
         {
             return m_bl;
         }
@@ -127,18 +169,22 @@ class Rectangle
         /**
          * Get the top-left corner
         */
-        Point2_<ValueT> tl() const
+        Point_<ValueT,Dims> tl() const
         {
-            return m_bl + math::ToPoint2<double>( 0, m_height );
+            Point_<ValueT,Dims> offset;
+            offset.y() = height();
+            return m_bl + offset;
         }
 
         /**
          * Get the bottom-left corner
         */
-        Point2_<ValueT> tr() const
+        Point_<ValueT,Dims> tr() const
         {
-            return m_bl + math::ToPoint2<double>( m_width,
-                                                  m_height );
+            Point_<ValueT,Dims> offset;
+            offset.x() = width();
+            offset.y() = height();
+            return m_bl + offset;
         }
 
         /**
@@ -146,7 +192,9 @@ class Rectangle
         */
         Point2_<ValueT> br() const
         {
-            return m_bl + math::ToPoint2<double>( m_width, 0 );
+            Point_<ValueT,Dims> offset;
+            offset.x() = width();
+            return m_bl + offset;
         }
 
         /**
@@ -182,33 +230,49 @@ class Rectangle
         }
 
         /**
+         * Get the volume of the rectangle
+        */
+        double volume() const
+        {
+            double value = m_lengths[0];
+            for( size_t i = 1; i < m_lengths.size(); i++ )
+            {
+                value *= m_lengths[i];
+            }
+            return value;
+        }
+
+        /**
          * Set the max corner of the rectangle
          */
         template<typename PointValueT, int PointDims>
         void set_max( const Point_<PointValueT,PointDims>& new_max )
         {
             // need to compute a new min
-            m_bl = Point2_<ValueT>::elementwise_min( bl(), new_max );
-            auto max_pt = Point2_<ValueT>::elementwise_max( bl(), new_max );
+            m_bl = Point_<ValueT,Dims>::elementwise_min( bl(), new_max );
+            auto max_pt = Point_<ValueT,Dims>::elementwise_max( bl(), new_max );
 
-            m_width = max_pt.x() - min().x();
-            m_height = max_pt.y() - min().y();
+            auto lengths = ( max_pt - min() ).data();
+            auto max_len = std::min( m_lengths.size(), lengths.size() );
+            for( size_t x = 0; x < max_len; x++ )
+            {
+                m_lengths[x] = lengths[x];
+            }
         }
 
         /**
          * Set a new max
         */
-        template<typename PointValueT, int PointDims>
-        Rectangle<ValueT> set_max( const Point_<PointValueT,PointDims>& new_max ) const
+        template<typename PointValueT>
+        Rectangle<ValueT,Dims> set_max( const Point_<PointValueT,Dims>& new_max ) const
         {
-            Rectangle<ValueT> result;
+            Rectangle<ValueT,Dims> result;
 
             // need to compute a new min
-            result.m_bl = Point2_<ValueT>::elementwise_min( bl(), new_max );
-            auto max_pt = Point2_<ValueT>::elementwise_max( bl(), new_max );
+            result.m_bl = Point_<ValueT,Dims>::elementwise_min( bl(), new_max );
+            auto max_pt = Point_<ValueT,Dims>::elementwise_max( bl(), new_max );
 
-            result.m_width = max_pt.x() - min().x();
-            result.m_height = max_pt.y() - min().y();
+            result.m_lengths = ( max_pt - min() ).data();
 
             return std::move(result);
         }
@@ -216,41 +280,37 @@ class Rectangle
         /**
          * Shift the rectangle by the specified amount
          */
-        Rectangle<ValueT> operator + ( const Point2_<ValueT>& offset ) const
+        Rectangle<ValueT,Dims> operator + ( const Point_<ValueT,Dims>& offset ) const
         {
-            return Rectangle<ValueT>( bl() + offset,
-                                      width(),
-                                      height() );
+            return Rectangle<ValueT,Dims>( bl() + offset,
+                                           m_lengths );
         }
 
         /**
          * Shift the rectangle by the specified amount
          */
-        Rectangle<ValueT> operator + ( const Vector2_<ValueT>& offset ) const
+        Rectangle<ValueT,Dims> operator + ( const Vector_<ValueT,Dims>& offset ) const
         {
-            return Rectangle<ValueT>( bl() + offset,
-                                      width(),
-                                      height() );
+            return Rectangle<ValueT,Dims>( bl() + offset,
+                                           m_lengths );
         }
 
         /**
          * Shift the rectangle by the specified amount
          */
-        Rectangle<ValueT> operator - ( const Point2_<ValueT>& offset ) const
+        Rectangle<ValueT,Dims> operator - ( const Point2_<ValueT>& offset ) const
         {
-            return Rectangle<ValueT>( bl() - offset,
-                                      width(),
-                                      height() );
+            return Rectangle<ValueT,Dims>( bl() - offset,
+                                           m_lengths );
         }
 
         /**
          * Shift the rectangle by the specified amount
          */
-        Rectangle<ValueT> operator - ( const Vector2_<ValueT>& offset ) const
+        Rectangle<ValueT,Dims> operator - ( const Vector2_<ValueT>& offset ) const
         {
-            return Rectangle<ValueT>( bl() - offset,
-                                      width(),
-                                      height() );
+            return Rectangle<ValueT,Dims>( bl() - offset,
+                                           m_lengths );
         }
 
         /**
@@ -269,7 +329,7 @@ class Rectangle
          * Check if rectangle is inside bounding box
         */
         template <typename OtherValueT>
-        bool is_inside( const Rectangle<OtherValueT>& obox ) const
+        bool is_inside( const Rectangle<OtherValueT,Dims>& obox ) const
         {
             return ( bl().x() <= obox.bl().x() &&
                      bl().y() <= obox.bl().y() &&
@@ -280,45 +340,49 @@ class Rectangle
         /**
          * Compute the Rectangle Intersection
         */
-        template <typename ValueT1, typename ValueT2>
-        static Rectangle<ValueT1> intersection( const Rectangle<ValueT1>& rect1,
-                                                const Rectangle<ValueT2>& rect2 )
+        template <typename ValueT1, typename ValueT2, int RDims>
+        static Rectangle<ValueT1,Dims> intersection( const Rectangle<ValueT1,RDims>& rect1,
+                                                     const Rectangle<ValueT2,RDims>& rect2 )
         {
-            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_max( rect1.min(),
-                                                                          rect2.min() ),
-                                       Point2_<ValueT1>::elementwise_min( rect1.max(),
-                                                                          rect2.max() ) );
+            return Rectangle<ValueT1,RDims>( Point_<ValueT1,RDims>::elementwise_max( rect1.min(),
+                                                                                     rect2.min() ),
+                                             Point_<ValueT1,RDims>::elementwise_min( rect1.max(),
+                                                                                     rect2.max() ) );
         }
 
         /**
          * Compute the Rectangle Union
         */
-        template <typename ValueT1, typename ValueT2>
-        static Rectangle<ValueT1> set_union( const Rectangle<ValueT1>& rect1,
-                                             const Rectangle<ValueT2>& rect2 )
+        template <typename ValueT1,
+                  typename ValueT2,
+                  int      RDims>
+        static Rectangle<ValueT1,RDims> set_union( const Rectangle<ValueT1,RDims>& rect1,
+                                                   const Rectangle<ValueT2,RDims>& rect2 )
         {
-            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_min( rect1.min(),
-                                                                          rect2.min() ),
-                                       Point2_<ValueT1>::elementwise_max( rect1.max(),
-                                                                          rect2.max() ) );
+            return Rectangle<ValueT1,RDims>( Point_<ValueT1,RDims>::elementwise_min( rect1.min(),
+                                                                                     rect2.min() ),
+                                             Point_<ValueT1,RDims>::elementwise_max( rect1.max(),
+                                                                                     rect2.max() ) );
         }
 
         /**
          * Compute the Rectangle Union
         */
-        template <typename ValueT1, typename ValueT2, int Dim2>
-        static Rectangle<ValueT1> set_union( const Rectangle<ValueT1>&   rect1,
-                                             const Point_<ValueT2,Dim2>& point )
+        template <typename ValueT1, 
+                  int      Dims1,
+                  typename ValueT2, 
+                  int      Dims2>
+        static Rectangle<ValueT1,Dims1> set_union( const Rectangle<ValueT1,Dims1>&  rect1,
+                                                   const Point_<ValueT2,Dims2>&     point )
         {
-            // If the rectangle has no dimensions, use the point
-            if( rect1.width() <= 0 )
-            {
+            auto point_min = Point_<ValueT2,Dims2>::elementwise_min( rect1.min(),
+                                                                     point );
+            
+            auto point_max = Point_<ValueT2,Dims2>::elementwise_max( rect1.max(),
+                                                                     point );
 
-            }
-            return Rectangle<ValueT1>( Point2_<ValueT1>::elementwise_min( rect1.min(),
-                                                                          point ),
-                                       Point2_<ValueT1>::elementwise_max( rect1.max(),
-                                                                          point ) );
+            return Rectangle<ValueT1,Dims1>( point_min,
+                                             point_max );
         }
 
         /**
@@ -327,21 +391,30 @@ class Rectangle
         std::string to_string() const
         {
             std::stringstream sout;
-            sout << "Rectangle<>: bl: " << bl().to_string() << ", width: " << width() << ", height: " << height();
+            sout << "Rectangle<>: bl: " << bl().to_string() << ", Lengths: ";
+            size_t counter = 0;
+            for( const auto& len : m_lengths )
+            {
+                if( counter != 0 )
+                {
+                    sout << ", ";
+                }
+                sout << len;
+                counter++;
+            }
             return sout.str();
         }
 
     private:
 
-        Point2_<ValueT> m_bl;
-        ValueT m_width;
-        ValueT m_height;
+        Point_<ValueT,Dims> m_bl;
+        std::array<ValueT,Dims> m_lengths;
 
 }; // End of Box class
 
 // Common aliases
-using Rect2i = Rectangle<int>;
-using Rect2f = Rectangle<float>;
-using Rect2d = Rectangle<double>;
+using Rect2i = Rectangle<int,2>;
+using Rect2f = Rectangle<float,2>;
+using Rect2d = Rectangle<double,2>;
 
 } // end of tmns::math
