@@ -243,6 +243,21 @@ class Rectangle
         }
 
         /**
+         * Expand the bounding box by a specified amount
+         */
+        template <typename ExpansionT>
+        Rectangle<ValueT,Dims> expand( const ExpansionT& rate ) const
+        {
+            auto new_rect = (*this);
+            for( size_t i = 0; i < Dims; i++ )
+            {
+                new_rect.m_bl[i] -= rate;
+                new_rect.m_lengths[i] += ( 2 * rate );
+            }
+            return new_rect;
+        }
+
+        /**
          * Set the max corner of the rectangle
          */
         template<typename PointValueT, int PointDims>

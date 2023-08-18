@@ -208,3 +208,18 @@ TEST( Rectangle, set_union )
     ASSERT_NEAR( res_2.tr().x(),  9, 0.001 );
     ASSERT_NEAR( res_2.tr().y(),  1, 0.001 );
 }
+
+/********************************************/
+/*          Test the Expand Method          */
+/********************************************/
+TEST( Rectangle, expand )
+{
+    // Create a rectangle
+    tmns::math::Rect2i rect_01( -1, -1, 2, 2 );
+
+    auto rect_01_exp = rect_01.expand( 4 );
+    ASSERT_EQ( rect_01_exp.bl().x(), -5 );
+    ASSERT_EQ( rect_01_exp.bl().y(), -5 );
+    ASSERT_EQ( rect_01_exp.tr().x(),  5 );
+    ASSERT_EQ( rect_01_exp.tr().y(),  5 );
+}
