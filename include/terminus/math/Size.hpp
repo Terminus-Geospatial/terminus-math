@@ -106,6 +106,14 @@ class Size_
             return sout.str();
         }
 
+        /**
+         * Get data as vector
+         */
+        Vector_<ValueT,Dims> const& as_vector() const
+        {
+            return m_data;
+        }
+
     private:
 
         /// Underlying Data Structure

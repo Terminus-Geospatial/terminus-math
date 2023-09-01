@@ -223,3 +223,16 @@ TEST( Rectangle, expand )
     ASSERT_EQ( rect_01_exp.tr().x(),  5 );
     ASSERT_EQ( rect_01_exp.tr().y(),  5 );
 }
+
+/************************************************/
+/*          Test the Subdivide Method           */
+/************************************************/
+TEST( Rectangle, subdivide )
+{
+    // Create a big rectangle
+    tmns::math::Rect2d rect_01( 100, 200, 550, 550 );
+
+    tmns::math::Size2d tile_size_01( { 100, 100 } );
+
+    std::vector<tmns::math::Rect2d> bboxes_01 = rect_01.subdivide( tile_size_01, true );
+}

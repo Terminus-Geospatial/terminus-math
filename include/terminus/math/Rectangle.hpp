@@ -7,6 +7,7 @@
 
 // Terminus Libraries
 #include "Point_Utilities.hpp"
+#include "Size.hpp"
 #include "Vector_Utilities.hpp"
 
 // C++ Libraries
@@ -49,8 +50,7 @@ class Rectangle
          * Parameterized Constructor
          *
          * @param bl Bottom-Left Corner
-         * @param width
-         * @param height
+         * @param lengths
         */
         Rectangle( const Point_<ValueT,Dims>& bl,
                    std::array<ValueT,Dims>    lengths )
@@ -255,6 +255,46 @@ class Rectangle
                 new_rect.m_lengths[i] += ( 2 * rate );
             }
             return new_rect;
+        }
+
+        /**
+         * Subdivide the bounding box into chunks
+         */
+        std::vector<Rectangle<ValueT,Dims>> subdivide( const Size_<ValueT,Dims>& tile_size,
+                                                       bool                      include_partials ) const
+        {
+            std::vector<Rectangle<ValueT,Dims>> bboxes;
+
+            std::array<ValueT,Dims> lengths;
+
+            // Iterate over each offset
+            for( int dim = 0; dim < Dims; dim++ )
+            {
+                for( ValueT offset = 0;
+                     offset < m_lengths[dim];
+                     offset += tile_size[dim] )
+                {
+                    lengths[dim] = tile_size[dim];
+                    if( ( m_lengths[dim] - offset ) < lengths[dim] )
+                    {
+                        if( !include_partials )
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            lengths[dim] = m_lengths[dim] - offset;
+                        }
+                    }
+                }
+            }
+
+            Point_<ValueT,Dims> offset( lengths );
+
+            bboxes.push_back( Rectangle<ValueT,Dims>( offset + min(),
+                                                      tile_size.as_vector().data() ) );
+            
+            return bboxes;
         }
 
         /**

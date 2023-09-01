@@ -132,7 +132,7 @@ class Vector_
         /**
          * @brief Return copy of internal data array
         */
-        std::array<ValueT,Dims> data() const
+        std::array<ValueT,Dims> const& data() const
         {
             return m_data;
         }
