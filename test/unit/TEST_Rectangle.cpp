@@ -230,9 +230,13 @@ TEST( Rectangle, expand )
 TEST( Rectangle, subdivide )
 {
     // Create a big rectangle
-    tmns::math::Rect2d rect_01( 100, 200, 550, 550 );
+    tmns::math::Rect2d rect_01( tmns::math::Point2d( { 100, 200 } ),
+                                tmns::math::Point2d( { 550, 550 } ) );
 
     tmns::math::Size2d tile_size_01( { 100, 100 } );
 
     std::vector<tmns::math::Rect2d> bboxes_01 = rect_01.subdivide( tile_size_01, true );
+
+    // Expected size should be 5 x 4 = 20
+    ASSERT_EQ( bboxes_01.size(), 20 );
 }

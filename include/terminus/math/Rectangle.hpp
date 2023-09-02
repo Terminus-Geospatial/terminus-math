@@ -258,18 +258,59 @@ class Rectangle
         }
 
         /**
+         * Recursive component for the subdivision method.
+         * 
+         * @param bounds
+         * @param dim
+         * @param current_min
+         * @param current_size
+         * @param output
+        */
+        void process_bbox_dims( const std::vector<std::vector<std::tuple<ValueT,ValueT>>>&  bounds,
+                                int                                                         dim,
+                                Point_<ValueT,Dims>&                                        current_min,
+                                Size_<ValueT,Dims>&                                         current_size,
+                                std::vector<Rectangle<ValueT,Dims>>&                        output ) const
+        {
+            if( dim == Dims )
+            {
+                output.emplace_back( current_min,
+                                     current_size.as_vector().data() );
+                return;
+            }
+
+            // For dimension, add components
+            for( size_t dim_idx = 0; dim_idx < bounds[dim].size(); dim_idx++ )
+            {
+                // Update the current bbox
+                current_min[dim]  = std::get<0>( bounds[dim][dim_idx] );
+                current_size[dim] = std::get<1>( bounds[dim][dim_idx] );
+
+                process_bbox_dims( bounds,
+                                   dim + 1,
+                                   current_min,
+                                   current_size,
+                                   output );
+            }
+        }
+
+        /**
          * Subdivide the bounding box into chunks
          */
         std::vector<Rectangle<ValueT,Dims>> subdivide( const Size_<ValueT,Dims>& tile_size,
                                                        bool                      include_partials ) const
         {
-            std::vector<Rectangle<ValueT,Dims>> bboxes;
+            Point_<ValueT,Dims> lengths;
+            std::vector<ValueT> m_result;
 
-            std::array<ValueT,Dims> lengths;
+            // Compute the bounds for each dimension  (Dims, Per dim[ start, length])
+            std::vector<std::vector<std::tuple<ValueT,ValueT>>> bounds;
 
             // Iterate over each offset
             for( int dim = 0; dim < Dims; dim++ )
             {
+                std::vector<std::tuple<ValueT,ValueT>> dim_indices;
+
                 for( ValueT offset = 0;
                      offset < m_lengths[dim];
                      offset += tile_size[dim] )
@@ -286,15 +327,20 @@ class Rectangle
                             lengths[dim] = m_lengths[dim] - offset;
                         }
                     }
+
+                    dim_indices.push_back( std::make_tuple( min()[dim] + offset,
+                                                            lengths[dim] ) );
                 }
+
+                bounds.push_back( dim_indices );
             }
-
-            Point_<ValueT,Dims> offset( lengths );
-
-            bboxes.push_back( Rectangle<ValueT,Dims>( offset + min(),
-                                                      tile_size.as_vector().data() ) );
             
-            return bboxes;
+            Point_<ValueT,Dims> current_min;
+            Size_<ValueT,Dims>  current_size;
+            std::vector<Rectangle<ValueT,Dims>> output;
+            process_bbox_dims( bounds, 0, current_min, current_size, output );
+
+            return output;
         }
 
         /**
