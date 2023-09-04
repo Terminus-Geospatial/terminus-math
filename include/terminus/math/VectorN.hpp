@@ -41,6 +41,14 @@ class VectorN : public Vector_<ValueT,0>
         }
 
         /**
+         * Clear the array
+         */
+        void clear()
+        {
+            m_data.clear();
+        }
+
+        /**
          * Index Operator
         */
         ValueT operator[]( size_t idx ) const override
@@ -70,6 +78,11 @@ class VectorN : public Vector_<ValueT,0>
         ValueT& at( size_t idx ) override
         {
             return m_data.at(idx);
+        }
+
+        void push_back( ValueT new_entry )
+        {
+            m_data.push_back( new_entry );
         }
 
     private:

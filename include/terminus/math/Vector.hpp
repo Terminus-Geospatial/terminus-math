@@ -34,6 +34,15 @@ class Vector_
         }
 
         /**
+         * Constructor given an array of a different datatype
+        */
+        template <typename OtherValueT>
+        Vector_( std::array<OtherValueT,Dims> data )
+        {
+            std::copy( data.begin(), data.end(), m_data.begin() );
+        }
+
+        /**
          * Constructor given a fill value
         */
         Vector_( const ValueT& fill_value )
@@ -174,6 +183,41 @@ class Vector_
         }
 
         /**
+         * Normalize the vector
+         */
+        Vector_<ValueT,Dims> normalize() const
+        {
+            Vector_<ValueT,Dims> output = (*this);
+            auto mag = magnitude();
+            for( size_t i = 0; i < Dims; i++ )
+            {
+                output[i] /= mag;
+            }
+            return output;
+        }
+
+        /**
+         * Compute the vector magnitude
+        */
+        double magnitude() const
+        {
+            return std::sqrt( magnitude_sq() );
+        }
+
+        /**
+         * Compute the square of the magnitude
+        */
+        double magnitude_sq() const
+        {
+            double mag = 0;
+            for( const auto& elem : this->data() )
+            {
+                mag += elem * elem;
+            }
+            return mag;
+        }
+
+        /**
          * Print to string
         */
         std::string to_string() const
@@ -206,6 +250,11 @@ template <typename ValueT> using Vector4_ = Vector_<ValueT,4>;
 using Vector2d = Vector2_<double>;
 using Vector3d = Vector3_<double>;
 using Vector4d = Vector4_<double>;
+
+// Single-Precision Vectors
+using Vector2f = Vector2_<float>;
+using Vector3f = Vector3_<float>;
+using Vector4f = Vector4_<float>;
 
 // Integer Vectors
 using Vector2i = Vector2_<int>;

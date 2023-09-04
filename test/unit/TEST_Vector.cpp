@@ -25,3 +25,38 @@ TEST( Vector, Simple_Operations )
     ASSERT_EQ( v2.y(), 3 );
     ASSERT_EQ( v2.z(), 3 );
 }
+
+/**************************************/
+/*      Test the Array Constructors   */
+/**************************************/
+TEST( Vector, Constructors )
+{
+    // Create an array 
+    std::array<double,3> arr01 { 1, 2, 3 };
+
+    // Create Vector
+    tmns::math::Vector3d vec01( arr01 );
+    ASSERT_NEAR( vec01[0], 1, 0.001 );
+    ASSERT_NEAR( vec01[1], 2, 0.001 );
+    ASSERT_NEAR( vec01[2], 3, 0.001 );
+
+    // Create another vector of different type
+    tmns::math::Vector3i vec02( arr01 );
+    ASSERT_NEAR( vec02[0], 1, 0.001 );
+    ASSERT_NEAR( vec02[1], 2, 0.001 );
+    ASSERT_NEAR( vec02[2], 3, 0.001 );
+
+}
+
+/************************************************/
+/*          Test the Normalize Function         */
+/************************************************/
+TEST( Vector, normalize )
+{
+    tmns::math::Vector3f vec01( { 1, 2, 3 } );
+
+    auto res_01 = vec01.normalize();
+    ASSERT_NEAR( res_01[0], 0.267, 0.001 );
+    ASSERT_NEAR( res_01[1], 0.535, 0.001 );
+    ASSERT_NEAR( res_01[2], 0.802, 0.001 );
+}

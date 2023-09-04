@@ -45,6 +45,13 @@ TEST( Point, Addition_Operator )
     ASSERT_NEAR( pt6.y(),  3, 0.001 );
     ASSERT_NEAR( pt6.z(),  0, 0.001 );
 
+    // Test a point with a vector
+    auto vec7 = tmns::math::Vector3d( { -1.1, -2.2, -3.3 } );
+    auto pt8  = pt4 + vec7;
+    ASSERT_NEAR( pt8.x(), 1.9, 0.001 );
+    ASSERT_NEAR( pt8.y(),-7.2, 0.001 );
+    ASSERT_NEAR( pt8.z(), 1.7, 0.001 );
+
 }
 
 /***************************************************/
