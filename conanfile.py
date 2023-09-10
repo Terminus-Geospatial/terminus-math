@@ -1,3 +1,6 @@
+#    File:    conanfile.py
+#    Author:  Marvin Smith
+#    Date:    7/8/2023
 from conan import ConanFile, tools
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 from conan.tools.files import copy
@@ -8,30 +11,28 @@ class ConanProject(ConanFile):
     version = "0.0.1"
 
     license = "Terminus Proprietary"
-    author  = "Marvin Smith"
+    author  = "Marvin Smith <marvin_smith1@me.com>"
     url     = "https://bitbucket.org/msmith81886/terminus-outcome/src"
     description = "Straightforward Math APIs"
-    topics = ()
+    topics = ("terminus","math")
+
+    options = { "shared": [True, False],
+                "with_tests": [True, False],
+                "with_docs": [True, False],
+                "with_coverage": [True, False]
+    }
+
+    default_options = { "with_tests": True,
+                        "with_docs": True,
+                        "with_coverage": False,
+                        "boost/*:shared": True
+    }
 
     settings = "os", "compiler", "build_type", "arch"
 
-    options = {
-        "with_tests": [True, False],
-        "with_docs": [True, False],
-        "with_coverage": [True, False]
-    }
-
-    default_options = {
-        "with_tests": True,
-        "with_docs": True,
-        "with_coverage": False,
-        "boost/*:shared": True
-    }
-
-
     def build_requirements(self):
-        self.build_requires("terminus_cmake/1.0.0")
-        self.build_requires( "gtest/1.13.0" )
+        self.test_requires("gtest/1.13.0")
+        self.tool_requires("terminus_cmake/1.0.0")
 
     def requirements(self):
         self.requires("boost/1.82.0")
@@ -72,5 +73,5 @@ class ConanProject(ConanFile):
 
     def export_sources(self):
 
-        for p in [ "CMakeLists.txt", "include/*", "test/*", "README.md" ]:
+        for p in [ "CMakeLists.txt", "include/*", "src/*", "test/*", "README.md" ]:
             copy( self, p, self.recipe_folder, self.export_sources_folder )
