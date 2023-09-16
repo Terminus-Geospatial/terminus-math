@@ -60,3 +60,18 @@ TEST( Vector, normalize )
     ASSERT_NEAR( res_01[1], 0.535, 0.001 );
     ASSERT_NEAR( res_01[2], 0.802, 0.001 );
 }
+
+/****************************************/
+/*          Test the Dot-Product        */
+/****************************************/
+TEST( Vector, dot )
+{
+    // Create 2 vectors
+    tmns::math::Vector3f vec_01( {  1, 2, 3 } );
+    tmns::math::Vector3f vec_02( { -1, 2, 4 } );
+
+    // Compute the dot-product
+    auto dp_01 = tmns::math::Vector3f::dot( vec_01, vec_02 );
+
+    ASSERT_NEAR( dp_01, 15, 0.001 );
+}

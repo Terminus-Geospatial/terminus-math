@@ -30,6 +30,12 @@ class Quaternion
                     double x,
                     double y,
                     double z );
+        
+        /**
+         * Parameterized Constructor
+         */
+        Quaternion( double          real,
+                    const Vector3d& imag );
 
         /**
          * Get the real component
@@ -41,13 +47,46 @@ class Quaternion
         */
         Vector3d imag() const;
 
+        /**
+         * Get the magnitude of the quaternion
+         * @note:  This really should be 1.  
+         */
+        double magnitude() const;
+
+        /**
+         * Get the squared magnitude
+         * @note:  This really should be 1.
+         */
+        double magnitude_sq() const;
+
+        /**
+         * Return a normalize quaternion. 
+         * This effectively makes it unit-length in case it isn't.
+         */
+        Quaternion normalize() const;
+
+        /**
+         * Get the conjugate of the quaternion
+         */
+        Quaternion conj() const;
+
+        /**
+         * @brief get the inverse of this quaternion
+         */
+        Quaternion inverse() const;
+
+        /**
+         * Quaternion Division
+         */
+        Quaternion operator / ( const Quaternion& rhs ) const;
+
     private:
 
         /// Real Component
         double m_real { 0 };
 
         /// Imaginary Component
-        Vector3d m_imag {{ 1, 0, 0 }};
+        Vector3d m_imag { { 1, 0, 0 } };
 
 }; // End of Quaternion Class
 

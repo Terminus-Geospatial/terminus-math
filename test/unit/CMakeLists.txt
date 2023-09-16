@@ -12,6 +12,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/include )
 set( TEST ${PROJECT_NAME}_test )
 add_executable( ${TEST}
     TEST_Point.cpp
+    TEST_Quaternion.cpp
     TEST_Rectangle.cpp
     TEST_Size.cpp
     TEST_Vector.cpp

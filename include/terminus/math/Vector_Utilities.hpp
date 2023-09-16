@@ -31,5 +31,56 @@ Vector3_<ValueT> ToVector3( const ValueT& x,
     return {{ x, y, z }};
 }
 
+/**
+ * Multiply a Vector with a Scalar
+*/
+template <typename  ValueT,
+          int       Dims,
+          typename  OtherValueT>
+Vector_<ValueT,Dims> operator * ( const Vector_<ValueT,Dims>& vec,
+                                  const OtherValueT&          sc )
+{
+    auto output = vec;
+    for( auto& val : output.data() )
+    {
+        val = val * sc;
+    }
+    return output;
+}
+
+/**
+ * Multiply a Scalar with a Vector
+*/
+template <typename  ValueT,
+          int       Dims,
+          typename  OtherValueT>
+Vector_<ValueT,Dims> operator * ( const OtherValueT&          sc,
+                                  const Vector_<ValueT,Dims>& vec )
+{
+    auto output = vec;
+    for( auto& val : output.data() )
+    {
+        val = val * sc;
+    }
+    return output;
+}
+
+/**
+ * Divide a Vector with a Scalar
+*/
+template <typename  ValueT,
+          int       Dims,
+          typename  OtherValueT>
+Vector_<ValueT,Dims> operator / ( const Vector_<ValueT,Dims>& vec,
+                                  const OtherValueT&          sc )
+{
+    auto output = vec;
+    for( auto& val : output.data() )
+    {
+        val = val / sc;
+    }
+    return output;
+}
+
 
 } // End of tmns::math namespace

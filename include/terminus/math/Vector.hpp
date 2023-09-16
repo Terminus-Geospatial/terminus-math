@@ -218,6 +218,20 @@ class Vector_
         }
 
         /**
+         * Perform a Dot-Product
+         */
+        static double dot( const Vector_<ValueT,Dims>& vec1,
+                           const Vector_<ValueT,Dims>& vec2 )
+        {
+            double mag = 0;
+            for( int i = 0; i < Dims; i++ )
+            {
+                mag += vec1[i] * vec2[i];
+            }
+            return mag;
+        }
+
+        /**
          * Print to string
         */
         std::string to_string() const
