@@ -256,40 +256,6 @@ class Point_ : public Vector_<ValueT,Dims>
 
 }; // End of Point class
 
-/**
- * Multiply a Scalar by a Vector
-*/
-template <typename ValueT,
-          int      Dims,
-          typename OtherValueT>
-Vector_<ValueT,Dims> operator * ( OtherValueT s,
-                                  const Vector_<ValueT,Dims>& v )
-{
-    auto output = v;
-    for( size_t i = 0; i < v.size(); i++ )
-    {
-        output[i] = v[i] * s;
-    }
-    return output;
-}
-
-/**
- * Multiply a Vector by a Scalar
-*/
-template <typename ValueT,
-          int      Dims,
-          typename OtherValueT>
-Vector_<ValueT,Dims> operator * ( const Vector_<ValueT,Dims>& v,
-                                  OtherValueT s )
-{
-    auto output = v;
-    for( size_t i = 0; i < v.size(); i++ )
-    {
-        output[i] = v[i] * s;
-    }
-    return output;
-}
-
 // Alias for Point2_ object
 template <typename ValueT> using Point2_ = Point_<ValueT,2>;
 template <typename ValueT> using Point3_ = Point_<ValueT,3>;

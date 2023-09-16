@@ -22,6 +22,25 @@ class VectorN : public Vector_<ValueT,0>
 {
     public:
 
+        /// @brief Value Type
+        using value_type = ValueT;
+
+        /// @brief Array Type
+        using array_type = std::vector<value_type>;
+
+        /// @brief Reference Type
+        using reference_type = ValueT&;
+
+        /// @brief Const Reference Type
+        using const_reference_type = const ValueT&;
+
+        /// @brief Iterator Type
+        using iter_t = typename array_type::iterator;
+
+        /// @brief Const Iterator Type
+        using const_iter_t = typename array_type::const_iterator;
+
+
         VectorN() = default;
 
         /**
@@ -51,7 +70,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Index Operator
         */
-        ValueT operator[]( size_t idx ) const override
+        const_reference_type operator[]( size_t idx ) const override
         {
             return this->m_data[idx];
         }
@@ -59,7 +78,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Index Reference Operator
          */
-        ValueT& operator[]( size_t idx ) override
+        reference_type operator[]( size_t idx ) override
         {
             return this->m_data[idx];
         }
@@ -67,7 +86,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Get copy of internal data at specific index
         */
-        ValueT at( size_t idx ) const override
+        const_reference_type at( size_t idx ) const override
         {
             return m_data.at(idx);
         }
@@ -75,14 +94,76 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Get reference to internal data at specific index
         */
-        ValueT& at( size_t idx ) override
+        reference_type at( size_t idx ) override
         {
             return m_data.at(idx);
         }
 
+        /**
+         * @brief Get X Value
+         */
+        const_reference_type x() const
+        {
+            return m_data[0];
+        }
+
+        /**
+         * @brief Get X Reference
+         */
+        reference_type x()
+        {
+            return m_data[0];
+        }
+
+        /**
+         * @brief Get Y Value
+         */
+        const_reference_type y() const
+        {
+            return m_data[1];
+        }
+
+        /**
+         * @brief Get Y Reference
+         */
+        reference_type y()
+        {
+            return m_data[1];
+        }
+
+        /**
+         * @brief Get Z Value
+         */
+        const_reference_type z() const
+        {
+            return m_data[2];
+        }
+
+        /**
+         * @brief Get Z Reference
+         */
+        reference_type z()
+        {
+            return m_data[2];
+        }
+
+        /**
+         * @brief Add entry to vector
+         */
         void push_back( ValueT new_entry )
         {
             m_data.push_back( new_entry );
+        }
+
+        /**
+         * @brief Set all elements in the vector
+         */
+        template <typename TP>
+        void fill( TP value )
+        {
+            std::fill( begin(),
+                       end(),
+                       value );
         }
 
     private:

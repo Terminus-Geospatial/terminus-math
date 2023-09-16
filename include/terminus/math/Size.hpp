@@ -19,71 +19,78 @@ class Size_
 {
     public:
 
-        /// Value Type
-        typedef ValueT value_type;
+        /// @brief Value Type
+        using value_type = ValueT;
 
-        /// Number of dimensions
-        
+        /// @brief Reference Type
+        using reference_type = value_type&;
+
+        /// @brief Const Reference Type
+        using const_reference_type = const value_type&;
 
         /// Default Constructor
         Size_() = default;
 
         /**
          * Parameterized Constructor
-        */
+         */
         Size_( const std::array<ValueT,Dims>& data )
          : m_data( data )
         {
         }
 
         /**
-         * Get the width
-        */
-        ValueT width() const
+         * @brief Get the width
+         */
+        const_reference_type width() const
         {
             return m_data.x();
         }
 
         /**
-         * Get the width value
-        */
-        ValueT& width()
+         * @brief Get the width value
+         */
+        reference_type width()
         {
             return m_data.x();
         }
 
         /**
-         * Get the height
-        */
-        ValueT height() const
+         * @brief Get the height
+         */
+        const_reference_type height() const requires ( Dims >= 2 )
         {
             return m_data.y();
         }
 
         /**
-         * Get the height value
-        */
-        ValueT& height()
+         * @brief Get the height value
+         */
+        reference_type height() requires ( Dims >= 2 )
         {
             return m_data.y();
         }
 
         /**
-         * Get the depth value
-        */
-        ValueT& depth()
+         * @brief Get the depth value
+         */
+        reference_type depth() const requires ( Dims >= 3 )
         {
-            if( Dims < 3 )
-            {
-                throw std::runtime_error("Cannot call a 3d member on structure with < 3 dimensions." );
-            }
             return m_data.z();
         }
 
         /**
-         * Indexing Operator (Const/Copy)
-        */
-        ValueT operator[]( size_t id ) const
+         * @brief Get the depth value
+         */
+        reference_type depth() requires ( Dims >= 3 )
+        {
+            return m_data.z();
+        }
+
+        /**
+         * @brief Indexing Operator (Const/Copy)
+         */
+        const_reference_type operator[]( size_t id ) const
         {
             return m_data[id];
         }
@@ -91,7 +98,7 @@ class Size_
         /**
          * Indexing Operator (Ref)
         */
-        ValueT& operator[]( size_t id )
+        reference_type operator[]( size_t id )
         {
             return m_data[id];
         }

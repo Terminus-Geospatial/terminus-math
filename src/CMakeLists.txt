@@ -4,11 +4,18 @@
 
 include_directories( ../include/terminus/math )
 
+# Find Boost
+set( Boost_USE_MULTITHREADED ON )
+add_definitions( -DBOOST_ALL_DYN_LINK )
+find_package( Boost REQUIRED )
+#include_directories( ${Boost_INCLUDE_DIRS} )
+
+
 add_library( ${PROJECT_NAME} SHARED
                 Quaternion.cpp )
 
-target_include_directories( ${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+target_link_libraries( ${PROJECT_NAME} PUBLIC
+    Boost::headers
 )
 
 terminus_lib_configure( ${PROJECT_NAME} )

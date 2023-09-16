@@ -20,8 +20,6 @@ TEST( Point, Constructors )
     tmns::math::Point2d pt1;
     ASSERT_NEAR( pt1.x(), 0, EPS );
     ASSERT_NEAR( pt1.y(), 0, EPS );
-    ASSERT_ANY_THROW( pt1.z(); );
-
 }
 
 /************************************************/

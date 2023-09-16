@@ -17,7 +17,6 @@ TEST( Size, Basic_Construction_Tests )
     auto sz1 = tmns::math::Size2i();
     ASSERT_EQ( sz1.width(), 0 );
     ASSERT_EQ( sz1.height(), 0 );
-    ASSERT_ANY_THROW( { sz1.depth(); } );
 
     auto sz2 = tmns::math::Size3f();
     ASSERT_NEAR( sz2.width(), 0, 0.001 );
