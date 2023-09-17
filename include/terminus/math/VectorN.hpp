@@ -148,6 +148,38 @@ class VectorN : public Vector_<ValueT,0>
         }
 
         /**
+         * Get the starting iterator position
+         */
+        iter_t begin()
+        {
+            return m_data.begin();
+        }
+
+        /**
+         * Get the starting iterator position
+         */
+        const_iter_t begin() const
+        {
+            return m_data.begin();
+        }
+
+        /**
+         * Get the ending iterator position
+         */
+        iter_t end()
+        {
+            return m_data.end();
+        }
+
+        /**
+         * Get the ending iterator position
+         */
+        const_iter_t end() const
+        {
+            return m_data.end();
+        }
+
+        /**
          * @brief Add entry to vector
          */
         void push_back( ValueT new_entry )

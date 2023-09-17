@@ -103,7 +103,7 @@ class Quaternion
             
             static constexpr double EPS { 0.00001 };
 
-            if( std::fabs( ww -            max_val ) < EPS )
+            if( std::fabs( ww - max_val ) < EPS )
             {
                 double w4 = std::sqrt( ww * 4.0 );
                 components[0] = w4 / 4.0;

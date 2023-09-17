@@ -12,7 +12,8 @@ find_package( Boost REQUIRED )
 
 
 add_library( ${PROJECT_NAME} SHARED
-                Quaternion.cpp )
+                Quaternion.cpp
+                Quaternion_Utilities.cpp )
 
 target_link_libraries( ${PROJECT_NAME} PUBLIC
     Boost::headers
