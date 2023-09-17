@@ -31,10 +31,10 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
         using const_reference_type = ElementT const&;
 
         /// @brief Iterator Type
-        using iter_t = array_type::iterator;
+        using iter_t = typename array_type::iterator;
 
         /// @brief Const Iterator Type
-        using const_iter_t = array_type::const_iterator;
+        using const_iter_t = typename array_type::const_iterator;
 
         /**
          * Constructs a default (zero-size) matrix
@@ -65,6 +65,21 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
                 size_t          cols,
                 const ElementT* data )
             : m_data( data, data + rows * cols ),
+              m_rows( rows ),
+              m_cols( cols )
+        {
+        }
+
+        /**
+         * Constructs a matrix of the given size from given 
+         * densely-packed row-mjor data.  This constructor copies the
+         * data.  If you wish to make a shallow proxy object instead,
+         * Matrix_Proxy
+         */
+        Matrix( size_t                  rows,
+                size_t                  cols,
+                std::vector<value_type> data )
+            : m_data( data.begin(), data.end() ),
               m_rows( rows ),
               m_cols( cols )
         {
@@ -111,7 +126,7 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
          * Generalize Assignment Operator
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const matric::Matrix_Base<OtherMatrixT>& mat )
+        Matrix& operator = ( const matrix::Matrix_Base<OtherMatrixT>& mat )
         {
             // Make a copy of the data
             Matrix temp( mat );
@@ -126,10 +141,10 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
          * This is a performance-optimizing function to be used with caution!
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const MatrixNoTmp<OtherMatrixT>& mat )
+        Matrix& operator = ( const matrix::Matrix_No_Tmp<OtherMatrixT>& mat )
         {
             if( mat.impl().rows() == rows() && 
-                mat.impl().cols()==cols() )
+                mat.impl().cols() == cols() )
             {
                 std::copy( mat.impl().begin(),
                            mat.impl().end(),
@@ -229,7 +244,7 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
         /**
          * Get the beginning of the matrix
          */
-        const_iter_t begin()
+        iter_t begin()
         {
             return m_data.begin();
         }

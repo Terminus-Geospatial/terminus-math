@@ -58,19 +58,39 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         /**
          * Constructor given an array of data
          */
-        template <typename OtherValueT,
-                  int ArrayDims>
-        Matrix( const std::array<OtherValueT,ArrayDims>& data )
+        Matrix( std::array<value_type,RowsN*ColsN> data )
         {
-            static_assert( ColsN * RowsN >= ArrayDims );
-
             // Copy the first X elements
             std::copy( data.begin(), 
                        data.end(),
                        m_data.begin() );
             
             // Fill in the remaining items
-            std::fill( std::advance( m_data.begin(), ArrayDims ),
+            auto pos = m_data.begin();
+            std::advance( pos, RowsN * ColsN );
+
+            std::fill( pos,
+                       m_data.end(),
+                       0 );
+        }
+
+        /**
+         * Constructor given an array of data
+         */
+        template <typename OtherValueT,
+                  size_t ArrayDims>
+        Matrix( std::array<OtherValueT,ArrayDims> data ) requires ( ArrayDims <= ColsN * RowsN )
+        {
+            // Copy the first X elements
+            std::copy( data.begin(), 
+                       data.end(),
+                       m_data.begin() );
+            
+            // Fill in the remaining items
+            auto pos = m_data.begin();
+            std::advance( pos, ArrayDims );
+
+            std::fill( pos,
                        m_data.end(),
                        0 );
         }
@@ -79,7 +99,7 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
          * Copy Constructor
          */
         Matrix( const Matrix& mat )
-            : m_data( mat.data )
+            : m_data( mat.m_data )
         {
         }
 
