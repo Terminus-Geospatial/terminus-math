@@ -41,11 +41,21 @@ class VectorN : public Vector_<ValueT,0>
         using const_iter_t = typename array_type::const_iterator;
 
 
+        /**
+         * @brief Create an empty vector
+         */
         VectorN() = default;
 
         /**
-         * Constructor Given an Array
-        */
+         * @brief Create a zero vector of the specific size
+         */
+        VectorN( size_t vector_size )
+            : m_data( vector_size, 0 )
+        {}
+
+        /**
+         * @brief Constructor Given an Array
+         */
         VectorN( std::initializer_list<ValueT> data )
           : m_data( data )
         {
