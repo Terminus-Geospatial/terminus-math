@@ -17,7 +17,7 @@ namespace tmns::math::vector {
 template <typename VectorT>
 struct Vector_Size
 {
-    const static size_t value = 0;
+    const static std::size_t value = 0;
 };
 
 /**

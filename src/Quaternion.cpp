@@ -8,6 +8,9 @@
 // Terminus Libraries
 #include "Vector_Utilities.hpp"
 
+// C++ Libraries
+#include <cmath>
+
 namespace tmns::math {
 
 /********************************************/

@@ -5,9 +5,12 @@
 */
 #pragma once
 
-// C++ Includes
+// Terminus Libraries
 #include "Matrix.hpp"
 #include "Vector.hpp"
+
+// C++ Libraries
+#include <cmath>
 
 namespace tmns::math {
 

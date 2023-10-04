@@ -7,6 +7,7 @@
 
 // C++ Libraries
 #include <array>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 
@@ -387,7 +388,7 @@ class Vector_ : public vector::Vector_Base<Vector_<ValueT,Dims>>
 
     private:
 
-        array_type m_data { 0 };
+        array_type m_data;
 
 }; // End of Vector class
 
