@@ -6,6 +6,7 @@
 #include "Quaternion_Utilities.hpp"
 
 // C++ Libraries
+#include <cmath>
 #include <numeric>
 
 namespace tmns::math {
