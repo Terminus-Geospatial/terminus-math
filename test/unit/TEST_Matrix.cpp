@@ -88,4 +88,3 @@ TEST( Matrix, constructor_tests )
     ASSERT_EQ( &(*(mat_01.begin()+1)), &(mat_01(0,1)));
     ASSERT_EQ( mat_01.end(), mat_01.begin() + 9 );
 }
-

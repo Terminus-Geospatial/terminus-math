@@ -501,6 +501,8 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
 
 }; // End of Matrix class
 
+using Matrix_3x3 = Matrix<double,3,3>;
+
 // Overload a few type traits
 namespace matrix {
 
