@@ -51,6 +51,24 @@ TEST( Rectangle, Constructors_and_Getters )
     ASSERT_NEAR( rect4.height(),  6, 0.0001 );
     ASSERT_NEAR( rect4.min().x(), -3, 0.0001 );
     ASSERT_NEAR( rect4.min().y(), -2, 0.0001 );
+
+    // Real-world example that was failing in TMNS Image
+    tmns::math::Rect2i rect5( tmns::math::Point2i( { 100, 100 } ),
+                              tmns::math::Point2i( { 300, 300 } ) );
+    
+    ASSERT_NEAR( rect5.bl().x(), 100, 0.0001 );
+    ASSERT_NEAR( rect5.bl().y(), 100, 0.0001 );
+    ASSERT_NEAR( rect5.br().x(), 300, 0.0001 );
+    ASSERT_NEAR( rect5.br().y(), 100, 0.0001 );
+    ASSERT_NEAR( rect5.tr().x(), 300, 0.0001 );
+    ASSERT_NEAR( rect5.tr().y(), 300, 0.0001 );
+    ASSERT_NEAR( rect5.tl().x(), 100, 0.0001 );
+    ASSERT_NEAR( rect5.tl().y(), 300, 0.0001 );
+    ASSERT_NEAR( rect5.width(),  200, 0.0001 );
+    ASSERT_NEAR( rect5.height(), 200, 0.0001 );
+    ASSERT_NEAR( rect5.min().x(),100, 0.0001 );
+    ASSERT_NEAR( rect5.min().y(),100, 0.0001 );
+            
 }
 
 /************************************/

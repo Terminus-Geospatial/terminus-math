@@ -45,7 +45,10 @@ class Vector_ : public vector::Vector_Base<Vector_<ValueT,Dims>>
         /**
          * Default Constructor
         */
-        Vector_() = default;
+        Vector_()
+        {
+            std::fill( m_data.begin(), m_data.end(), 0 );
+        }
 
         /**
          * Constructor given an array.  Performs a deep copy.  If 

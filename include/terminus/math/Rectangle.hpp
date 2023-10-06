@@ -49,23 +49,11 @@ class Rectangle
         /**
          * Parameterized Constructor
          *
-         * @param bl Bottom-Left Corner
-         * @param lengths
-        */
-        Rectangle( const Point_<ValueT,Dims>& bl,
-                   std::array<ValueT,Dims>    lengths )
-          : m_bl( bl ),
-            m_lengths( lengths )
-        {}
-
-        /**
-         * Parameterized Constructor
-         *
          * @param min_corner
          * @param max_corner
         */
-        Rectangle( const Point_<ValueT,Dims>& min_corner,
-                   const Point_<ValueT,Dims>& max_corner )
+        explicit Rectangle( const Point_<ValueT,Dims>& min_corner,
+                            const Point_<ValueT,Dims>& max_corner )
         {
             m_bl = Point_<ValueT,Dims>::elementwise_min( min_corner,
                                                          max_corner );
@@ -77,6 +65,18 @@ class Rectangle
 
             m_lengths = ( max_point - min_point ).data();
         }
+
+        /**
+         * Parameterized Constructor
+         *
+         * @param bl Bottom-Left Corner
+         * @param lengths
+        */
+        Rectangle( const Point_<ValueT,Dims>& bl,
+                   std::array<ValueT,Dims>    lengths )
+          : m_bl( bl ),
+            m_lengths( lengths )
+        {}
 
         /**
          * Get the dimensions
