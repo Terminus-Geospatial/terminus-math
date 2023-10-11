@@ -9,6 +9,7 @@
 #include "Matrix_Base.hpp"
 #include "Matrix_Col.hpp"
 #include "Matrix_Row.hpp"
+#include "Matrix_Transpose.hpp"
 
 // Boost Libraries
 #include <boost/mpl/min_max.hpp>
@@ -281,6 +282,14 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         const_iter_t end() const
         {
             return m_data.end();
+        }
+
+        /**
+         * Return the transpose
+         */
+        Matrix_Transpose<Matrix<ElementT,RowsN,ColsN>> T()
+        {
+            return transpose( *this );
         }
 
         /**

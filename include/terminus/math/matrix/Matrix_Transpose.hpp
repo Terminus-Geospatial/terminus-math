@@ -10,6 +10,12 @@
 
 namespace tmns::math {
 
+// Forward declar matrix
+template <typename ElementT,
+          size_t   RowsN,
+          size_t   ColsN>
+class Matrix;
+
 /**
  * @class Matrix_Transpose<MatrixT>
  * A transposed matrix class.
@@ -51,7 +57,7 @@ class Matrix_Transpose : public Matrix_Base<Matrix_Transpose<MatrixT> >
                 sout << "Matrix must have dimensions " << rows() << "x" << cols() << ".";
                 throw std::runtime_error( sout.str() );
             }
-            Matrix<value_type> tmp( m );
+            Matrix<value_type,0,0> tmp( m );
             std::copy( tmp.begin(), tmp.end(), begin() );
             return *this;
         }
@@ -68,7 +74,7 @@ class Matrix_Transpose : public Matrix_Base<Matrix_Transpose<MatrixT> >
                 sout << "Matrix must have dimensions " << rows() << "x" << cols() << ".";
                 throw std::runtime_error( sout.str() );
             }
-            Matrix<value_type> tmp( m );
+            Matrix<value_type,0,0> tmp( m );
             std::copy( tmp.begin(), tmp.end(), begin() );
             return *this;
         }
@@ -185,7 +191,7 @@ class Matrix_Transpose : public Matrix_Base<Matrix_Transpose<MatrixT> >
          */
         const_iter_t end() const
         {
-            return const_iterator( *this, rows(), 0 );
+            return const_iter_t( *this, rows(), 0 );
         }
 
     private:

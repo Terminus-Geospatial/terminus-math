@@ -46,4 +46,27 @@ TEST( Matrix_Transpose, transpose )
         ASSERT_NEAR( mat_trans_01[r][c], trans_data[counter++], 0.001 );
     }
 
+    // Assign to a real matrix
+    tmx::Matrix<double,4,3> new_mat = mat_trans_01;
+
+    // Verify it's the same
+    counter = 0;
+    ASSERT_EQ( new_mat.rows(), 4 );
+    ASSERT_EQ( new_mat.cols(), 3 );
+    for( int r = 0; r < new_mat.rows(); r++ )
+    for( int c = 0; c < new_mat.cols(); c++ )
+    {
+        ASSERT_NEAR( new_mat[r][c], trans_data[counter++], 0.001 );
+    }
+
+    // Compare using the mat's .transpose() operator
+    counter = 0;
+    auto final_mat = new_mat.T();
+    ASSERT_EQ( final_mat.rows(), 3 );
+    ASSERT_EQ( final_mat.cols(), 4 );
+    for( int r = 0; r < final_mat.rows(); r++ )
+    for( int c = 0; c < final_mat.cols(); c++ )
+    {
+        ASSERT_NEAR( final_mat[r][c], data[counter++], 0.001 );
+    }
 }
