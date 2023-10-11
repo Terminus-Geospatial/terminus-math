@@ -14,7 +14,7 @@ namespace tmns::math {
  * Dynamicall allocated, arbitrary-dimension matrix class.
  */
 template <typename ElementT>
-class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
+class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
 {
     public:
 
@@ -101,7 +101,7 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
          * Generalized copy constructor for any base type
          */
         template <typename OtherMatrixT>
-        Matrix( const matrix::Matrix_Base<OtherMatrixT>& mat )
+        Matrix( const Matrix_Base<OtherMatrixT>& mat )
             : m_data( mat.impl().begin(),
                       mat.impl().end() ),
               m_rows( mat.rows() ),
@@ -126,7 +126,7 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
          * Generalize Assignment Operator
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const matrix::Matrix_Base<OtherMatrixT>& mat )
+        Matrix& operator = ( const Matrix_Base<OtherMatrixT>& mat )
         {
             // Make a copy of the data
             Matrix temp( mat );
@@ -141,7 +141,7 @@ class Matrix<ElementT,0,0> : public matrix::Matrix_Base<Matrix<ElementT> >
          * This is a performance-optimizing function to be used with caution!
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const matrix::Matrix_No_Tmp<OtherMatrixT>& mat )
+        Matrix& operator = ( const Matrix_No_Tmp<OtherMatrixT>& mat )
         {
             if( mat.impl().rows() == rows() && 
                 mat.impl().cols() == cols() )

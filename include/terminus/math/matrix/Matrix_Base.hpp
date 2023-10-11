@@ -9,7 +9,7 @@
 #include "Matrix_Row.hpp"
 #include "Matrix_Traits.hpp"
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * @class Matrix_Base
@@ -100,4 +100,4 @@ class Matrix_Base
 
 }; // End of Matrix_Base class
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

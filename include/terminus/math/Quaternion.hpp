@@ -6,7 +6,7 @@
 #pragma once
 
 // Terminus Libraries
-#include "Matrix.hpp"
+#include "matrix/Matrix.hpp"
 #include "Vector.hpp"
 
 // C++ Libraries

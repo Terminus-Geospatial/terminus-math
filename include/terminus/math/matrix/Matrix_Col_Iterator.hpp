@@ -8,7 +8,7 @@
 // Boost Libraries
 #include <boost/iterator/iterator_facade.hpp>
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * Matrix Column Iterator Class
@@ -99,4 +99,4 @@ class Matrix_Col_Iterator : public boost::iterator_facade<Iterator<IteratorT>,
 
 }; // End of Matrix_Col_Iterator class
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

@@ -8,7 +8,7 @@
 // Terminus Libraries
 #include "Matrix_Traits.hpp"
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * @class Matrix_Unary_Functor<MatrixT,FunctorT>
@@ -432,4 +432,4 @@ struct Matrix_Cols<Matrix_Binary_Functor<Matrix1T,Matrix2T,FunctorT>>
                                     ( Matrix_Cols<Matrix2T>::value );
 };
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

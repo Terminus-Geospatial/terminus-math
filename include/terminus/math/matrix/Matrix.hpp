@@ -6,9 +6,9 @@
 #pragma once
 
 // Terminus Libraries
-#include "matrix/Matrix_Base.hpp"
-#include "matrix/Matrix_Col.hpp"
-#include "matrix/Matrix_Row.hpp"
+#include "Matrix_Base.hpp"
+#include "Matrix_Col.hpp"
+#include "Matrix_Row.hpp"
 
 // Boost Libraries
 #include <boost/mpl/min_max.hpp>
@@ -16,6 +16,7 @@
 // C++ Libraries
 #include <cassert>
 #include <iterator>
+#include <ranges>
 #include <stack>
 #include <stdexcept>
 
@@ -27,7 +28,7 @@ namespace tmns::math {
 template <typename ElementT,
           size_t   RowsN = 0,
           size_t   ColsN = 0>
-class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
+class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
 {
     public:
 
@@ -111,7 +112,7 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
          * Copy Constructor from another Base Matrix-Type
          */
         template <typename OtherMatrixT>
-        Matrix( const matrix::Matrix_Base<OtherMatrixT>& mat )
+        Matrix( const Matrix_Base<OtherMatrixT>& mat )
         {
             // Log error if incoming matrix is of incorrect size
             if( mat.impl().rows() != RowsN ||
@@ -143,7 +144,7 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
          * General assignment operator
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const matrix::Matrix_Base<OtherMatrixT>& mat )
+        Matrix& operator = ( const Matrix_Base<OtherMatrixT>& mat )
         {
             if( mat.impl().rows() != RowsN ||
                 mat.impl().cols() != ColsN )
@@ -166,7 +167,7 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
          * caution!
          */
         template <typename OtherMatrixT>
-        Matrix& operator = ( const matrix::Matrix_No_Tmp<OtherMatrixT>& mat )
+        Matrix& operator = ( const Matrix_No_Tmp<OtherMatrixT>& mat )
         {
             if( mat.impl().rows() != RowsN ||
                 mat.impl().cols() != ColsN )
@@ -393,8 +394,8 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
             // Perform LU decomposition with partial pivoting
             for( size_t i = 0; i < sz; ++i )
             {
-                matrix::Matrix_Col<Matrix<value_type> > mci( buf, i );
-                matrix::Matrix_Row<Matrix<value_type> > mri( buf, i );
+                Matrix_Col<Matrix<value_type> > mci( buf, i );
+                Matrix_Row<Matrix<value_type> > mri( buf, i );
       
                 size_t i_norm_inf = i + index_norm_inf( subvector( mci, i, sz - i ) );
       
@@ -504,7 +505,6 @@ class Matrix : public matrix::Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
 using Matrix_3x3 = Matrix<double,3,3>;
 
 // Overload a few type traits
-namespace matrix {
 
 /**
  * Matrix implementation for Matrix_Rows
@@ -527,7 +527,5 @@ struct Matrix_Cols<Matrix<ElementT,RowsN,ColsN> >
 {
     static const size_t value = ColsN;
 };
-
-} // End of matrix namespace
 
 } // End of tmns::math namespace

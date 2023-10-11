@@ -5,7 +5,7 @@
 */
 #pragma once
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * Simple type structure to compute the number of rows of a matrix
@@ -61,4 +61,4 @@ class Matrix_No_Tmp
   }; // End of Matrix_No_Tmp class
 
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

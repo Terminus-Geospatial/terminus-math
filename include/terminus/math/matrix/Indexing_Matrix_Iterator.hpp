@@ -11,7 +11,7 @@
 // Boost Libraries
 #include <boost/iterator/iterator_facade.hpp>
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * @class Indexing_Matrix_Iterator<MatrixT>
@@ -24,11 +24,11 @@ namespace tmns::math::matrix {
  */
 template <typename MatrixT>
 class Indexing_Matrix_Iterator : public boost::iterator_facade<Indexing_Matrix_Iterator<MatrixT>,
-                                        std::conditional_t<std::is_const<MatrixT>,
+                                        std::conditional_t<std::is_const_v<MatrixT>,
                                                            const typename MatrixT::value_type,
                                                            typename MatrixT::value_type>,
                                         boost::random_access_traversal_tag,
-                                        std::conditional_t<std::is_const<MatrixT>,
+                                        std::conditional_t<std::is_const_v<MatrixT>,
                                                            typename MatrixT::const_reference_type,
                                                            typename MatrixT::reference_type>>
 {
@@ -140,4 +140,4 @@ class Indexing_Matrix_Iterator : public boost::iterator_facade<Indexing_Matrix_I
 }; // End of Indexing_Matrix_Iterator class
 
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

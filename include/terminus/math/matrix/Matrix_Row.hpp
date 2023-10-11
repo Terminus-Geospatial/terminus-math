@@ -13,7 +13,7 @@
 // C++ Libraries
 #include <vector>
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 
 /**
@@ -204,4 +204,4 @@ class Matrix_Row : public vector::Vector_Base<Matrix_Row<MatrixT>>
 
 }; // End of Matrix_Row class
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace

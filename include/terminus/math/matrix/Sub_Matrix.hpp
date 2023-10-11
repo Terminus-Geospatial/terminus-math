@@ -9,7 +9,7 @@
 #include "Indexing_Matrix_Iterator.hpp"
 #include "Matrix_Base.hpp"
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * View-like wrapper around another matrix to allow for sub-matrix operations
@@ -233,4 +233,4 @@ Sub_Matrix<const MatrixT> submatrix( const Matrix_Base<MatrixT>& matrix,
                                       cols );
 }
 
-} // End of tmns::math::matrix
+} // End of tmns::math

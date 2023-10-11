@@ -11,7 +11,7 @@
 /// Boost Libraries
 #include <boost/iterator/iterator_facade.hpp>
 
-namespace tmns::math::matrix {
+namespace tmns::math {
 
 /**
  * Structure for representing column semantics
@@ -298,4 +298,4 @@ class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
 
 }; // End of Matrix_Col class
 
-} // End of tmns::math::matrix namespace
+} // End of tmns::math namespace
