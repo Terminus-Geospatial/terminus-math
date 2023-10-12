@@ -8,6 +8,7 @@
 // Terminus Math Libraries
 #include "../vector/Vector_Base.hpp"
 #include "../VectorN.hpp"
+#include "../Vector_Utilities.hpp"
 #include "Matrix_Traits.hpp"
 
 // C++ Libraries

@@ -70,7 +70,7 @@ class Matrix_Proxy : public Matrix_Base<Matrix_Proxy<ElementT,RowsN,ColsN> >
         template <typename T>
         Matrix_Proxy& operator = ( const Matrix_Base<T>& m )
         {
-            if( m.impl().rows() != Rows || 
+            if( m.impl().rows() != RowsN || 
                 m.impl().cols() != ColsN )
             {
                 std::stringstream sout;
@@ -78,7 +78,7 @@ class Matrix_Proxy : public Matrix_Base<Matrix_Proxy<ElementT,RowsN,ColsN> >
                      << m.impl().rows() << " x " << m.impl().cols();
                 throw std::runtime_error( sout.str() );
             }
-            Matrix<ElemT,RowsN,ColsN> tmp( m );
+            Matrix<ElementT,RowsN,ColsN> tmp( m );
             std::copy( tmp.begin(), tmp.end(), begin() );
             return *this;
         }
@@ -387,7 +387,7 @@ class Matrix_Proxy<ElementT,0,0> : public Matrix_Base<Matrix_Proxy<ElementT>>
         /**
          * Get the beginning iterator position
          */
-        iterator begin()
+        iter_t begin()
         {
             return m_ptr;
         }
@@ -403,7 +403,7 @@ class Matrix_Proxy<ElementT,0,0> : public Matrix_Base<Matrix_Proxy<ElementT>>
         /**
          * Get the end iterator position
          */
-        iterator end()
+        iter_t end()
         {
             return m_ptr + rows() * cols();
         }

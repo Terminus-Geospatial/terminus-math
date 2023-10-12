@@ -42,11 +42,11 @@ class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
 
         /// @brief Iterator Type
         using iter_t = std::conditional_t<std::is_const_v<MatrixT>,
-                                          Iterator<typename MatrixT::const_iterator>,
-                                          Iterator<typename MatrixT::iterator>>;
+                                          Iterator<typename MatrixT::const_iter_t>,
+                                          Iterator<typename MatrixT::iter_t>>;
         
         /// @brief Const Iterator Type
-        using const_iter_t = Iterator<typename MatrixT::const_iterator>;
+        using const_iter_t = Iterator<typename MatrixT::const_iter_t>;
 
         /**
          * @brief Constructor

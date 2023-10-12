@@ -58,7 +58,6 @@ class Matrix_No_Tmp
         /// @brief Underlying Matrix
         const MatrixT& m_value;
         
-  }; // End of Matrix_No_Tmp class
-
+}; // End of Matrix_No_Tmp class
 
 } // End of tmns::math namespace

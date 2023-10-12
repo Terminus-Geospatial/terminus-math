@@ -9,6 +9,12 @@
 #include "Matrix_Row.hpp"
 #include "Matrix_Traits.hpp"
 
+// C++ Libraries
+#include <deque>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+
 namespace tmns::math {
 
 /**
@@ -97,6 +103,46 @@ class Matrix_Base
             return Matrix_Row<const MatrixT>( impl(), row );
         }
 
+        /**
+         * Print the matrix in a pretty format
+         */
+        std::string to_log_string( size_t offset = 0, int precision = 4 ) const
+        {
+            // Solve for the largest string
+            int max_val_len = 0;
+            std::stringstream temp;
+            std::deque<std::string> str_list;
+            for( auto it = impl().begin(); it != impl().end(); it++ )
+            {
+                temp.clear();
+                temp.str("");
+                temp << std::fixed << std::setprecision(precision) << (*it);
+                str_list.push_back( temp.str() );
+                max_val_len = temp.str().size();
+            }
+
+            // Print the actual matrix
+            std::stringstream sout;
+            std::string gap( offset, ' ' );
+            sout << gap << "Matrix: (r: " << impl().rows() << ", c: " << impl().cols() << ")" << std::endl;
+            for( size_t r = 0; r < impl().rows(); r++ )
+            {
+                sout << gap << "|  ";
+                for( size_t c = 0; c < impl().cols(); c++ )
+                {
+                    std::stringstream temp;
+                    temp << std::setw( max_val_len ) << std::setfill( ' ' ) << str_list.front();
+                    str_list.pop_front();
+                    if( c > 0 )
+                    {
+                        sout << ",  ";
+                    }
+                    sout << temp.str();
+                }
+                sout << "  |" << std::endl;
+            }
+            return sout.str();
+        }
 
 }; // End of Matrix_Base class
 
