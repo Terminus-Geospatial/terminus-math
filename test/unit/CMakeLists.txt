@@ -12,6 +12,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/include )
 set( TEST ${PROJECT_NAME}_test )
 add_executable( ${TEST}
     matrix/TEST_Matrix_Multiplication.cpp
+    matrix/TEST_Matrix_Operations.cpp
     matrix/TEST_Matrix_Transpose.cpp
     matrix/TEST_Matrix.cpp
     matrix/TEST_MatrixN.cpp

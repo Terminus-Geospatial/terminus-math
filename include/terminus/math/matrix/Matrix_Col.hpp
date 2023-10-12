@@ -158,6 +158,12 @@ class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
          */
         reference_type operator[]( size_t idx )
         {
+            if( idx > child().rows() )
+            {
+                std::stringstream sout;
+                sout << "Requested row (" << idx << ") > Rows (" << child().rows() << ")";
+                throw std::runtime_error( sout.str() );
+            }
             return child()( idx, m_col );
         }
 

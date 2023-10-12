@@ -223,6 +223,18 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         value_type& operator()( size_t row,
                                 size_t col )
         {
+            if( row >= RowsN )
+            {
+                std::stringstream sout;
+                sout << "Row: " << row << " > RowsN: " << RowsN;
+                throw std::runtime_error( sout.str() );
+            }
+            if( col >= ColsN )
+            {
+                std::stringstream sout;
+                sout << "Col: " << col << " > ColsN: " << ColsN;
+                throw std::runtime_error( sout.str() );
+            }
             return m_data[ row * ColsN + col ];
         }
 
@@ -232,6 +244,18 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         value_type const& operator()( size_t row,
                                       size_t col ) const
         {
+            if( row >= RowsN )
+            {
+                std::stringstream sout;
+                sout << "Row: " << row << " > RowsN: " << RowsN;
+                throw std::runtime_error( sout.str() );
+            }
+            if( col >= ColsN )
+            {
+                std::stringstream sout;
+                sout << "Col: " << col << " > ColsN: " << ColsN;
+                throw std::runtime_error( sout.str() );
+            }
             return m_data[ row * ColsN + col ];
         }
 
