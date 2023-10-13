@@ -122,3 +122,125 @@ TEST( Matrix_Operations, select_col_test_01 )
         ASSERT_ANY_THROW( col_check[0] );
     }
 }
+
+/*************************************************/
+/*          Test the Select Row Method           */
+/*************************************************/
+TEST( Matrix_Operations, select_row_test_01 )
+{
+    // Create some test matrices
+    tmx::Matrix<double,3,4> mat01( {  1,  2,  3,  4,
+                                      5,  6,  7,  8,
+                                      9, 10, 11, 12 } );
+    tmx::Matrix<double,4,3> mat02( {  1,  2,  3,
+                                      4,  5,  6,
+                                      7,  8,  9,
+                                     10, 11, 12 } );
+
+    // Verify picking a column works
+    {
+        auto row_check = tmx::select_row( mat01, 0 );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0], 1, 0.001 );
+        ASSERT_NEAR( row_check[1], 2, 0.001 );
+        ASSERT_NEAR( row_check[2], 3, 0.001 );
+        ASSERT_NEAR( row_check[3], 4, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    {
+        auto row_check = tmx::select_row( mat01, 1 );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0], 5, 0.001 );
+        ASSERT_NEAR( row_check[1], 6, 0.001 );
+        ASSERT_NEAR( row_check[2], 7, 0.001 );
+        ASSERT_NEAR( row_check[3], 8, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+    {
+        auto row_check = tmx::select_row( mat01, 2 );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0],  9, 0.001 );
+        ASSERT_NEAR( row_check[1], 10, 0.001 );
+        ASSERT_NEAR( row_check[2], 11, 0.001 );
+        ASSERT_NEAR( row_check[3], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    // This should fail
+    {
+        auto row_check = tmx::select_row( mat01, 3 );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_ANY_THROW( row_check[0]  );
+        ASSERT_ANY_THROW( row_check[1]  );
+        ASSERT_ANY_THROW( row_check[2]  );
+        ASSERT_ANY_THROW( row_check[3]  );
+        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    // This should fail
+    {
+        auto row_check = tmx::select_row( mat01, 30 );
+        ASSERT_ANY_THROW( row_check[0] );
+    }
+
+    // Check mat 2
+    {
+        auto row_check = tmx::select_row( mat02, 0 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0],  1, 0.001 );
+        ASSERT_NEAR( row_check[1],  2, 0.001 );
+        ASSERT_NEAR( row_check[2],  3, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    {
+        auto row_check = tmx::select_row( mat02, 1 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0],  4, 0.001 );
+        ASSERT_NEAR( row_check[1],  5, 0.001 );
+        ASSERT_NEAR( row_check[2],  6, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+    {
+        auto row_check = tmx::select_row( mat02, 2 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0],  7, 0.001 );
+        ASSERT_NEAR( row_check[1],  8, 0.001 );
+        ASSERT_NEAR( row_check[2],  9, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+    {
+        auto row_check = tmx::select_row( mat02, 3 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0], 10, 0.001 );
+        ASSERT_NEAR( row_check[1], 11, 0.001 );
+        ASSERT_NEAR( row_check[2], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    // This should fail
+    {
+        auto row_check = tmx::select_row( mat02, 4 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_ANY_THROW( row_check[0]  );
+        ASSERT_ANY_THROW( row_check[1]  );
+        ASSERT_ANY_THROW( row_check[2]  );
+        ASSERT_ANY_THROW( row_check[3]  );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+
+    // This should fail
+    {
+        auto row_check = tmx::select_row( mat02, 30 );
+        ASSERT_ANY_THROW( row_check[0] );
+    }
+}
