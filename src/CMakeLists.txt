@@ -17,6 +17,7 @@ add_library( ${PROJECT_NAME} SHARED
 
 target_link_libraries( ${PROJECT_NAME} PUBLIC
     Boost::headers
+    Boost::stacktrace
 )
 
 terminus_lib_configure( ${PROJECT_NAME} )

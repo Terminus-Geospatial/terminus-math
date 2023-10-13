@@ -7,8 +7,8 @@
 
 // Terminus Math Libraries
 #include "../vector/Vector_Base.hpp"
-#include "../VectorN.hpp"
-#include "../Vector_Utilities.hpp"
+#include "../vector/VectorN.hpp"
+#include "../vector/Vector_Utilities.hpp"
 #include "Matrix_Traits.hpp"
 
 // C++ Libraries
@@ -21,7 +21,7 @@ namespace tmns::math {
  * A matrix row specification with Vector-like semantics.
  */
 template <typename MatrixT>
-class Matrix_Row : public vector::Vector_Base<Matrix_Row<MatrixT>>
+class Matrix_Row : public Vector_Base<Matrix_Row<MatrixT>>
 {
     public:
 
@@ -76,7 +76,7 @@ class Matrix_Row : public vector::Vector_Base<Matrix_Row<MatrixT>>
          * Generalized Assignment Operator
          */
         template <class OtherT>
-        Matrix_Row& operator = ( const vector::Vector_Base<OtherT>& v )
+        Matrix_Row& operator = ( const Vector_Base<OtherT>& v )
         {
             // Make sure size is accurate
             if( v.impl().size() != size() )

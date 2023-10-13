@@ -18,7 +18,7 @@ namespace tmns::math {
  * N-dimensional, resizable vector
 */
 template <typename ValueT>
-class VectorN : public Vector_<ValueT,0>
+class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
 {
     public:
 
@@ -42,29 +42,77 @@ class VectorN : public Vector_<ValueT,0>
 
 
         /**
-         * @brief Create an empty vector
+         * Default Constructor
          */
-        VectorN() = default;
+        Vector_() = default;
+
+        /**
+         * @brief Constructor from any other Vector type.
+         */
+        template <typename OtherVectorT>
+        Vector_( const Vector_Base<OtherVectorT>& v )
+            : m_data( v.impl().begin(),
+                      v.impl().end() )
+        {
+        }
 
         /**
          * @brief Create a zero vector of the specific size
          */
-        VectorN( size_t vector_size )
+        Vector_( size_t vector_size )
             : m_data( vector_size, 0 )
+        {}
+
+        /**
+         * @brief Create a vector of the specific size and value
+         */
+        Vector_( size_t vector_size, ValueT val )
+            : m_data( vector_size, val )
         {}
 
         /**
          * @brief Constructor Given an Array
          */
-        VectorN( std::initializer_list<ValueT> data )
+        Vector_( std::initializer_list<ValueT> data )
           : m_data( data )
         {
         }
 
         /**
+         * General Assignment Operator
+         */
+        Vector_& operator = ( const Vector_& v )
+        {
+            Vector_ temp( v );
+            m_data = temp.m_data;
+            return (*this);
+        }
+
+        /**
+         * Assignment operator for any vector type.
+         */
+        template <typename OtherVectorT>
+        Vector_& operator = ( const Vector_Base<OtherVectorT>& v )
+        {
+            Vector_ tmp( v );
+            m_data = tmp.m_data;
+            return *this;
+        }
+
+        /**
+         * Temporary-free generalized assignment operator, from arbitrary vector expressions.
+         * This is a performance-optimizing function to be used with caution!
+         */
+        template <typename T>
+        Vector_& operator=( const Vector_No_Tmp<T>& v )
+        {
+            return *this = v.impl();
+        }
+
+        /**
          * Get the current size of the array
         */
-        size_t size() const override
+        size_t size() const
         {
             return m_data.size();
         }
@@ -80,7 +128,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Index Operator
         */
-        const_reference_type operator[]( size_t idx ) const override
+        const_reference_type operator[]( size_t idx ) const
         {
             return this->m_data[idx];
         }
@@ -88,7 +136,23 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Index Reference Operator
          */
-        reference_type operator[]( size_t idx ) override
+        reference_type operator[]( size_t idx )
+        {
+            return this->m_data[idx];
+        }
+
+        /**
+         * Call Operator
+        */
+        const_reference_type operator()( size_t idx ) const
+        {
+            return this->m_data[idx];
+        }
+
+        /**
+         * Call Reference Operator
+         */
+        reference_type operator()( size_t idx )
         {
             return this->m_data[idx];
         }
@@ -96,7 +160,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Get copy of internal data at specific index
         */
-        const_reference_type at( size_t idx ) const override
+        const_reference_type at( size_t idx ) const
         {
             return m_data.at(idx);
         }
@@ -104,7 +168,7 @@ class VectorN : public Vector_<ValueT,0>
         /**
          * Get reference to internal data at specific index
         */
-        reference_type at( size_t idx ) override
+        reference_type at( size_t idx )
         {
             return m_data.at(idx);
         }
@@ -208,10 +272,27 @@ class VectorN : public Vector_<ValueT,0>
                        value );
         }
 
+        /**
+         * Perform a Dot-Product
+         */
+        static double dot( const Vector_<ValueT>& vec1,
+                           const Vector_<ValueT>& vec2 )
+        {
+            double mag = 0;
+            for( size_t i = 0; i < vec1.size(); i++ )
+            {
+                mag += vec1[i] * vec2[i];
+            }
+            return mag;
+        }
+
     private:
 
         std::vector<ValueT> m_data;
 
-}; // End of VectorN Class
+}; // End of Vector_<ValueT,0> Class
+
+template <typename ValueT>
+using VectorN = Vector_<ValueT,0>;
 
 } // End of tmns::math namespace

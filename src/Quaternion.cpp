@@ -6,7 +6,7 @@
 #include "Quaternion.hpp"
 
 // Terminus Libraries
-#include "Vector_Utilities.hpp"
+#include "vector/Vector_Utilities.hpp"
 
 // C++ Libraries
 #include <cmath>

@@ -17,7 +17,7 @@ namespace tmns::math {
  * Structure for representing column semantics
  */
 template <typename MatrixT>
-class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
+class Matrix_Col : public Vector_Base<Matrix_Col<MatrixT> >
 {
     private:
 
@@ -80,7 +80,7 @@ class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
          * Generalized assignment operator
          */
         template <typename OtherT>
-        Matrix_Col& operator = ( const vector::Vector_Base<OtherT>& v )
+        Matrix_Col& operator = ( const Vector_Base<OtherT>& v )
         {
             if( v.size() != size() )
             {
@@ -100,7 +100,7 @@ class Matrix_Col : public vector::Vector_Base<Matrix_Col<MatrixT> >
          * This is a performance-optimizing function to be used with caution!
          */
         template <typename OtherT>
-        Matrix_Col& operator = ( const vector::Vector_No_Tmp<OtherT>& v )
+        Matrix_Col& operator = ( const Vector_No_Tmp<OtherT>& v )
         {
             if( v.size() != size() )
             {

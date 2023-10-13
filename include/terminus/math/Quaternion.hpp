@@ -7,7 +7,7 @@
 
 // Terminus Libraries
 #include "matrix/Matrix.hpp"
-#include "Vector.hpp"
+#include "vector/Vector.hpp"
 
 // C++ Libraries
 #include <cmath>

@@ -6,7 +6,7 @@
 #pragma once
 
 // Terminus Math Libraries
-#include "Vector.hpp"
+#include "vector/Vector.hpp"
 
 namespace tmns::math {
 

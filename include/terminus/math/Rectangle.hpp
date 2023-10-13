@@ -8,7 +8,7 @@
 // Terminus Libraries
 #include "Point_Utilities.hpp"
 #include "Size.hpp"
-#include "Vector_Utilities.hpp"
+#include "vector/Vector_Utilities.hpp"
 
 // C++ Libraries
 #include <cmath>

@@ -35,7 +35,7 @@ Vector3_<ValueT> ToVector3( const ValueT& x,
  * Multiply a Vector with a Scalar
 */
 template <typename  ValueT,
-          int       Dims,
+          size_t    Dims,
           typename  OtherValueT>
 Vector_<ValueT,Dims> operator * ( const Vector_<ValueT,Dims>& vec,
                                   const OtherValueT&          sc )
@@ -52,7 +52,7 @@ Vector_<ValueT,Dims> operator * ( const Vector_<ValueT,Dims>& vec,
  * Multiply a Scalar with a Vector
 */
 template <typename  ValueT,
-          int       Dims,
+          size_t    Dims,
           typename  OtherValueT>
 Vector_<ValueT,Dims> operator * ( const OtherValueT&          sc,
                                   const Vector_<ValueT,Dims>& vec )
@@ -69,7 +69,7 @@ Vector_<ValueT,Dims> operator * ( const OtherValueT&          sc,
  * Divide a Vector with a Scalar
 */
 template <typename  ValueT,
-          int       Dims,
+          size_t    Dims,
           typename  OtherValueT>
 Vector_<ValueT,Dims> operator / ( const Vector_<ValueT,Dims>& vec,
                                   const OtherValueT&          sc )

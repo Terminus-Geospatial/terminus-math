@@ -8,7 +8,7 @@
 // C++ Libraries
 #include <vector>
 
-namespace tmns::math::vector {
+namespace tmns::math {
 
 /**
  * A type function to compute the dimension of a vector expression
@@ -54,4 +54,4 @@ class Vector_No_Tmp
 
 
 
-} // end of tmns::math::vector namespace
+} // end of tmns::math namespace

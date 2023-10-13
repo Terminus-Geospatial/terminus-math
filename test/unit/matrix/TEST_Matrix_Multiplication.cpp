@@ -16,8 +16,8 @@ namespace tmx = tmns::math;
 TEST( Matrix_Matrix_Product, multiply_2_matrices )
 {
     // Create 2 matrices
-    tmx::Matrix<double,4,3> mat01( { 1, 2, 3, 4, 5, 6, 7,  8, 9, 10, 11, 12 } );
-    tmx::Matrix<double,3,4> mat02( { 1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12 } );
+    tmx::Matrix<double,4,3> mat01( { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } );
+    tmx::Matrix<double,3,4> mat02( { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } );
 
     // Result
     auto mat03_act = mat01 * mat02;
@@ -25,9 +25,6 @@ TEST( Matrix_Matrix_Product, multiply_2_matrices )
                                           83,  98, 113, 128,
                                          128, 152, 176, 200,
                                          173, 206, 239, 272 } );
-
-    std::cout << mat03_exp.to_log_string( 4, 2 );
-    std::cout << mat03_act.to_log_string( 4, 2 );
 
     ASSERT_EQ( mat03_act.cols(), mat03_exp.cols() );
     ASSERT_EQ( mat03_act.rows(), mat03_exp.rows() );

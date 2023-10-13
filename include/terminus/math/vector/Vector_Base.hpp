@@ -8,7 +8,7 @@
 // Terminus Libraries
 #include "Vector_Traits.hpp"
 
-namespace tmns::math::vector {
+namespace tmns::math {
 
 /**
  * A CRTP base class for vectors and vector expressions.
@@ -83,4 +83,4 @@ class Vector_Base
 
 }; // End of Vector_Base class
 
-} // end of tmns::math::vector namespace
+} // end of tmns::math namespace
