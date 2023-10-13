@@ -6,7 +6,7 @@
 #pragma once
 
 // Terminus Math Libraries
-#include "../Type_Deduction.hpp"
+#include "../types/Type_Deduction.hpp"
 #include "Matrix_Base.hpp"
 #include "Matrix_Operations.hpp"
 #include "Matrix_Proxy.hpp"

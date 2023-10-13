@@ -8,6 +8,9 @@
 // Terminus Libraries
 #include "Matrix_Traits.hpp"
 
+// Boost Libraries
+#include <boost/iterator/iterator_facade.hpp>
+
 namespace tmns::math {
 
 /**
@@ -81,7 +84,7 @@ class Matrix_Unary_Functor : public Matrix_Base<Matrix_Unary_Functor<MatrixT,Fun
         /**
          * Iterator overload
         */
-        class Iterator : public boost::iterator_facade<iterator,
+        class Iterator : public boost::iterator_facade<Iterator,
                                                        value_type,
                                                        boost::random_access_traversal_tag,
                                                        value_type>
@@ -91,9 +94,9 @@ class Matrix_Unary_Functor : public Matrix_Base<Matrix_Unary_Functor<MatrixT,Fun
                 /**
                  * Constructor
                  */
-                Iterator( const typename MatrixT::const_iterator& iter,
-                          const FunctorT&                         functor )
-                    : m_iter( iter ),
+                Iterator( const typename MatrixT::const_iter_t& iter,
+                          const FunctorT&                       functor )
+                    : m_iterator( iter ),
                       m_functor( functor )
                 {}
 
@@ -102,43 +105,44 @@ class Matrix_Unary_Functor : public Matrix_Base<Matrix_Unary_Functor<MatrixT,Fun
                 /**
                  * Equal Operator
                  */
-                bool equal( const iterator& iter ) const
+                bool equal( const Iterator& iter ) const
                 {
-                    return m_iter == iter.m_iterator;
+                    return m_iterator == iter.m_iterator;
                 }
 
-                typename iterator::difference_type distance_to( const iterator& iter ) const
+                typename Iterator::difference_type distance_to( const Iterator& iter ) const
                 {
                     return iter.m_iterator - m_iterator;
                 }
 
                 void increment()
                 {
-                    ++i;
+                    ++m_iterator;
                 }
 
                 void decrement()
                 {
-                    --i;
+                    --m_iterator;
                 }
 
-                void advance( typename iterator::difference_type n )
+                void advance( typename Iterator::difference_type n )
                 {
                     m_iterator += n;
                 }
 
-                typename iterator::reference dereference() const
+                typename Iterator::reference dereference() const
                 {
-                    return m_functor( *i );
+                    return m_functor( *m_iterator );
                 }
 
                 friend class boost::iterator_core_access;
 
                 /// @brief Internal Iterator Position / Offset
-                typename MatrixT::const_iterator m_iterator;
+                typename MatrixT::const_iter_t m_iterator;
 
                 /// @brief Functor to apply
                 FunctorT m_functor;
+
         }; // End of Iterator class
 
         using iter_t = Iterator;
@@ -356,7 +360,8 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                 */
                 typename iterator::reference dereference() const
                 {
-                    return m_functor( *i1, *i2 );
+                    return m_functor( *m_iter1,
+                                      *m_iter2 );
                 }
 
                 /// @brief Reference to first matrix
