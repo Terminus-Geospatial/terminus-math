@@ -102,10 +102,11 @@ Matrix_Binary_Functor<Matrix1T, Matrix2T, Arg_Arg_Sum_Functor>
  */
 template <typename ScalarT,
           typename MatrixT>
-Matrix_Unary_Functor<MatrixT, Val_Arg_Sum_Functor<ScalarT>>
-    elem_sum( ScalarT s, Matrix_Base<MatrixT> const& m ) requires Is_Scalar<ScalarT>
+Matrix_Unary_Functor<MatrixT,Val_Arg_Sum_Functor<ScalarT>>
+    elem_sum( ScalarT                     s, 
+              const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
 {
-    return Matrix_Unary_Func<MatrixT, Val_Arg_Sum_Functor<ScalarT> >( m.impl(), s );
+    return Matrix_Unary_Functor<MatrixT, Val_Arg_Sum_Functor<ScalarT> >( m.impl(), s );
 }
 
 /**
@@ -115,7 +116,7 @@ template <typename MatrixT,
           typename ScalarT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Sum_Functor<ScalarT>>
     elem_sum( const Matrix_Base<MatrixT>& m,
-              ScalarT                     s ) requires Is_Scalar<ScalarT>
+              ScalarT                     s ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Arg_Val_Sum_Functor<ScalarT> >( m.impl(), s );
 }
@@ -151,7 +152,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Val_Arg_Difference_Functor<ScalarT>>
     elem_diff( ScalarT                     s,
-               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>
+               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Val_Arg_Difference_Functor<ScalarT> >( m.impl(), s );
 }
@@ -163,7 +164,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Difference_Functor<ScalarT>>
     elem_diff( const Matrix_Base<MatrixT>& m,
-               ScalarT                     s ) requires Is_Scalar<ScalarT>
+               ScalarT                     s ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Arg_Val_Difference_Functor<ScalarT> >( m.impl(), s );
 }
@@ -187,7 +188,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT,Val_Arg_Product_Functor<ScalarT>>
     elem_prod( ScalarT                     s,
-               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>
+               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT> >( m.impl(), s );
 }
@@ -199,7 +200,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT>>
     operator * ( ScalarT                    s,
-                 const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>
+                 const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
 {
     return elem_prod( s, m );
 }
@@ -211,7 +212,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>
     elem_prod( const Matrix_Base<MatrixT>& m,
-               ScalarT                     s ) requires Is_Scalar<ScalarT>
+               ScalarT                     s ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT> >( m.impl(), s );
 }
@@ -223,7 +224,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>
     operator * ( const Matrix_Base<MatrixT>& m,
-                 ScalarT                     s ) requires Is_Scalar<ScalarT>
+                 ScalarT                     s ) requires Is_Scalar<ScalarT>::type
 {
     return elem_prod( m, s );
 }
@@ -248,7 +249,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Val_Arg_Quotient_Functor<ScalarT>>
    elem_quot( ScalarT                     s,
-              const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>
+              const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Val_Arg_Quotient_Functor<ScalarT> >( m.impl(), s );
 }
@@ -260,7 +261,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Quotient_Functor<ScalarT>>
     elem_quot( const Matrix_Base<MatrixT>& m,
-               ScalarT                     s ) requires Is_Scalar<ScalarT>
+               ScalarT                     s ) requires Is_Scalar<ScalarT>::type
 {
     return Matrix_Unary_Functor<MatrixT, Arg_Val_Quotient_Functor<ScalarT>>( m.impl(), s );
 }
@@ -271,7 +272,7 @@ Matrix_Unary_Functor<MatrixT, Arg_Val_Quotient_Functor<ScalarT>>
 template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT, Arg_Val_Quotient_Functor<ScalarT>>
-    operator / ( const Matrix_Base<MatrixT>& m, ScalarT s ) requires Is_Scalar<ScalarT>
+    operator / ( const Matrix_Base<MatrixT>& m, ScalarT s ) requires Is_Scalar<ScalarT>::type
 {
     return elem_quot( m, s );
 }

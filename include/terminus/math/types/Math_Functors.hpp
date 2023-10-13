@@ -8,6 +8,9 @@
 // C++ Libraries
 #include <queue>
 
+// Terminus Libraries
+#include <terminus/log/utility.hpp>
+
 namespace tmns::math {
 
 /**
@@ -319,15 +322,15 @@ struct Arg_Abs_Functor
     };
 
     template <typename FunctorT>
-    struct result<FunctorT(int32)>
+    struct result<FunctorT(int32_t)>
     {
-        typedef int32 type;
+        typedef int32_t type;
     };
 
     template <typename FunctorT>
-    struct result<FunctorT(int64)>
+    struct result<FunctorT(int64_t)>
     {
-        typedef int64 type;
+        typedef int64_t type;
     };
 
     template <typename FunctorT, class ValueT>

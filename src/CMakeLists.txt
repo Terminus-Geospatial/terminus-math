@@ -10,6 +10,7 @@ add_definitions( -DBOOST_ALL_DYN_LINK )
 find_package( Boost REQUIRED )
 #include_directories( ${Boost_INCLUDE_DIRS} )
 
+find_package( terminus_log REQUIRED )
 
 add_library( ${PROJECT_NAME} SHARED
                 Quaternion.cpp
@@ -18,6 +19,7 @@ add_library( ${PROJECT_NAME} SHARED
 target_link_libraries( ${PROJECT_NAME} PUBLIC
     Boost::headers
     Boost::stacktrace
+    terminus_log::terminus_log
 )
 
 terminus_lib_configure( ${PROJECT_NAME} )
