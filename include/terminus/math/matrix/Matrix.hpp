@@ -5,12 +5,15 @@
  */
 #pragma once
 
-// Terminus Libraries
+// Terminus Math Libraries
 #include "../types/Fundamental_Types.hpp"
 #include "Matrix_Base.hpp"
 #include "Matrix_Col.hpp"
 #include "Matrix_Row.hpp"
 #include "Matrix_Transpose.hpp"
+
+// Terminus Libraries
+#include <terminus/log/utility.hpp>
 
 // Boost Libraries
 #include <boost/mpl/min_max.hpp>
@@ -92,6 +95,33 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
             // Fill in the remaining items
             auto pos = m_data.begin();
             std::advance( pos, ArrayDims );
+
+            std::fill( pos,
+                       m_data.end(),
+                       0 );
+        }
+
+        /**
+         * Constructor given an STL style container of data
+         */
+        template <typename ContainerT>
+        Matrix( const ContainerT& data ) requires (Is_STL_Container<ContainerT>::value)
+        {
+            if( data.size() <= RowsN * ColsN )
+            {
+                std::stringstream sout;
+                sout << "Array has less data than required matrix size. Required: " << RowsN * ColsN
+                     << ", Actual: " << data.size() << ", Remaining fields will be zero-filled";
+                tmns::log::warn( sout.str() );
+            }
+            // Copy the first X elements
+            std::copy( data.begin(), 
+                       data.end(),
+                       m_data.begin() );
+            
+            // Fill in the remaining items
+            auto pos = m_data.begin();
+            std::advance( pos, RowsN * ColsN );
 
             std::fill( pos,
                        m_data.end(),

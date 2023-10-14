@@ -7,7 +7,9 @@
 
 // C++ Libraries
 #include <complex>
+#include <deque>
 #include <type_traits>
+#include <vector>
 
 namespace tmns::math {
 
@@ -92,5 +94,25 @@ inline int16_t numeric( int8_t v )
 {
     return v;
 }
+
+
+/**
+ * Structure to determine if we are using an STL-compliant container.
+*/
+template <typename ValueT> struct Is_STL_Container : public std::false_type {};
+
+// Deque
+template <typename ValueT> struct Is_STL_Container<std::deque<ValueT>> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<const std::deque<ValueT>> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<std::deque<ValueT>&> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<const std::deque<ValueT>&> : public std::true_type {};
+
+// Vector
+template <typename ValueT> struct Is_STL_Container<std::vector<ValueT>> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<const std::vector<ValueT>> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<std::vector<ValueT>&> : public std::true_type {};
+template <typename ValueT> struct Is_STL_Container<const std::vector<ValueT>&> : public std::true_type {};
+
+//template <typename ValueT> using Is_STL_Container = typename Is_Scalar<ValueT>::va;
 
 } // End of tmns::image namespace

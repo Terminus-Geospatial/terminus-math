@@ -87,4 +87,23 @@ TEST( Matrix, constructor_tests )
     ASSERT_EQ( &(*(mat_01.begin())),&(mat_01(0,0)));
     ASSERT_EQ( &(*(mat_01.begin()+1)), &(mat_01(0,1)));
     ASSERT_EQ( mat_01.end(), mat_01.begin() + 9 );
+
+    //////////////////////////////////////////
+    //  Test 5:  2x2 matrix constructor
+    //////////////////////////////////////////
+    std::vector<float> data5 = { 1, 2, 3, 4 };
+    tmx::Matrix<float,2,2> mat_05( data5 );
+
+    ASSERT_EQ( 2, mat_05.rows() );
+    ASSERT_EQ( 2, mat_05.cols() );
+
+    ASSERT_EQ( 1, mat_05(0, 0) );
+    ASSERT_EQ( 2, mat_05(0, 1) );
+    ASSERT_EQ( 3, mat_05(1, 0) );
+    ASSERT_EQ( 4, mat_05(1, 1) );
+
+    ASSERT_EQ( 1, mat_05[0][0] );
+    ASSERT_EQ( 2, mat_05[0][1] );
+    ASSERT_EQ( 3, mat_05[1][0] );
+    ASSERT_EQ( 4, mat_05[1][1] );
 }

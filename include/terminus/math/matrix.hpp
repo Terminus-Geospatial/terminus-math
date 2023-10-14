@@ -8,4 +8,5 @@
 #include "matrix/Matrix.hpp"
 #include "matrix/MatrixN.hpp"
 #include "matrix/Matrix_Matrix_Product.hpp"
+#include "matrix/Matrix_Proxy.hpp"
 #include "matrix/Matrix_Transpose.hpp"
