@@ -16,12 +16,13 @@ add_executable( ${TEST}
     matrix/TEST_Matrix_Transpose.cpp
     matrix/TEST_Matrix.cpp
     matrix/TEST_MatrixN.cpp
+    vector/TEST_Vector.cpp
+    vector/TEST_VectorN.cpp
+    vector/TEST_Vector_Transpose.cpp
     TEST_Point.cpp
     TEST_Quaternion.cpp
     TEST_Rectangle.cpp
     TEST_Size.cpp
-    TEST_Vector.cpp
-    TEST_VectorN.cpp
 )
 
 target_link_libraries( ${TEST} PRIVATE

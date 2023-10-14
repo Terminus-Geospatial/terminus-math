@@ -8,8 +8,10 @@
 // Terminus Libraries
 #include "../types/Functors.hpp"
 #include "../types/Math_Functors.hpp"
+#include "../vector/Vector_Transpose.hpp"
 #include "Matrix_Col.hpp"
 #include "Matrix_Functors.hpp"
+#include "Matrix_Vector_Product.hpp"
 
 // C++ Libraries
 #include <type_traits>
@@ -281,6 +283,42 @@ Matrix_Unary_Functor<MatrixT, Arg_Val_Quotient_Functor<ScalarT>>
     operator / ( const Matrix_Base<MatrixT>& m, ScalarT s ) requires Is_Scalar<ScalarT>::type
 {
     return elem_quot( m, s );
+}
+
+/**
+ * Product of a matrix and a vector
+ */
+template <typename MatrixT,
+          typename VectorT>
+Matrix_Vector_Product<MatrixT,VectorT,false>
+    operator * ( const Matrix_Base<MatrixT>& m,
+                 const Vector_Base<VectorT>& v )
+{
+    return Matrix_Vector_Product<MatrixT,VectorT,false>( m.impl(), v.impl() );
+}
+
+/**
+ * Product of a transposed matrix and a vector
+ */
+template <typename MatrixT,
+          typename VectorT>
+Matrix_Vector_Product<MatrixT,VectorT,true>
+    operator * ( const Matrix_Transpose<MatrixT>& m,
+                 const Vector_Base<VectorT>&      v )
+{
+    return Matrix_Vector_Product<MatrixT,VectorT,true>( m.child(), v.impl() );
+}
+
+/**
+ * Product of a transposed vector and a matrix
+ */
+template <typename VectorT,
+          typename MatrixT>
+Vector_Transpose<const Matrix_Vector_Product<MatrixT,VectorT,true> >
+    operator * ( const Vector_Transpose<VectorT>& v,
+                 const Matrix_Base<MatrixT>&      m )
+{
+    return transpose( Matrix_Vector_Product<MatrixT,VectorT,true>( m.impl(), v.child() ));
 }
 
 } // End of tmns::math namespace
