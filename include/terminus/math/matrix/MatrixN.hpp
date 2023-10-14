@@ -273,6 +273,17 @@ class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
             return m_data.end();
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix<" << Data_Type_Name<ElementT>::name()
+                 << ",0,0>";
+            return sout.str();
+        }
+
     private:
 
         /// @brief Underlying array data

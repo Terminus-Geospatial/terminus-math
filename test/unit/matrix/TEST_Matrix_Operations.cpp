@@ -51,7 +51,7 @@ TEST_F( Matrix_Operations, select_col_test_01 )
     }
 
     {
-        auto col_check = tmx::select_col( mat_01, 1 );
+        const auto col_check = tmx::select_col( mat_01, 1 );
         ASSERT_EQ( col_check.size(), 4 );
         ASSERT_NEAR( col_check[0],  2, 0.001 );
         ASSERT_NEAR( col_check[1],  5, 0.001 );
@@ -143,8 +143,8 @@ TEST_F( Matrix_Operations, select_col_test_01 )
 TEST_F( Matrix_Operations, select_col_test_02_transpose )
 {
     // Tranpose
-    auto mat_01_t = mat_01.T();
-    auto mat_02_t = mat_02.T();
+    auto mat_01_t = tmx::transpose( mat_01 );
+    auto mat_02_t = tmx::transpose( mat_02 );
 
     // Verify picking a column works
     {
@@ -261,41 +261,49 @@ TEST_F( Matrix_Operations, select_row_test_01 )
 {
     // Verify picking a column works
     {
+        std::cout << mat_01.to_log_string() << std::endl;
         auto row_check = tmx::select_row( mat_01, 0 );
-        ASSERT_EQ( row_check.size(), 4 );
+        std::cout << row_check.to_string() << std::endl;
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_NEAR( row_check[0], 1, 0.001 );
         ASSERT_NEAR( row_check[1], 2, 0.001 );
         ASSERT_NEAR( row_check[2], 3, 0.001 );
-        ASSERT_NEAR( row_check[3], 4, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     {
         auto row_check = tmx::select_row( mat_01, 1 );
-        ASSERT_EQ( row_check.size(), 4 );
-        ASSERT_NEAR( row_check[0], 5, 0.001 );
-        ASSERT_NEAR( row_check[1], 6, 0.001 );
-        ASSERT_NEAR( row_check[2], 7, 0.001 );
-        ASSERT_NEAR( row_check[3], 8, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0], 4, 0.001 );
+        ASSERT_NEAR( row_check[1], 5, 0.001 );
+        ASSERT_NEAR( row_check[2], 6, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
     {
         auto row_check = tmx::select_row( mat_01, 2 );
-        ASSERT_EQ( row_check.size(), 4 );
-        ASSERT_NEAR( row_check[0],  9, 0.001 );
-        ASSERT_NEAR( row_check[1], 10, 0.001 );
-        ASSERT_NEAR( row_check[2], 11, 0.001 );
-        ASSERT_NEAR( row_check[3], 12, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0], 7, 0.001 );
+        ASSERT_NEAR( row_check[1], 8, 0.001 );
+        ASSERT_NEAR( row_check[2], 9, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+    {
+        auto row_check = tmx::select_row( mat_01, 3 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0], 10, 0.001 );
+        ASSERT_NEAR( row_check[1], 11, 0.001 );
+        ASSERT_NEAR( row_check[2], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     // This should fail
     {
-        auto row_check = tmx::select_row( mat_01, 3 );
-        ASSERT_EQ( row_check.size(), 4 );
+        auto row_check = tmx::select_row( mat_01, 4 );
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_ANY_THROW( row_check[0]  );
         ASSERT_ANY_THROW( row_check[1]  );
         ASSERT_ANY_THROW( row_check[2]  );
@@ -313,46 +321,40 @@ TEST_F( Matrix_Operations, select_row_test_01 )
     // Check mat 2
     {
         auto row_check = tmx::select_row( mat_02, 0 );
-        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_EQ( row_check.size(), 4 );
         ASSERT_NEAR( row_check[0],  1, 0.001 );
         ASSERT_NEAR( row_check[1],  2, 0.001 );
         ASSERT_NEAR( row_check[2],  3, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_NEAR( row_check[3],  4, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     {
         auto row_check = tmx::select_row( mat_02, 1 );
-        ASSERT_EQ( row_check.size(), 3 );
-        ASSERT_NEAR( row_check[0],  4, 0.001 );
-        ASSERT_NEAR( row_check[1],  5, 0.001 );
-        ASSERT_NEAR( row_check[2],  6, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0],  5, 0.001 );
+        ASSERT_NEAR( row_check[1],  6, 0.001 );
+        ASSERT_NEAR( row_check[2],  7, 0.001 );
+        ASSERT_NEAR( row_check[3],  8, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
     {
         auto row_check = tmx::select_row( mat_02, 2 );
-        ASSERT_EQ( row_check.size(), 3 );
-        ASSERT_NEAR( row_check[0],  7, 0.001 );
-        ASSERT_NEAR( row_check[1],  8, 0.001 );
-        ASSERT_NEAR( row_check[2],  9, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
-        ASSERT_ANY_THROW( row_check[30]  );
-    }
-    {
-        auto row_check = tmx::select_row( mat_02, 3 );
-        ASSERT_EQ( row_check.size(), 3 );
-        ASSERT_NEAR( row_check[0], 10, 0.001 );
-        ASSERT_NEAR( row_check[1], 11, 0.001 );
-        ASSERT_NEAR( row_check[2], 12, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0],  9, 0.001 );
+        ASSERT_NEAR( row_check[1], 10, 0.001 );
+        ASSERT_NEAR( row_check[2], 11, 0.001 );
+        ASSERT_NEAR( row_check[3], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     // This should fail
     {
-        auto row_check = tmx::select_row( mat_02, 4 );
-        ASSERT_EQ( row_check.size(), 3 );
+        auto row_check = tmx::select_row( mat_02, 3 );
+        ASSERT_EQ( row_check.size(), 4 );
         ASSERT_ANY_THROW( row_check[0]  );
         ASSERT_ANY_THROW( row_check[1]  );
         ASSERT_ANY_THROW( row_check[2]  );
@@ -373,52 +375,46 @@ TEST_F( Matrix_Operations, select_row_test_01 )
 TEST_F( Matrix_Operations, select_row_test_02_transpose )
 {    
     // Tranpose
-    auto mat_01_t = mat_01.T();
-    auto mat_02_t = mat_02.T();
+    auto mat_01_t = tmx::transpose( mat_01 );
+    auto mat_02_t = tmx::transpose( mat_02 );
 
     // Verify picking a column works
     {
         auto row_check = tmx::select_row( mat_01_t, 0 );
-        ASSERT_EQ( row_check.size(), 3 );
-        ASSERT_NEAR( row_check[0], 1, 0.001 );
-        ASSERT_NEAR( row_check[1], 5, 0.001 );
-        ASSERT_NEAR( row_check[2], 9, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_NEAR( row_check[0],  1, 0.001 );
+        ASSERT_NEAR( row_check[1],  4, 0.001 );
+        ASSERT_NEAR( row_check[2],  7, 0.001 );
+        ASSERT_NEAR( row_check[3], 10, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     {
         auto row_check = tmx::select_row( mat_01_t, 1 );
-        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_EQ( row_check.size(), 4 );
         ASSERT_NEAR( row_check[0],  2, 0.001 );
-        ASSERT_NEAR( row_check[1],  6, 0.001 );
-        ASSERT_NEAR( row_check[2], 10, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_NEAR( row_check[1],  5, 0.001 );
+        ASSERT_NEAR( row_check[2],  8, 0.001 );
+        ASSERT_NEAR( row_check[3], 11, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
     {
         auto row_check = tmx::select_row( mat_01_t, 2 );
-        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_EQ( row_check.size(), 4 );
         ASSERT_NEAR( row_check[0],  3, 0.001 );
-        ASSERT_NEAR( row_check[1],  7, 0.001 );
-        ASSERT_NEAR( row_check[2], 11, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
-        ASSERT_ANY_THROW( row_check[30]  );
-    }
-    {
-        auto row_check = tmx::select_row( mat_01_t, 3 );
-        ASSERT_EQ( row_check.size(), 3 );
-        ASSERT_NEAR( row_check[0],  4, 0.001 );
-        ASSERT_NEAR( row_check[1],  8, 0.001 );
-        ASSERT_NEAR( row_check[2], 12, 0.001 );
-        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_NEAR( row_check[1],  6, 0.001 );
+        ASSERT_NEAR( row_check[2],  9, 0.001 );
+        ASSERT_NEAR( row_check[3], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[4] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     // This should fail
     {
         auto row_check = tmx::select_row( mat_01_t, 4 );
-        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_EQ( row_check.size(), 4 );
         ASSERT_ANY_THROW( row_check[0] );
         ASSERT_ANY_THROW( row_check[1] );
         ASSERT_ANY_THROW( row_check[2] );
@@ -435,40 +431,46 @@ TEST_F( Matrix_Operations, select_row_test_02_transpose )
     // Check mat 2
     {
         auto row_check = tmx::select_row( mat_02_t, 0 );
-        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_NEAR( row_check[0],  1, 0.001 );
-        ASSERT_NEAR( row_check[1],  4, 0.001 );
-        ASSERT_NEAR( row_check[2],  7, 0.001 );
-        ASSERT_NEAR( row_check[3], 10, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_NEAR( row_check[1],  5, 0.001 );
+        ASSERT_NEAR( row_check[2],  9, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     {
         auto row_check = tmx::select_row( mat_02_t, 1 );
-        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_NEAR( row_check[0],  2, 0.001 );
-        ASSERT_NEAR( row_check[1],  5, 0.001 );
-        ASSERT_NEAR( row_check[2],  8, 0.001 );
-        ASSERT_NEAR( row_check[3], 11, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_NEAR( row_check[1],  6, 0.001 );
+        ASSERT_NEAR( row_check[2], 10, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
     {
         auto row_check = tmx::select_row( mat_02_t, 2 );
-        ASSERT_EQ( row_check.size(), 4 );
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_NEAR( row_check[0],  3, 0.001 );
-        ASSERT_NEAR( row_check[1],  6, 0.001 );
-        ASSERT_NEAR( row_check[2],  9, 0.001 );
-        ASSERT_NEAR( row_check[3], 12, 0.001 );
-        ASSERT_ANY_THROW( row_check[4] );
+        ASSERT_NEAR( row_check[1],  7, 0.001 );
+        ASSERT_NEAR( row_check[2], 11, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
+        ASSERT_ANY_THROW( row_check[30]  );
+    }
+    {
+        auto row_check = tmx::select_row( mat_02_t, 3 );
+        ASSERT_EQ( row_check.size(), 3 );
+        ASSERT_NEAR( row_check[0],  4, 0.001 );
+        ASSERT_NEAR( row_check[1],  8, 0.001 );
+        ASSERT_NEAR( row_check[2], 12, 0.001 );
+        ASSERT_ANY_THROW( row_check[3] );
         ASSERT_ANY_THROW( row_check[30]  );
     }
 
     // This should fail
     {
-        auto row_check = tmx::select_row( mat_02_t, 3 );
-        ASSERT_EQ( row_check.size(), 4 );
+        auto row_check = tmx::select_row( mat_02_t, 4 );
+        ASSERT_EQ( row_check.size(), 3 );
         ASSERT_ANY_THROW( row_check[0]  );
         ASSERT_ANY_THROW( row_check[1]  );
         ASSERT_ANY_THROW( row_check[2]  );
@@ -489,9 +491,9 @@ TEST_F( Matrix_Operations, select_row_test_02_transpose )
 TEST_F( Matrix_Operations, matrix_multiplication_blended )
 {
     // Create Proxy Matrix
-    tmx::Matrix_Proxy<double,3,3> mat_p( mat_01.data() );
+    const tmx::Matrix_Proxy<const double,3,3> mat_p( mat_01.data() );
 
-    tmx::Matrix_Transpose mat_t( mat_02 );
+    const tmx::Matrix_Transpose mat_t( mat_02 );
 
     // Multiply matrices
     auto result = mat_p * mat_t;
@@ -513,9 +515,9 @@ TEST_F( Matrix_Operations, matrix_multiplication_blended )
 TEST_F( Matrix_Operations, matrix_multiplication_vector_blended )
 {
     // Create Proxy Matrix
-    tmx::Matrix_Proxy<double,3,3> mat_p( mat_01.data() );
+    const tmx::Matrix_Proxy<const double,3,3> mat_p( mat_01.data() );
 
-    tmx::Matrix_Transpose mat_t( mat_02 );
+    const tmx::Matrix_Transpose mat_t( mat_02 );
 
     // Multiply matrices
     auto result = mat_p * mat_t;

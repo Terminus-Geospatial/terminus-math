@@ -131,6 +131,17 @@ class Matrix_Vector_Product : public Vector_Base<Matrix_Vector_Product<MatrixT,V
             return Iterator( *this, size() );
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Vector_Product<" << MatrixT::name() << ","
+                 << VectorT::name() << "," << std::boolalpha << TransposeN <<  ">";
+            return sout.str();
+        }
+
     private:
 
         template <typename MatT>

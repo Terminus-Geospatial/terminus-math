@@ -152,6 +152,7 @@ class Matrix_Row : public Vector_Base<Matrix_Row<MatrixT>>
          */
         reference_type operator[]( size_t i )
         {
+            std::cout << "i: " << i << ", row: " << m_row << ", " << to_string() << std::endl;
             return child()( m_row, i );
         }
 

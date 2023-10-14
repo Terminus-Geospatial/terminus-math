@@ -66,12 +66,8 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
          * Constructor given an array of data
          */
         Matrix( std::array<value_type,RowsN*ColsN> data )
+            : m_data( std::move( data ) )
         {
-            // Copy the first X elements
-            std::copy( data.begin(), 
-                       data.end(),
-                       m_data.begin() );
-            
             // Fill in the remaining items
             auto pos = m_data.begin();
             std::advance( pos, RowsN * ColsN );
