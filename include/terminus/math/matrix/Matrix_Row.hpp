@@ -195,6 +195,34 @@ class Matrix_Row : public Vector_Base<Matrix_Row<MatrixT>>
             return child().begin() + ( m_row + 1 ) * child().cols();
         }
 
+        /**
+         * Get the name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Row (" << MatrixT::name() << ")";
+            return sout.str();
+        }
+
+        /**
+         * Print to string
+        */
+        std::string to_string() const
+        {
+            std::stringstream sout;
+            sout << name() << " (Row: " << m_row << ", Size: " << size() << "): ";
+            for( size_t i = 0; i < size(); i++ )
+            {
+                if( i != 0 )
+                {
+                    sout << ", ";
+                }
+                sout << this->operator()(i);
+            }
+            return sout.str();
+        }
+
     private:
 
         /// @brief  Handle to parent matrix

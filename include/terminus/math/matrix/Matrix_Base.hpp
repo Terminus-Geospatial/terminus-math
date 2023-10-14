@@ -103,6 +103,7 @@ class Matrix_Base
             return Matrix_Row<const MatrixT>( impl(), row );
         }
 
+
         /**
          * Print the matrix in a pretty format
          */
@@ -124,7 +125,7 @@ class Matrix_Base
             // Print the actual matrix
             std::stringstream sout;
             std::string gap( offset, ' ' );
-            sout << gap << "Matrix: (r: " << impl().rows() << ", c: " << impl().cols() << ")" << std::endl;
+            sout << gap << MatrixT::name() << ": (r: " << impl().rows() << ", c: " << impl().cols() << ")" << std::endl;
             for( size_t r = 0; r < impl().rows(); r++ )
             {
                 sout << gap << "|  ";

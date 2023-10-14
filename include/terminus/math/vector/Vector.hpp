@@ -378,13 +378,18 @@ class Vector_ : public Vector_Base<Vector_<ValueT,Dims>>
         /**
          * Perform a Dot-Product
          */
-        static double dot( const Vector_<ValueT,Dims>& vec1,
-                           const Vector_<ValueT,Dims>& vec2 )
+        template <typename Vector1T,
+                  typename Vector2T>
+        static double dot( const Vector_Base<Vector1T>& vec1,
+                           const Vector_Base<Vector2T>& vec2 )
         {
             double mag = 0;
-            for( size_t i = 0; i < Dims; i++ )
+
+            auto it1 = vec1.impl().begin();
+            auto it2 = vec2.impl().begin();
+            for( ; it1 != vec1.impl().end(); it1++, it2++ )
             {
-                mag += vec1[i] * vec2[i];
+                mag += (*it1) * (*it2);
             }
             return mag;
         }

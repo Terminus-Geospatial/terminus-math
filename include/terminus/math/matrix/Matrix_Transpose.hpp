@@ -194,6 +194,16 @@ class Matrix_Transpose : public Matrix_Base<Matrix_Transpose<MatrixT> >
             return const_iter_t( *this, rows(), 0 );
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Transpose<" << MatrixT::name() <<  ">";
+            return sout.str();
+        }
+
     private:
 
         /// @brief Underlying Matrix Data

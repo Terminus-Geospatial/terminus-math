@@ -3,13 +3,16 @@
  * @author  Marvin Smith
  * @date    9/16/2023
  */
-#pragma
+#pragma once
 
 // Terminus Libraries
 #include "../types/Functors.hpp"
 #include "../types/Math_Functors.hpp"
 #include "Matrix_Col.hpp"
 #include "Matrix_Functors.hpp"
+
+// C++ Libraries
+#include <type_traits>
 
 namespace tmns::math {
 
@@ -198,9 +201,10 @@ Matrix_Unary_Functor<MatrixT,Val_Arg_Product_Functor<ScalarT>>
  */
 template <typename ScalarT,
           typename MatrixT>
-Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT>>
+std::enable_if_t<Is_Scalar<ScalarT>::type,
+                 Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT>>>
     operator * ( ScalarT                    s,
-                 const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
+                 const Matrix_Base<MatrixT>& m )
 {
     return elem_prod( s, m );
 }
@@ -210,9 +214,10 @@ Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT>>
  */
 template <typename ScalarT,
           typename MatrixT>
-Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>
+std::enable_if_t<Is_Scalar<ScalarT>::type,
+                 Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>>
     elem_prod( const Matrix_Base<MatrixT>& m,
-               ScalarT                     s ) requires Is_Scalar<ScalarT>::type
+               ScalarT                     s )
 {
     return Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT> >( m.impl(), s );
 }
@@ -222,9 +227,10 @@ Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>
  */
 template <typename ScalarT,
           typename MatrixT>
-Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>
+std::enable_if_t<Is_Scalar<ScalarT>::type,
+                 Matrix_Unary_Functor<MatrixT, Arg_Val_Product_Functor<ScalarT>>>
     operator * ( const Matrix_Base<MatrixT>& m,
-                 ScalarT                     s ) requires Is_Scalar<ScalarT>::type
+                 ScalarT                     s )
 {
     return elem_prod( m, s );
 }

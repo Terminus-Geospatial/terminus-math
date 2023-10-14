@@ -6,6 +6,7 @@
 #pragma once
 
 // Terminus Libraries
+#include "../types/Fundamental_Types.hpp"
 #include "Matrix_Base.hpp"
 #include "Matrix_Col.hpp"
 #include "Matrix_Row.hpp"
@@ -528,10 +529,21 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
             return output;
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix<" << Data_Type_Name<ElementT>::name()
+                 << "," << RowsN << "," << ColsN <<  ">";
+            return sout.str();
+        }
+
     private:
 
         /// Array Information
-        array_type m_data { 0 };
+        array_type m_data;
 
 }; // End of Matrix class
 

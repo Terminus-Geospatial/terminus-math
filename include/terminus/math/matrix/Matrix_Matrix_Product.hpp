@@ -126,6 +126,17 @@ class Matrix_Matrix_Product : public Matrix_Base<Matrix_Matrix_Product<Matrix1T,
             return iter_t( *this, rows(), 0 );
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Matrix_Product<" << Matrix1T::name() << "," << Matrix2T::name() << ","
+                 << std::boolalpha << Transpose1N << "," << Transpose2N << ">";
+            return sout.str();
+        }
+
     private:
 
         template <typename MatrixT>
@@ -171,6 +182,42 @@ class Matrix_Matrix_Product : public Matrix_Base<Matrix_Matrix_Product<Matrix1T,
         typename Matrix_Closure<Matrix2T>::type m_matrix2;
 
 }; // End of Matrix_Matrix_Product Class
+
+/**
+ * Compute the product of 2 matrices
+ */
+template <typename Matrix1T,
+          typename Matrix2T>
+Matrix_Matrix_Product<Matrix1T,Matrix2T,true,true>
+    operator * ( const Matrix_Transpose<Matrix1T>& m1,
+                 const Matrix_Transpose<Matrix2T>& m2 )
+{
+    return Matrix_Matrix_Product<Matrix1T,Matrix2T,true,true>( m1, m2 );
+}
+
+/**
+ * Compute the product of 2 matrices
+ */
+template <typename Matrix1T,
+          typename Matrix2T>
+Matrix_Matrix_Product<Matrix1T,Matrix2T,false,true>
+    operator * ( const Matrix_Base<Matrix1T>&      m1,
+                 const Matrix_Transpose<Matrix2T>& m2 )
+{
+    return Matrix_Matrix_Product<Matrix1T,Matrix2T,false,true>( m1.impl(), m2 );
+}
+
+/**
+ * Compute the product of 2 matrices
+ */
+template <typename Matrix1T,
+          typename Matrix2T>
+Matrix_Matrix_Product<Matrix1T,Matrix2T,true,false>
+    operator * ( const Matrix_Transpose<Matrix1T>& m1,
+                 const Matrix_Base<Matrix2T>&      m2 )
+{
+    return Matrix_Matrix_Product<Matrix1T,Matrix2T,true,false>( m1, m2.impl() );
+}
 
 /**
  * Compute the product of 2 matrices

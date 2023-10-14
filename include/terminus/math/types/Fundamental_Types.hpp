@@ -17,9 +17,11 @@ namespace tmns::math {
  *
  * https://en.wikipedia.org/wiki/Scalar_(mathematics)
 */
-template <class ValueT> struct Is_Scalar : public std::is_arithmetic<ValueT> {};
-template <class ValueT> struct Is_Scalar<std::complex<ValueT> > : public std::true_type {};
-template <class ValueT> struct Is_Scalar<const ValueT> : public Is_Scalar<ValueT> {};
+template <typename ValueT> struct Is_Scalar : public std::is_arithmetic<ValueT> {};
+template <typename ValueT> struct Is_Scalar<std::complex<ValueT> > : public std::true_type {};
+template <typename ValueT> struct Is_Scalar<const ValueT> : public Is_Scalar<ValueT> {};
+
+template <typename ValueT> using Is_Scalar_t = typename Is_Scalar<ValueT>::type;
 
 /**
  * Returns a type for doing arithmetic on for an input type.  For example, if doing math on

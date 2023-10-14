@@ -14,19 +14,36 @@
 
 namespace tmx = tmns::math;
 
+class Matrix_Transpose : public ::testing::Test
+{
+    protected:
+
+        void SetUp() override
+        {
+            // Create matrix
+            std::iota( data.begin(), data.end(), 0 );
+
+            // Create matrix
+            test_mat_01 = tmx::Matrix<double,3,4>( data );
+        }
+
+        /// Data underneath matrix
+        std::array<double,12> data;
+
+        /// Matrix prior to transpose
+        tmx::Matrix<double,3,4> test_mat_01;
+
+        /// Expected Result
+        std::array<double,12> exp_trans_data { 0, 4, 8, 1, 5, 9, 2, 6, 10, 3, 7, 11 };
+
+}; // End of Matrix_Transpose class
+
 /************************************************/
 /*          Test the Standard Transpose         */
 /************************************************/
-TEST( Matrix_Transpose, transpose )
+TEST_F( Matrix_Transpose, transpose )
 {
-    // Create matrix
-    std::array<double,12> data;
-    std::iota( data.begin(), data.end(), 0 );
-
-    std::array<double,12> trans_data { 0, 4, 8, 1, 5, 9, 2, 6, 10, 3, 7, 11 };
-
-    tmx::Matrix<double,3,4> test_mat_01( data );
-
+    
     // Verify non transpose shape
     size_t counter = 0;
     for( int r = 0; r < test_mat_01.rows(); r++ )
@@ -43,7 +60,7 @@ TEST( Matrix_Transpose, transpose )
     for( int r = 0; r < mat_trans_01.rows(); r++ )
     for( int c = 0; c < mat_trans_01.cols(); c++ )
     {
-        ASSERT_NEAR( mat_trans_01[r][c], trans_data[counter++], 0.001 );
+        ASSERT_NEAR( mat_trans_01[r][c], exp_trans_data[counter++], 0.001 );
     }
 
     // Assign to a real matrix
@@ -56,7 +73,7 @@ TEST( Matrix_Transpose, transpose )
     for( int r = 0; r < new_mat.rows(); r++ )
     for( int c = 0; c < new_mat.cols(); c++ )
     {
-        ASSERT_NEAR( new_mat[r][c], trans_data[counter++], 0.001 );
+        ASSERT_NEAR( new_mat[r][c], exp_trans_data[counter++], 0.001 );
     }
 
     // Compare using the mat's .transpose() operator
@@ -68,5 +85,19 @@ TEST( Matrix_Transpose, transpose )
     for( int c = 0; c < final_mat.cols(); c++ )
     {
         ASSERT_NEAR( final_mat[r][c], data[counter++], 0.001 );
+    }
+}
+
+/************************************************/
+/*          Test the Standard Transpose         */
+/************************************************/
+TEST_F( Matrix_Transpose, iterator )
+{
+    auto mat_trans_01 = tmx::transpose( test_mat_01 );
+    
+    size_t counter = 0;
+    for( auto it = mat_trans_01.begin(); it != mat_trans_01.end(); it++ )
+    {
+        ASSERT_NEAR( (*it), exp_trans_data[counter++], 0.001 );
     }
 }

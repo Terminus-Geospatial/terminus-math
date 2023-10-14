@@ -198,6 +198,17 @@ class Matrix_Proxy : public Matrix_Base<Matrix_Proxy<ElementT,RowsN,ColsN> >
             return m_ptr + rows() * cols();
         }
 
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Proxy<" << Data_Type_Name<ElementT>::name()
+                 << "," << RowsN << "," << ColsN <<  ">";
+            return sout.str();
+        }
+
     private:
 
         ElementT* m_ptr { nullptr };
@@ -261,11 +272,11 @@ class Matrix_Proxy<ElementT,0,0> : public Matrix_Base<Matrix_Proxy<ElementT>>
         /**
          * Construct a matrix with another container
          */
-        template <typename ContainerT>
-        Matrix_Proxy( const ContainerT& container )
-            : m_ptr(container.data()),
-              m_rows(container.rows()),
-              m_cols(container.cols())
+        template <typename ValueT>
+        Matrix_Proxy( const Matrix_Base<ValueT>& matrix )
+            : m_ptr(matrix.data()),
+              m_rows(matrix.rows()),
+              m_cols(matrix.cols())
         {}
 
         /**
@@ -414,6 +425,17 @@ class Matrix_Proxy<ElementT,0,0> : public Matrix_Base<Matrix_Proxy<ElementT>>
         const_iter_t end() const
         {
             return m_ptr + rows() * cols();
+        }
+
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "Matrix_Proxy<" << Data_Type_Name<ElementT>::name()
+                 << ",0,0>";
+            return sout.str();
         }
 
     private:

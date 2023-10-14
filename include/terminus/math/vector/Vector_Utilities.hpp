@@ -82,5 +82,4 @@ Vector_<ValueT,Dims> operator / ( const Vector_<ValueT,Dims>& vec,
     return output;
 }
 
-
 } // End of tmns::math namespace
