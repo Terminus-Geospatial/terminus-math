@@ -3,7 +3,7 @@
  * @author  Marvin Smith
  * @date    9/16/2023
  */
-#include "Quaternion_Utilities.hpp"
+#include <terminus/math/Quaternion_Utilities.hpp>
 
 // C++ Libraries
 #include <cmath>

@@ -79,6 +79,15 @@ class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
         }
 
         /**
+         * Constructor given pointer and size
+        */
+        explicit Vector_( const ValueT* ptr,
+                          size_t        size )
+        {
+            std::copy( ptr, ptr + size, m_data.begin() );
+        }
+
+        /**
          * General Assignment Operator
          */
         Vector_& operator = ( const Vector_& v )
@@ -222,6 +231,22 @@ class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
         }
 
         /**
+         * @brief Return copy of internal data array
+        */
+        array_type const& data() const
+        {
+            return m_data;
+        }
+
+        /**
+         * @brief Return reference of internal data array
+         */
+        array_type& data()
+        {
+            return m_data;
+        }
+
+        /**
          * Get the starting iterator position
          */
         iter_t begin()
@@ -270,6 +295,41 @@ class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
             std::fill( begin(),
                        end(),
                        value );
+        }
+
+        /**
+         * Normalize the vector
+         */
+        Vector_<ValueT,0> normalize() const
+        {
+            Vector_<ValueT,0> output = (*this);
+            auto mag = magnitude();
+            for( size_t i = 0; i < size(); i++ )
+            {
+                output[i] /= mag;
+            }
+            return output;
+        }
+
+        /**
+         * Compute the vector magnitude
+        */
+        double magnitude() const
+        {
+            return std::sqrt( magnitude_sq() );
+        }
+
+        /**
+         * Compute the square of the magnitude
+        */
+        double magnitude_sq() const
+        {
+            double mag = 0;
+            for( const auto& elem : this->data() )
+            {
+                mag += elem * elem;
+            }
+            return mag;
         }
 
         /**

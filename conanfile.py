@@ -8,7 +8,7 @@ from conan.tools.files import copy
 class ConanProject(ConanFile):
 
     name = "terminus_math"
-    version = "0.0.7"
+    version = "0.0.8"
 
     license = "Terminus Proprietary"
     author  = "Marvin Smith <marvin_smith1@me.com>"
@@ -36,7 +36,10 @@ class ConanProject(ConanFile):
 
     def requirements(self):
         self.requires("boost/1.82.0")
+        self.requires("eigen/3.4.0")
+        self.requires("terminus_core/0.0.3")
         self.requires("terminus_log/0.0.3")
+        self.requires("terminus_outcome/0.0.2")
 
     def _configure_cmake(self):
         cmake = CMake(self)

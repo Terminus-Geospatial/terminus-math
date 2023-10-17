@@ -327,20 +327,6 @@ class Vector_ : public Vector_Base<Vector_<ValueT,Dims>>
         }
 
         /**
-         * Subtraction Operator
-        */
-        template< typename OtherValueT>
-        Vector_<ValueT,Dims> operator - ( const Vector_<OtherValueT,Dims>& rhs ) const
-        {
-            Vector_<ValueT,Dims> result;
-            for( size_t i=0; i<m_data.size(); i++ )
-            {
-                result.m_data[i] = m_data[i] - rhs.m_data[i];
-            }
-            return result;
-        }
-
-        /**
          * Normalize the vector
          */
         Vector_<ValueT,Dims> normalize() const
@@ -392,6 +378,23 @@ class Vector_ : public Vector_Base<Vector_<ValueT,Dims>>
                 mag += (*it1) * (*it2);
             }
             return mag;
+        }
+
+        /**
+         * Cross product of 2 vectors
+         */
+        template <typename Vector1T,
+                  typename Vector2T>
+        static Vector_<ValueT,Dims> cross( const Vector1T& vec1,
+                                           const Vector2T& vec2 )
+        {
+            std::array<ValueT,3> output;
+
+            output[0] = vec1[1] * vec2[2] - vec1[2] * vec2[1];
+            output[1] = vec1[2] * vec2[0] - vec1[0] * vec2[2];
+            output[2] = vec1[0] * vec2[1] - vec1[1] * vec2[0];
+
+            return Vector_<ValueT,3>( output );
         }
 
         /**

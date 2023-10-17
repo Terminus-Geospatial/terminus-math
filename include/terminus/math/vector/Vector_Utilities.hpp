@@ -6,6 +6,8 @@
 #pragma once
 
 // Terminus Libraries
+#include "../types/Functors.hpp"
+#include "Vector_Functors.hpp"
 #include "Vector.hpp"
 
 namespace tmns::math {
@@ -29,6 +31,20 @@ Vector3_<ValueT> ToVector3( const ValueT& x,
                             const ValueT& z )
 {
     return {{ x, y, z }};
+}
+
+/**
+ * Difference of two vectors (same as elem_diff).
+ */
+template <typename Vector1T,
+          typename Vector2T>
+Vector_Binary_Functor<Vector1T, Vector2T, Arg_Arg_Difference_Functor>
+    operator - ( const Vector_Base<Vector1T>& v1,
+                 const Vector_Base<Vector2T>& v2 )
+{
+    return Vector_Binary_Functor<Vector1T,
+                                 Vector2T,
+                                 Arg_Arg_Difference_Functor>( v1.impl(), v2.impl() );
 }
 
 /**

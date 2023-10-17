@@ -26,8 +26,16 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 #  Give Vscode a fighting chance
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#-------------------------------------#
+#-     Add Manual CMake Scripts      -#
+#-------------------------------------#
+LIST( APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
+
 # Bring in CMake helpers for TERMINUS projects
 include( terminus_cmake )
+
+#  Look for dependencies
+include("${PROJECT_SOURCE_DIR}/cmake/scripts/Find_Dependencies.cmake")
 
 add_subdirectory( src )
 

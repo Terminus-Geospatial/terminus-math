@@ -18,6 +18,10 @@ class Quaternion
 {
     public:
 
+        using ElementT = double;
+
+        using VectorT = Vector_<ElementT,3>;
+
         /**
          * Default Constructor
         */
@@ -30,39 +34,59 @@ class Quaternion
          * @param y
          * @param z
         */
-        Quaternion( double real,
-                    double x,
-                    double y,
-                    double z );
+        Quaternion( ElementT real,
+                    ElementT x,
+                    ElementT y,
+                    ElementT z );
         
         /**
          * Parameterized Constructor
          */
-        Quaternion( double          real,
-                    const Vector3d& imag );
+        Quaternion( ElementT       real,
+                    const VectorT& imag );
 
 
         /**
          * Get the real component
         */
-        double real() const;
+        ElementT real() const;
 
         /**
          * Get the imaginary component
         */
-        Vector3d imag() const;
+        VectorT imag() const;
 
+        /**
+         * Indexing Operator
+         */
+        ElementT operator[]( size_t i ) const;
+
+        /**
+         * Function Operator
+         */
+        ElementT operator()( size_t i ) const;
+
+        /**
+         * Quaternion/Quaternion Multiplication
+        */
+        Quaternion operator * ( const Quaternion& rhs ) const;
+
+        /**
+         * Quaternion Division
+         */
+        Quaternion operator / ( const Quaternion& rhs ) const;
+        
         /**
          * Get the magnitude of the quaternion
          * @note:  This really should be 1.  
          */
-        double magnitude() const;
+        ElementT magnitude() const;
 
         /**
          * Get the squared magnitude
          * @note:  This really should be 1.
          */
-        double magnitude_sq() const;
+        ElementT magnitude_sq() const;
 
         /**
          * Return a normalize quaternion. 
@@ -81,11 +105,6 @@ class Quaternion
         Quaternion inverse() const;
 
         /**
-         * Quaternion Division
-         */
-        Quaternion operator / ( const Quaternion& rhs ) const;
-
-        /**
          * Build a quaternion from a rotation matrix
          */
         template <typename MatrixT>
@@ -94,21 +113,21 @@ class Quaternion
             // Get diagonal parts
             auto diag = mat.diagonal();
 
-            double ww = 1.0 + diag[0] + diag[1] + diag[2];
-            double xx = 1.0 + diag[0] - diag[1] - diag[2];
-            double yy = 1.0 - diag[0] + diag[1] - diag[2];
-            double zz = 1.0 - diag[0] - diag[1] + diag[2];
+            ElementT ww = 1.0 + diag[0] + diag[1] + diag[2];
+            ElementT xx = 1.0 + diag[0] - diag[1] - diag[2];
+            ElementT yy = 1.0 - diag[0] + diag[1] - diag[2];
+            ElementT zz = 1.0 - diag[0] - diag[1] + diag[2];
 
-            double max_val = std::max( ww, std::max( xx, std::max( yy, zz ) ) );
+            ElementT max_val = std::max( ww, std::max( xx, std::max( yy, zz ) ) );
             
             // Depending on the max, we need to determine how to parse the quaternion
-            std::array<double,4> components;
+            std::array<ElementT,4> components;
             
-            static constexpr double EPS { 0.00001 };
+            static constexpr ElementT EPS { 0.00001 };
 
             if( std::fabs( ww - max_val ) < EPS )
             {
-                double w4 = std::sqrt( ww * 4.0 );
+                ElementT w4 = std::sqrt( ww * 4.0 );
                 components[0] = w4 / 4.0;
                 components[1] = (mat(2,1) - mat(1,2)) / w4;
                 components[2] = (mat(0,2) - mat(2,0)) / w4;
@@ -117,7 +136,7 @@ class Quaternion
             
             else if( std::fabs( xx - max_val ) < EPS )
             {
-                double x4 = std::sqrt( xx * 4.0 );
+                ElementT x4 = std::sqrt( xx * 4.0 );
                 components[0] = ( mat(2,1) - mat(1,2) ) / x4;
                 components[1] = x4 / 4;
                 components[2] = ( mat(0,1) + mat(1,0) ) / x4;
@@ -126,7 +145,7 @@ class Quaternion
             
             else if( std::fabs( yy - max_val) < EPS )
             {
-                double y4 = std::sqrt(yy * 4.0);
+                ElementT y4 = std::sqrt(yy * 4.0);
                 components[0] = ( mat(0,2) - mat(2,0) ) / y4;
                 components[1] = ( mat(0,1) + mat(1,0) ) / y4;
                 components[2] =  y4 / 4;
@@ -135,7 +154,7 @@ class Quaternion
             
             else
             {
-                double z4 = std::sqrt( zz * 4.0 );
+                ElementT z4 = std::sqrt( zz * 4.0 );
                 components[0] = ( mat(1,0) - mat(0,1) ) / z4;
                 components[1] = ( mat(0,2) + mat(2,0) ) / z4;
                 components[2] = ( mat(1,2) + mat(2,1) ) / z4;
@@ -148,13 +167,29 @@ class Quaternion
                                components[3] );
         }
 
+        /**
+         * Rotate a Vector by the quaternion. 
+         * 
+         * Rotation is notated by (this) Q1, [r, i1, i2, i3] 
+         *                         (v)   Q1, [0, v1, v2, v3]
+         * 
+         * Perform (Q1 x Q2)/Q1, return imaginary component.
+         */
+        template<typename InVectorT>
+        Vector_<ElementT,3> rotate_vector( const Vector_Base<InVectorT>& in_vec ) const
+        {
+            // Get underlying vector type
+            const InVectorT& v = in_vec.impl();
+            return ( *this * Quaternion( 0, v[0], v[1], v[2] ) / *this ).imag();
+        }
+
     private:
 
         /// Real Component
-        double m_real { 0 };
+        ElementT m_real { 0 };
 
         /// Imaginary Component
-        Vector3d m_imag { { 1, 0, 0 } };
+        VectorT m_imag { { 1, 0, 0 } };
 
 }; // End of Quaternion Class
 
