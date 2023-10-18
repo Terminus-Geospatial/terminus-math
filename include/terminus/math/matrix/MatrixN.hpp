@@ -274,6 +274,75 @@ class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
         }
 
         /**
+         * Get the Determinant
+         * General case
+         */
+        value_type determinant() const
+        {
+            value_type result = value_type();
+
+            // Make sure the matrix is square
+            if( rows() != cols() )
+            {
+                std::cerr << "error: Matrix must be square.  Actual: "
+                          << rows() << " x " << cols();
+                return result;
+            }
+            
+            std::stack<std::pair<Matrix<value_type>,value_type> > s;
+
+            s.push( std::make_pair( (*this), 1 ) );
+            while( !s.empty() )
+            {
+                auto a = s.top().first;
+                value_type scale = s.top().second;
+
+                s.pop();
+                
+                // Make sure matrix is square
+                if( a.rows() != a.cols() )
+                {
+                    std::cerr << "error: Matrix must be square.  Actual: "
+                              << a.rows() << " x " << a.cols();
+                    return result;
+                }
+                
+                size_t dim = a.rows();
+                Matrix<value_type> sub;
+                switch( dim )
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        result += scale * a( 0, 0 );
+                        break;
+                    case 2:
+                        result += scale * ( a( 0, 0 ) * a( 1, 1 ) - a( 0, 1 ) * a( 1, 0 ) );
+                        break;
+                    default:
+                        {
+                            sub = submatrix( a, 1, 1, dim - 1, dim - 1 );
+                            s.push( std::make_pair( sub, scale * a( 0, 0 ) ) );
+                            scale *= -1;
+                        }
+                        for( size_t i = 1; i < ( dim - 1 ); ++i )
+                        {
+                            submatrix( sub, 0, 0, dim-1, i )       = submatrix( a, 1,   0, dim-1, i );
+                            submatrix( sub, 0, i, dim-1, dim-i-1 ) = submatrix( a, 1, i+1, dim-1, dim-i-1 );
+                            s.push( std::make_pair( sub, scale * a( 0, i ) ) );
+                            scale *= -1;
+                        }
+                        {
+                            sub = submatrix( a, 1, 0, dim-1, dim-1 );
+                            s.push( std::make_pair( sub, scale * a( 0, dim - 1 ) ) );
+                        }
+                        break;
+                } // End of switch statement
+            }
+            return result;
+        }
+
+        /**
          * Get name
          */
         static std::string name()
