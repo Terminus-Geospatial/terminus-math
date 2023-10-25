@@ -35,4 +35,18 @@ ImageResult<VectorN<typename Promote_Type<typename AMatrixT::value_type,
     return solve_symmetric( A, B );
 }
 
+/**
+ * x = solve(A,b) - Computes the solution to a real system of linear equations:
+ * 
+ * A*x=b
+ * 
+ * Based on the LAPACK GESV routines, this solution is computed using LU decomposition and
+ * back/forward substitution.
+ * 
+ * Computes the minimum-norm solution to a real linear least squares problem.
+ */
+ImageResult<VectorN<double>> solve( const MatrixN<double>& mat_A,
+                                    const VectorN<double>& vec_b,
+                                    double                 eps = 0.00000001 );
+
 } // End of tmns::math::linalg

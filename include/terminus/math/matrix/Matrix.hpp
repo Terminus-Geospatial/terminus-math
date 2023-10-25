@@ -287,7 +287,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get underlying data
+         * Get pointer to underlying data
          */
         value_type* data()
         {
@@ -296,7 +296,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get underlying data
+         * Get pointer to underlying data
          */
         const value_type* data() const
         {
@@ -304,7 +304,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get the beginning of the array
+         * Get the beginning of the matrix
          */
         iter_t begin()
         {
@@ -312,7 +312,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get the beginning of the array
+         * Get the beginning of the matrix (const)
          */
         const_iter_t begin() const
         {
@@ -320,7 +320,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get the end of the array
+         * Get the end of the matrix
          */
         iter_t end()
         {
@@ -328,7 +328,7 @@ class Matrix : public Matrix_Base<Matrix<ElementT,RowsN,ColsN> >
         }
 
         /**
-         * Get the end of the array
+         * Get the end of the matrix (const)
          */
         const_iter_t end() const
         {

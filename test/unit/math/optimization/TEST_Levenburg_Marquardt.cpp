@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 // Terminus Libraries
+#include <terminus/math/matrix/MatrixN.hpp>
 #include <terminus/math/optimization/Levenburg_Marquardt.hpp>
 
 namespace tmx = tmns::math;
@@ -17,7 +18,7 @@ struct Test_Least_Squares_Model : public tmx::optimize::Least_Squares_Model_Base
 {
     using result_type   = tmx::VectorN<double>;
     using domain_type   = tmx::VectorN<double>;
-    using jacobian_type = MatrixN<double>;
+    using jacobian_type = tmx::MatrixN<double>;
 
     Test_Least_Squares_Model() = default;
 
@@ -38,7 +39,7 @@ struct Test_Least_Squares_Model : public tmx::optimize::Least_Squares_Model_Base
 TEST( Levenberg_Marquardt, least_squares_model )
 {
     
-    tmx::TestLeastSquaresModel model;
+    Test_Least_Squares_Model model;
 
     tmx::Vector_<double,5> z;
     tmx::Vector_<double,4> x( { 0.2, 0.3, 0.4, 0.5 } );
@@ -88,9 +89,9 @@ TEST( Levenberg_Marquardt, levenberg_marquardt )
     tmx::optimize::LM_STATUS_CODE status;
     auto best = tmx::optimize::levenberg_marquardt( model, seed, target, status );
 
-    tmx::Vector_<double,4> expected_best( 0.101358, 1.15485, 1.12093, 0.185534 );
+    tmx::Vector_<double,4> expected_best( { 0.101358, 1.15485, 1.12093, 0.185534 } );
 
     ASSERT_EQ( tmx::optimize::LM_STATUS_CODE::ERROR_CONVERGED_REL_TOLERANCE, status );
     
-    EXPECT_NEAR( ( expected_best - best ).normalize(), 0, 1e-5 );
+    EXPECT_NEAR( tmx::VectorN<double>( expected_best - best ).magnitude(), 0, 1e-5 );
 }

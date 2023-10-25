@@ -51,4 +51,14 @@ ImageResult<VectorT> from_eigen( const ::Eigen::VectorXd& vec )
                                           vec.size() ) );
 }
 
+/**
+ * Convert Eigen Vector to Vector
+*/
+template <typename VectorT>
+ImageResult<VectorT> from_eigen( const ::Eigen::MatrixXd& vec )
+{
+    return outcome::ok<VectorT>( VectorT( vec.data(),
+                                          vec.size() ) );
+}
+
 } // End of tmns::math::eigen namespace

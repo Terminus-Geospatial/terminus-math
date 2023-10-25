@@ -6,6 +6,7 @@
 #pragma once
 
 // Terminus Libraries
+#include <terminus/math/linalg/Solvers.hpp>
 #include <terminus/math/optimization/Least_Squares_Model_Base.hpp>
 #include <terminus/math/optimization/LM_Enums.hpp>
 
@@ -96,7 +97,7 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
         VectorN<double> del_J = -1.0 * Rinv * (transpose(J) * error);
 
         // Hessian of cost function (using Gauss-Newton approximation)
-        Matrix<double> hessian = Rinv * (transpose(J) * J);
+        MatrixN<double> hessian = Rinv * ( transpose( J ) * J );
 
         int iterations = 0;
         double norm_try = norm_start + 1.0;
@@ -124,13 +125,13 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
                 try
                 {
                     // By construction, hessian_lm is symmetric and positive-definite.
-                    delta_x = solve_symmetric(hessian_lm, del_J);
+                    delta_x = linalg::solve_symmetric( hessian_lm, del_J );
                 }
                 catch ( const std::exception& e )
                 {
                     // If lambda is very small, the matrix becomes numerically
                     // singular. In that case use the more general least_squares solver.
-                    delta_x = least_squares( hessian_lm, del_J );
+                    delta_x = linalg::solve( hessian_lm, del_J );
                 }
             }
 
@@ -140,10 +141,10 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
             typename ImplT::result_type h_try = model(x_try);
 
             typename ImplT::result_type error_try = model.difference(observation, h_try);
-            norm_try = error_try.magnitude()
+            norm_try = error_try.magnitude();
 
-            tmns::log::debug << "LM: inner iteration " << iterations << " error is " << error_try;
-            tmns::log::trace << "\tLM: inner iteration " << iterations << " norm is " << norm_try;
+            tmns::log::debug( "LM: inner iteration ", iterations, " error is ", error_try );
+            tmns::log::trace( "\tLM: inner iteration ", iterations, " norm is ", norm_try );
 
             if( norm_try > norm_start )
             {
@@ -154,50 +155,54 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
             ++iterations; // Sanity check on iterations in this loop
             if( iterations > 5 )
             {
-                tmns::log::debug << "\n****LM: too many inner iterations - short circuiting";
+                tmns::log::debug( "\n****LM: too many inner iterations - short circuiting" );
                 shortCircuit = true;
                 norm_try     = norm_start;
             }
-        VW_OUT(DebugMessage, "math") << "\tlambda = " << lambda << std::endl;
-      }
+            tmns::log::debug( "\tlambda = ", lambda );
+        }
 
-      // Percentage change convergence criterion. Only if we did not do a short-circuit,
-      // as in that case the solution did not improve.
-      if (!shortCircuit && ((norm_start-norm_try)/norm_start) < rel_tolerance) {
-        status = optimization::eConvergedRelTolerance;
-        VW_OUT(DebugMessage, "math") << "CONVERGED TO RELATIVE TOLERANCE\n";
-        done = true;
-      }
-
-      // Absolute error convergence criterion
-        if (norm_try < abs_tolerance)
+        // Percentage change convergence criterion. Only if we did not do a short-circuit,
+        // as in that case the solution did not improve.
+        if( !shortCircuit && ( ( norm_start - norm_try ) / norm_start ) < rel_tolerance )
         {
-        status = optimization::eConvergedAbsTolerance;
-        VW_OUT(DebugMessage, "math") << "CONVERGED TO ABSOLUTE TOLERANCE\n";
-        done = true;
-      }
+            status = LM_STATUS_CODE::ERROR_CONVERGED_REL_TOLERANCE;
+            tmns::log::debug( "CONVERGED TO RELATIVE TOLERANCE" );
+            done = true;
+        }
 
-      // Max iterations convergence criterion
-      if (outer_iter >= max_iterations) {
-        VW_OUT(DebugMessage, "math") << "REACHED MAX ITERATIONS!";
-        done = true;
-      }
+        // Absolute error convergence criterion
+        if( norm_try < abs_tolerance )
+        {
+            status = LM_STATUS_CODE::ERROR_CONVERGED_ABS_TOLERANCE;
+            tmns::log::debug( "CONVERGED TO ABSOLUTE TOLERANCE" );
+            done = true;
+        }
 
-      // Take trial parameters as new parameters
-      // If we short-circuited the inner loop, then we didn't actually find a
-      // better p, so don't update it.
-      if (!shortCircuit)
-        x = x_try;
+        // Max iterations convergence criterion
+        if( outer_iter >= max_iterations )
+        {
+            tmns::log::debug( "REACHED MAX ITERATIONS!" );
+            done = true;
+        }
 
-      // Take trial error as new error
-      norm_start = norm_try;
+        // Take trial parameters as new parameters
+        // If we short-circuited the inner loop, then we didn't actually find a
+        // better p, so don't update it.
+        if( !shortCircuit )
+        {
+            x = x_try;
+        }
 
-      // Decrease lambda
-      lambda /= 10;
-      VW_OUT(DebugMessage, "math") << "lambda = " << lambda << std::endl;
-      VW_OUT(DebugMessage, "math") << "LM: end of outer iteration " << outer_iter << " with error " << norm_try << std::endl;
+        // Take trial error as new error
+        norm_start = norm_try;
+
+        // Decrease lambda
+        lambda /= 10;
+        tmns::log::debug( "lambda = ", lambda, "\nLM: end of outer iteration ",
+                          outer_iter, " with error ", norm_try );
     }
-    VW_OUT(DebugMessage, "math") << "LM: finished with: " << outer_iter << "\n";
+    tmns::log::debug( "LM: finished with: ", outer_iter );
     return x;
 } // End levenberg_marquardt
 
@@ -234,18 +239,18 @@ class Least_Squares_Model_Base_Fixed
             // Get nominal function value
             //std::cout << "x; = " << x << std::endl;
             //std::cout << "impl().operator()(x); = " << impl().operator()(x) << std::endl;
-            Vector<double, NO> h0 = impl().operator()(x);
+            Vector_<double, NO> h0 = impl().operator()(x);
             //Vector<double> h0 = impl().operator()(x);
             //std::cout << "h0 = " << h0 << std::endl;
 
             // Jacobian is #params x #outputs
-            Matrix<double, NO, NI> H(h0.size(), x.size());
+            Matrix<double, NO, NI> H( h0.size(), x.size() );
             //Matrix<double> H(h0.size(), x.size());
             //std::cout << "H = " << H << std::endl;
 
             // For each param dimension, add epsilon and re-evaluate h() to
             // get numerical derivative w.r.t. that parameter
-            Vector<double, NO> hi;
+            Vector_<double, NO> hi;
             for( unsigned i = 0; i < x.size(); ++i )
             {
                 DomainT xi = x;
@@ -279,15 +284,15 @@ class Least_Squares_Model_Base_Fixed
 template <typename ImplT,
           int      NI,
           int      NO>
-typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixed<ImplT, NI, NO> const& least_squares_model,
-                                                       typename ImplT::domain_type const& seed,
-                                                       typename ImplT::result_type const& observation,
+typename ImplT::domain_type levenberg_marquardt_fixed( const Least_Squares_Model_Base_Fixed<ImplT, NI, NO>& least_squares_model,
+                                                       const typename ImplT::domain_type&                   seed,
+                                                       const typename ImplT::result_type&                   observation,
                                                        int &status,
-                                                       double abs_tolerance = VW_MATH_LM_ABS_TOL,
-                                                       double rel_tolerance = VW_MATH_LM_REL_TOL,
-                                                       double max_iterations = VW_MATH_LM_MAX_ITER) {
+                                                       double abs_tolerance = MATH_LM_ABS_TOL,
+                                                       double rel_tolerance = MATH_LM_REL_TOL,
+                                                       double max_iterations = MATH_LM_MAX_ITER) {
 
-    status = optimization::eDidNotConverge;
+    status = LM_STATUS_CODE::ERROR_DID_NOT_CONVERGE;
 
     const ImplT& model = least_squares_model.impl();
     bool   done   = false;
@@ -299,31 +304,31 @@ typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixe
     typename ImplT::result_type error = model.difference(observation, h);
     double norm_start = error.magnitude();
 
-    tmns::log::debug << "LM: initial guess for the model is " << seed;
-    tmns::log::debug << "LM: starting error " << error;
-    tmns::log::debug << "LM: starting norm is: " << norm_start;
+    tmns::log::debug( "LM: initial guess for the model is ", seed );
+    tmns::log::debug( "LM: starting error ", error );
+    tmns::log::debug( "LM: starting norm is: ", norm_start );
 
     // Solution may already be good enough
     if( norm_start < abs_tolerance )
     {
-        status = LM_STATUS_CODE::ERROR_CONVERGED_ABS_TO_TOLERANCE;
-        tmns::log::debug << "CONVERGED TO ABSOLUTE TOLERANCE";
+        status = LM_STATUS_CODE::ERROR_CONVERGED_ABS_TOLERANCE;
+        tmns::log::debug( "CONVERGED TO ABSOLUTE TOLERANCE" );
         done = true;
     }
 
     typename ImplT::jacobian_type J;
     Matrix<double, NI, NO> J_trans;
     Matrix<double, NI, NI> J_trans_J;
-    Vector<double, NI> del_J;
+    Vector_<double, NI> del_J;
     Matrix<double, NI, NI> hessian, hessian_lm, hessian_lm_inv;
     
-    tmns::log::debug << "Start of loops";
+    tmns::log::debug( "Start of loops" );
     int outer_iter = 0;
     while( !done )
     {
         bool shortCircuit = false;
         outer_iter++;
-        tmns::log::debug << "LM: outer iteration " << outer_iter << "   x = " << x;
+        tmns::log::debug( "LM: outer iteration ", outer_iter, "   x = ", x );
 
         // Compute the value, derivative, and hessian of the cost function
         // at the current point.  These remain valid until the parameter
@@ -334,18 +339,18 @@ typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixe
 
         // Difference between observed and predicted and error (2-norm of difference)
         error = model.difference(observation, h);
-        tmns::log::trace << "error: " << error.to_string();
+        tmns::log::trace( "error: ", error.to_string() );
 
         norm_start = error.magnitude();
-        tmns::log::debug << "LM: outer iteration starting robust norm: " << norm_start;
+        tmns::log::debug( "LM: outer iteration starting robust norm: ", norm_start );
 
         // Measurement Jacobian
         J = model.jacobian(x);
 
-        tmns::trace << "J: " << J.to_string();
+        tmns::log::trace( "J: ", J.to_string() );
       
         J_trans = transpose( J );
-        tmns::trace << "J Transpose: " << J_trans.to_string();
+        tmns::log::trace( "J Transpose: ", J_trans.to_string() );
 
         del_J = -1.0 * Rinv * ( J_trans * error );
         //Vector<double> del_J = -1.0 * Rinv * (J_trans * error);
@@ -407,8 +412,8 @@ typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixe
             typename ImplT::result_type error_try = model.difference(observation, h_try);
             norm_try = norm_2(error_try);
 
-            tmns::log::debug << "LM: inner iteration " << iterations << " error is " << error_try;
-            tmns::log::debug << "\tLM: inner iteration " << iterations << " norm is " << norm_try;
+            tmns::log::debug( "LM: inner iteration ", iterations, " error is ", error_try );
+            tmns::log::debug( "\tLM: inner iteration ", iterations,  " norm is ", norm_try );
 
             if( norm_try > norm_start )
             {
@@ -420,34 +425,34 @@ typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixe
         
             if( iterations > 5 )
             {
-                tmns::log::debug << "\n****LM: too many inner iterations - short circuiting";
+                tmns::log::debug( "\n****LM: too many inner iterations - short circuiting" );
                 shortCircuit = true;
                 norm_try     = norm_start;
             }
-            tmns::log::debug << "\tlambda = " << lambda << std::endl;
+            tmns::log::debug( "\tlambda = ", lambda );
         }
 
         // Percentage change convergence criterion. Only if we did not do a short-circuit,
         // as in that case the solution did not improve.
         if( !shortCircuit && ( ( norm_start-norm_try ) / norm_start ) < rel_tolerance )
         {
-            status = optimization::eConvergedRelTolerance;
-            tmns::log::debug << "CONVERGED TO RELATIVE TOLERANCE";
+            status = LM_STATUS_CODE::ERROR_CONVERGED_REL_TOLERANCE;
+            tmns::log::debug( "CONVERGED TO RELATIVE TOLERANCE" );
             done = true;
         }
 
         // Absolute error convergence criterion
         if( norm_try < abs_tolerance )
         {
-            status = LM_STATUS_CODE::ERROR_CONVERTED_ABS_TOLERANCE;
-            tmns::log::debug << "CONVERGED TO ABSOLUTE TOLERANCE";
+            status = LM_STATUS_CODE::ERROR_CONVERGED_ABS_TOLERANCE;
+            tmns::log::debug( "CONVERGED TO ABSOLUTE TOLERANCE" );
             done = true;
         }
 
         // Max iterations convergence criterion
         if( outer_iter >= max_iterations )
         {
-            tmns::log::debug << "REACHED MAX ITERATIONS!";
+            tmns::log::debug( "REACHED MAX ITERATIONS!" );
             done = true;
         }
 
@@ -464,11 +469,11 @@ typename ImplT::domain_type levenberg_marquardt_fixed( LeastSquaresModelBaseFixe
 
         // Decrease lambda
         lambda /= 10;
-        tmns::log::debug << "lambda = " << lambda;
-        tmns::log::debug << "LM: end of outer iteration " << outer_iter << " with error " << norm_try;
+        tmns::log::debug( "lambda = ", lambda );
+        tmns::log::debug( "LM: end of outer iteration ", outer_iter, " with error ", norm_try );
     }
 
-    tmns::log::debug << "LM: finished with: " << outer_iter;
+    tmns::log::debug( "LM: finished with: ", outer_iter );
     return x;
 
 } // End levenberg_marquardt

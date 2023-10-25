@@ -343,6 +343,88 @@ class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
         }
 
         /**
+         * Inverse Matrix
+         */
+        Matrix<value_type,0,0> inverse() const
+        {
+            value_type zero            = value_type();
+            size_t sz                  = cols();
+            Matrix<value_type,0,0> buf = (*this);
+
+            // Initialize the permutation
+            VectorN<size_t> pm( sz );
+            for( size_t i = 0; i < sz; ++i )
+            {
+                pm(i) = i;
+            }
+
+            // Perform LU decomposition with partial pivoting
+            for( size_t i = 0; i < sz; ++i )
+            {
+                Matrix_Col<Matrix<value_type> > mci( buf, i );
+                Matrix_Row<Matrix<value_type> > mri( buf, i );
+      
+                size_t i_norm_inf = i + index_norm_inf( subvector( mci, i, sz - i ) );
+      
+                if( buf( i_norm_inf, i ) == zero )
+                {
+                    throw std::runtime_error( "Matrix is singular in inverse()" );
+                }
+        
+                if( i_norm_inf != i )
+                {
+                    size_t pbuf = pm(i);
+                    pm(i) = pm(i_norm_inf);
+                    pm(i_norm_inf) = pbuf;
+                    VectorN<value_type> rowbuf = mri;
+                    mri = select_row(buf,i_norm_inf);
+                    select_row( buf, i_norm_inf ) = rowbuf;
+                }
+                if ( i != sz - 1 )
+                {
+                    subvector( mci, i+1, sz-i-1 ) /= buf( i, i );
+                    submatrix( buf, i+1, i+1, sz-i-1, sz-i-1 ) -= outer_prod( subvector( mci, i+1, sz-i-1 ),
+                                                                              subvector( mri, i+1, sz-i-1 ) );
+                }
+            }
+
+            // Build up a permuted identity matrix
+            Matrix<value_type> inverse_mat( sz, sz );
+            for( size_t i = 0; i < sz; ++i )
+            {
+                inverse_mat( i, pm(i) ) = value_type(1);
+            }
+
+            // Divide by the lower-triangular term
+            for( size_t i = 0; i < sz; ++i ){
+            for( size_t j = 0; j < sz; ++j ){
+                value_type t = inverse_mat( i, j );
+                if( t != zero )
+                {
+                    for( size_t k = i+1; k < sz; ++k )
+                    {
+                        inverse_mat( k, j ) -= buf( k, i ) * t;
+                    }
+                }
+            }} // End of lower-triangle division
+
+            // Divide by the upper-triangular term
+            for ( ssize_t i = sz - 1; i >= 0; --i ){
+            for ( ssize_t j = sz - 1; j >= 0; --j ){
+                value_type t = inverse_mat(i,j) /= buf(i,i);
+                if( t != zero )
+                {
+                    for( ssize_t k = i-1; k >= 0; --k )
+                    {
+                        inverse(k,j) -= buf(k,i) * t;
+                    }
+                }
+            }}
+
+            return inverse;
+        }
+
+        /**
          * Get name
          */
         static std::string name()
