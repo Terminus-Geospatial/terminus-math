@@ -8,6 +8,7 @@
 // Terminus Libraries
 #include <terminus/math/matrix/MatrixN.hpp>
 #include <terminus/math/optimization/Levenburg_Marquardt.hpp>
+#include <terminus/math/vector/Sub_Vector.hpp>
 
 namespace tmx = tmns::math;
 
@@ -88,10 +89,15 @@ TEST( Levenberg_Marquardt, levenberg_marquardt )
 
     tmx::optimize::LM_STATUS_CODE status;
     auto best = tmx::optimize::levenberg_marquardt( model, seed, target, status );
-
+    if( best.has_error() )
+    {
+        tmns::log::error( ADD_CURRENT_LOC(), "Test is about to fail: ", best.error().message() );
+    }
+    ASSERT_FALSE( best.has_error());
+    
     tmx::Vector_<double,4> expected_best( { 0.101358, 1.15485, 1.12093, 0.185534 } );
 
     ASSERT_EQ( tmx::optimize::LM_STATUS_CODE::ERROR_CONVERGED_REL_TOLERANCE, status );
     
-    EXPECT_NEAR( tmx::VectorN<double>( expected_best - best ).magnitude(), 0, 1e-5 );
+    EXPECT_NEAR( tmx::VectorN<double>( expected_best - best.value() ).magnitude(), 0, 1e-5 );
 }

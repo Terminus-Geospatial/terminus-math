@@ -8,6 +8,9 @@
 // Terminus Libraries
 #include "Vector_Traits.hpp"
 
+// C++ Libraries
+#include <iomanip>
+
 namespace tmns::math {
 
 /**
@@ -79,6 +82,26 @@ class Vector_Base
         void fill( ElementT value )
         {
             impl().fill( value );
+        }
+
+        /**
+         * Print the matrix in a pretty format
+         */
+        std::string to_log_string( size_t offset = 0, int precision = 4 ) const
+        {
+            std::stringstream sout;
+            std::string gap( offset, ' ' );
+            sout << gap << VectorT::name() << " (size: " << impl().size() << "): ";
+            for( size_t r = 0; r < impl().size(); r++ )
+            {
+                if( r > 0 )
+                {
+                    sout << ",  ";
+                }
+                sout << std::fixed << std::setprecision( precision ) << impl().operator()( r );
+            }
+            
+            return sout.str();
         }
 
 }; // End of Vector_Base class

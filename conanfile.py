@@ -37,7 +37,6 @@ class ConanProject(ConanFile):
     def requirements(self):
         self.requires("boost/1.82.0")
         self.requires("eigen/3.4.0")
-        self.requires("openblas/0.3.20")
         self.requires("terminus_core/0.0.3")
         self.requires("terminus_log/0.0.3")
         self.requires("terminus_outcome/0.0.2")

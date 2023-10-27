@@ -566,12 +566,10 @@ class Median_Accumulator : public Return_Fixed_Type<void>
 template <typename T>
 T destructive_nmad( std::vector<T>& vec )
 {
-    int len = vec.size();
-
     if( vec.empty() )
     {
         std::stringstream sout;
-        sout << "nmap: no valid samples.";
+        sout << "nmad: no valid samples.";
         tmns::log::error( sout.str() );
         throw std::runtime_error( sout.str() );
     }

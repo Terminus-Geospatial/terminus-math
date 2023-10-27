@@ -82,11 +82,11 @@ class Matrix_Col : public Vector_Base<Matrix_Col<MatrixT> >
         template <typename OtherT>
         Matrix_Col& operator = ( const Vector_Base<OtherT>& v )
         {
-            if( v.size() != size() )
+            if( v.impl().size() != size() )
             {
                 std::stringstream sout;
                 sout << "Vectors must have same size.  This: " << size() 
-                     << ", other: " << v.size();
+                     << ", other: " << v.impl().size();
                 throw std::runtime_error( sout.str() );
             }
 
@@ -180,8 +180,8 @@ class Matrix_Col : public Vector_Base<Matrix_Col<MatrixT> >
          */
         iter_t begin()
         {
-            return iterator( child().begin() + m_col,
-                             child().cols() );
+            return iter_t( child().begin() + m_col,
+                           child().cols() );
         }
 
         /**

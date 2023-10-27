@@ -292,7 +292,7 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
         /**
          * Iterator Overload
         */
-        class iterator : public boost::iterator_facade<iterator,
+        class Iterator : public boost::iterator_facade<Iterator,
                                                        value_type,
                                                        boost::random_access_traversal_tag,
                                                        value_type>
@@ -302,9 +302,9 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                 /**
                  * Constructor
                 */
-                iterator( typename Matrix1T::const_iterator const& iter1,
-                          typename Matrix2T::const_iterator const& iter2,
-                          const FunctorT&                          functor )
+                Iterator( typename Matrix1T::const_iter_t const& iter1,
+                          typename Matrix2T::const_iter_t const& iter2,
+                          const FunctorT&                        functor )
                     : m_iter1( iter1 ),
                       m_iter2( iter2 ),
                       m_functor( functor )
@@ -315,7 +315,7 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                 // Give boost internal access
                 friend class boost::iterator_core_access;
 
-                bool equal( iterator const& iter ) const
+                bool equal( Iterator const& iter ) const
                 {
                     return ( m_iter1 == iter.m_iter1 ) && ( m_iter2 == iter.m_iter2 );
                 }
@@ -323,7 +323,7 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                /**
                  * Compute the distance to the other iterator
                 */
-                typename iterator::difference_type distance_to( iterator const &iter ) const
+                typename Iterator::difference_type distance_to( Iterator const &iter ) const
                 {
                     return iter.m_iter1 - m_iter1;
                 }
@@ -349,7 +349,7 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                 /**
                  * Increment the iterator by the requested amount
                  */
-                void advance( typename iterator::difference_type n )
+                void advance( typename Iterator::difference_type n )
                 {
                     m_iter1 += n;
                     m_iter2 += n;
@@ -358,44 +358,47 @@ class Matrix_Binary_Functor : public Matrix_Base<Matrix_Binary_Functor<Matrix1T,
                 /**
                  * Dereference the iterator, applying the functor
                 */
-                typename iterator::reference dereference() const
+                typename Iterator::reference dereference() const
                 {
                     return m_functor( *m_iter1,
                                       *m_iter2 );
                 }
 
                 /// @brief Reference to first matrix
-                typename Matrix1T::const_iterator m_iter1;
+                typename Matrix1T::const_iter_t m_iter1;
 
                 /// @brief Reference to second matrix
-                typename Matrix2T::const_iterator m_iter2;
+                typename Matrix2T::const_iter_t m_iter2;
 
                 /// @brief Functor to apply to matrices
                 FunctorT m_functor;
 
         }; // End of iterator class
 
-        /// @brief  Iterator Typedef
-        using const_iterator = iterator;
+        /// @brief  Iterator Type
+        using iter_t = Iterator;
+
+        /// @brief Const Iterator Type
+        using const_iter_t = Iterator;
         
         /**
          * Starting Iterator Position
         */
-        iterator begin() const
+        iter_t begin() const
         {
-            return iterator( child1().begin(),
-                             child2().begin(),
-                             m_functor );
+            return iter_t( child1().begin(),
+                           child2().begin(),
+                           m_functor );
         }
     
         /**
          * End Iterator Position
          */
-        iterator end() const
+        iter_t end() const
         {
-            return iterator( child1().end(),
-                             child2().end(),
-                             m_functor );
+            return iter_t( child1().end(),
+                           child2().end(),
+                           m_functor );
         }
 
 

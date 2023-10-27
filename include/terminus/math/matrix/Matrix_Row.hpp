@@ -82,7 +82,7 @@ class Matrix_Row : public Vector_Base<Matrix_Row<MatrixT>>
             if( v.impl().size() != size() )
             {
                 std::cerr << "Vectors must be size size.  Expected: " << size() << ", Actual: "
-                          << v.size() << ".  Using smaller of two for copy.";
+                          << v.impl().size() << ".  Using smaller of two for copy.";
             }
             VectorN<value_type> tmp( v );
             std::copy( tmp.begin(), tmp.end(), begin() );

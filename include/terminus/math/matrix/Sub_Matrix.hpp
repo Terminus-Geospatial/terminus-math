@@ -23,7 +23,7 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
         using value_type = typename MatrixT::value_type;
 
         /// Type to store for reference lookups
-        using reference_type = std::conditional_t<std::is_const<MatrixT>,
+        using reference_type = std::conditional_t<std::is_const_v<MatrixT>,
                                                   typename MatrixT::const_reference_type,
                                                   typename MatrixT::reference_type>;
     
@@ -31,12 +31,12 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
         using const_reference_type = typename MatrixT::const_reference_type;
 
         /// @brief  Iterator Type
-        using iterator = Indexing_Matrix_Iterator<std::conditional_t<std::is_const<MatrixT>,
-                                                                     const Sub_Matrix,
-                                                                     Sub_Matrix>>;
+        using iter_t = Indexing_Matrix_Iterator<std::conditional_t<std::is_const_v<MatrixT>,
+                                                                   const Sub_Matrix,
+                                                                   Sub_Matrix>>;
 
         /// @brief Const Iterator Type
-        using const_iterator = Indexing_Matrix_Iterator<const Sub_Matrix>;
+        using const_iter_t = Indexing_Matrix_Iterator<const Sub_Matrix>;
 
         /**
          * Constructor
@@ -58,8 +58,8 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
          */
         Sub_Matrix& operator = ( const Sub_Matrix& m )
         {
-            if( m.rows() != rows() ||
-                m_cols() != cols() )
+            if( rows() != rows() ||
+                cols() != cols() )
             {
                 tmns::log::error( "Matrices must have the same dimensions in submatrix assignment. this: ",
                                   rows(), " rows x ", cols(), " cols. Actual: ", m.rows(), " rows x ",
@@ -77,12 +77,12 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
         template <typename OtherMatrixT>
         Sub_Matrix& operator = ( const Matrix_Base<OtherMatrixT>& m )
         {
-            if( m.rows() != rows() ||
-                m_cols() != cols() )
+            if( m.impl().rows() != rows() ||
+                m.impl().cols() != cols() )
             {
                 tmns::log::error( "Matrices must have the same dimensions in submatrix assignment. this: ",
-                                  rows(), " rows x ", cols(), " cols. Actual: ", m.rows(), " rows x ",
-                                  m.cols(), " cols.  Will be no-op." );
+                                  rows(), " rows x ", cols(), " cols. Actual: ", m.impl().rows(), " rows x ",
+                                  m.impl().cols(), " cols.  Will be no-op." );
                 return (*this);
             }
             Matrix<value_type> tmp( m );
@@ -95,14 +95,14 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
          * This is a performance-optimizing function to be used with caution!
          */
         template <typename OtherMatrixT>
-        Sub_Matrix& operator = ( const MatrixNoTmp<OtherMatrixT>& m )
+        Sub_Matrix& operator = ( const Matrix_No_Tmp<OtherMatrixT>& m )
         {
             if( m.rows() != rows() ||
-                m_cols() != cols() )
+                m.cols() != cols() )
             {
                 tmns::log::error( "Matrices must have the same dimensions in submatrix assignment. this: ",
-                                  rows(), " rows x ", cols(), " cols. Actual: ", m.rows(), " rows x ",
-                                  m.cols(), " cols.  Will be no-op." );
+                                  rows(), " rows x ", cols(), " cols. Actual: ", m.impl().rows(), " rows x ",
+                                  m.impl().cols(), " cols.  Will be no-op." );
                 return (*this);
             }
             std::copy( m.impl().begin(), m.impl().end(), begin() );
@@ -162,7 +162,7 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
          */
         iter_t begin()
         {
-            return iterator( *this, 0, 0 );
+            return iter_t( *this, 0, 0 );
         }
         
         /**
@@ -170,7 +170,7 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
          */
         const_iter_t begin() const
         {
-            return const_iterator( *this, 0, 0 );
+            return const_iter_t( *this, 0, 0 );
         }
         
         /**
@@ -178,7 +178,7 @@ class Sub_Matrix : public Matrix_Base<Sub_Matrix<MatrixT> >
          */
         iter_t end()
         {
-            return iterator( *this, rows(), 0 );
+            return iter_t( *this, rows(), 0 );
         }
         
         /**
@@ -209,11 +209,11 @@ Sub_Matrix<MatrixT> submatrix( Matrix_Base<MatrixT>& matrix,
                               size_t                 rows,
                               size_t                 cols )
 {
-    return SubMatrix<MatrixT>( matrix.impl(),
-                               row,
-                               col,
-                               rows,
-                               cols );
+    return Sub_Matrix<MatrixT>( matrix.impl(),
+                                row,
+                                col,
+                                rows,
+                                cols );
 }
 
 /**

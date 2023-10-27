@@ -193,7 +193,7 @@ template <typename ScalarT,
           typename MatrixT>
 Matrix_Unary_Functor<MatrixT,Val_Arg_Product_Functor<ScalarT>>
     elem_prod( ScalarT                     s,
-               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::type
+               const Matrix_Base<MatrixT>& m ) requires Is_Scalar<ScalarT>::value
 {
     return Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT> >( m.impl(), s );
 }
@@ -203,7 +203,7 @@ Matrix_Unary_Functor<MatrixT,Val_Arg_Product_Functor<ScalarT>>
  */
 template <typename ScalarT,
           typename MatrixT>
-std::enable_if_t<Is_Scalar<ScalarT>::type,
+std::enable_if_t<Is_Scalar<ScalarT>::value,
                  Matrix_Unary_Functor<MatrixT, Val_Arg_Product_Functor<ScalarT>>>
     operator * ( ScalarT                    s,
                  const Matrix_Base<MatrixT>& m )
@@ -319,6 +319,29 @@ Vector_Transpose<const Matrix_Vector_Product<MatrixT,VectorT,true> >
                  const Matrix_Base<MatrixT>&      m )
 {
     return transpose( Matrix_Vector_Product<MatrixT,VectorT,true>( m.impl(), v.child() ));
+}
+
+/**
+ * Outer product of two vectors.
+ */
+template <class Vector1T, class Vector2T>
+Matrix<typename Product_Type<typename Vector1T::value_type, 
+                             typename Vector2T::value_type>::type,
+                             (Vector_Size<Vector2T>::value?(Vector_Size<Vector1T>::value):0),
+                             (Vector_Size<Vector1T>::value?(Vector_Size<Vector2T>::value):0)>
+    outer_prod( const Vector_Base<Vector1T>& v1,
+                const Vector_Base<Vector2T>& v2 )
+{
+    typedef Matrix<typename Product_Type<typename Vector1T::value_type,
+                                         typename Vector2T::value_type>::type,
+                                         (Vector_Size<Vector2T>::value?(Vector_Size<Vector1T>::value):0),
+                                         (Vector_Size<Vector1T>::value?(Vector_Size<Vector2T>::value):0)> result_type;
+    result_type result;
+    result.set_size( v1.impl().size(), v2.impl().size() );
+    for( size_t i=0; i<v1.impl().size(); ++i )
+    for( size_t j=0; j<v2.impl().size(); ++j )
+        result(i,j) = v1.impl()(i) * v2.impl()(j);
+    return result;
 }
 
 } // End of tmns::math namespace

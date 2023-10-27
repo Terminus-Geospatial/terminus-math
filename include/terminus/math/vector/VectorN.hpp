@@ -88,6 +88,14 @@ class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
         }
 
         /**
+         * Copy Constructor
+         */
+        Vector_( const Vector_& other )
+            : m_data( other.m_data )
+        {
+        }
+
+        /**
          * General Assignment Operator
          */
         Vector_& operator = ( const Vector_& v )
@@ -349,6 +357,16 @@ class Vector_<ValueT,0> : public Vector_Base<Vector_<ValueT>>
                 mag += (*it1) * (*it2);
             }
             return mag;
+        }
+
+        /**
+         * Get name
+         */
+        static std::string name()
+        {
+            std::stringstream sout;
+            sout << "VectorN<" << Data_Type_Name<ValueT>::name() << ",0>";
+            return sout.str();
         }
 
     private:

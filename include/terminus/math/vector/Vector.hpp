@@ -12,7 +12,8 @@
 #include <sstream>
 
 // Terminus Libraries
-#include "Vector_Base.hpp"
+#include <terminus/math/types/Fundamental_Types.hpp>
+#include <terminus/math/vector/Vector_Base.hpp>
 
 namespace tmns::math {
 
@@ -398,20 +399,12 @@ class Vector_ : public Vector_Base<Vector_<ValueT,Dims>>
         }
 
         /**
-         * Print to string
-        */
-        std::string to_string() const
+         * Get name
+         */
+        static std::string name()
         {
             std::stringstream sout;
-            sout << "Vector (Dims: " << Dims << "): ";
-            for( size_t i = 0; i < this->m_data.size(); i++ )
-            {
-                if( i != 0 )
-                {
-                    sout << ", ";
-                }
-                sout << this->m_data[i];
-            }
+            sout << "Vector<" << Data_Type_Name<ValueT>::name() << "," << Dims << ">";
             return sout.str();
         }
 

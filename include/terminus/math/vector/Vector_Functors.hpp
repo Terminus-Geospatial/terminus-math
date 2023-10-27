@@ -17,6 +17,130 @@
 namespace tmns::math {
 
 /**
+ * A unary elementwise vector function class.
+ */
+template <typename VectorT,
+          typename FunctorT>
+class Vector_Unary_Functor : public Vector_Base<Vector_Unary_Functor<VectorT,FunctorT>>
+{
+    public:
+        
+        using value_type = std::invoke_result_t<FunctorT,typename VectorT::value_type>;
+
+        using reference_type = value_type;
+
+        using const_reference_type = value_type;
+
+        class Iterator : public boost::iterator_facade<Iterator,
+                                                       value_type,
+                                                       boost::random_access_traversal_tag,
+                                                       reference_type>
+        {
+            public:
+
+                /**
+                 * Iterator Constructor
+                */
+                Iterator( const typename VectorT::const_iter_t& i,
+                          const FunctorT&                       func )
+                    : m_iter( i ),
+                      m_functor( func ) {}
+
+            private:
+
+                friend class boost::iterator_core_access;
+
+                bool equal( const Iterator& iter ) const
+                {
+                    return m_iter == iter.m_iter;
+                }
+                
+                typename Iterator::difference_type distance_to( const Iterator& iter ) const
+                {
+                    return iter.m_iter - m_iter;
+                }
+                
+                void increment()
+                {
+                    ++m_iter;
+                }
+                
+                void decrement()
+                {
+                    --m_iter;
+                }
+
+                void advance( typename Iterator::difference_type n )
+                {
+                    m_iter += n;
+                }
+                
+                typename Iterator::reference dereference() const
+                {
+                    return m_functor( *m_iter );
+                }
+
+                typename VectorT::const_iter_t m_iter;
+                FunctorT m_functor;
+
+        }; // End of Iterator Class
+
+        using iter_t       = Iterator;
+        using const_iter_t = Iterator;
+        
+        Vector_Unary_Functor( const VectorT& v )
+            : m_vector(v) {}
+
+        template <typename Arg1>
+        Vector_Unary_Functor( const VectorT& v, Arg1 a1 )
+            : m_vector(v), m_functor( a1 ) {}
+
+        VectorT const& child() const
+        {
+            return m_vector;
+        }
+        
+        size_t size() const
+        {
+            return child().size();
+        }
+
+        const_reference_type operator()( size_t i ) const
+        {
+            return m_functor( child()(i) );
+        }
+        
+        const_reference_type operator[]( size_t i ) const
+        {
+            return m_functor( child()(i) );
+        }
+
+        iter_t begin() const
+        {
+            return iter_t( child().begin(), m_functor );
+        }
+        
+        iter_t end() const
+        {
+            return iter_t( child().end(), m_functor );
+        }
+    
+    private:
+
+        VectorT const& m_vector;
+
+        FunctorT m_functor;
+
+}; // End of Vector_Unary_Functor class
+
+template <typename VectorT,
+          typename FunctorT>
+struct Vector_Size<Vector_Unary_Functor<VectorT,FunctorT>>
+{
+    static const size_t value = Vector_Size<VectorT>::value;
+};
+
+/**
  * A binary elementwise vector function class.
  */
 template <typename Vector1T,

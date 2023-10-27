@@ -68,7 +68,7 @@ class Matrix_Vector_Product : public Vector_Base<Matrix_Vector_Product<MatrixT,V
                 Iterator( const Matrix_Vector_Product& mvp,
                           size_t                       index )
                     : m_mvp( mvp ),
-                      m_index( m_index ){}
+                      m_index( index ){}
 
             private:
 

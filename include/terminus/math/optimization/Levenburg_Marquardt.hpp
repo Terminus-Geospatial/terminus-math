@@ -7,6 +7,7 @@
 
 // Terminus Libraries
 #include <terminus/math/linalg/Solvers.hpp>
+#include <terminus/math/matrix/Matrix_Operations.hpp>
 #include <terminus/math/optimization/Least_Squares_Model_Base.hpp>
 #include <terminus/math/optimization/LM_Enums.hpp>
 
@@ -39,13 +40,13 @@ namespace tmns::math::optimize {
 #define MATH_LM_MAX_ITER (100)
 
 template <typename ImplT>
-typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<ImplT>& least_squares_model,
-                                                 const typename ImplT::domain_type&     seed,
-                                                 const typename ImplT::result_type&     observation,
-                                                 LM_STATUS_CODE&                        status,
-                                                 double                                 abs_tolerance  = MATH_LM_ABS_TOL,
-                                                 double                                 rel_tolerance  = MATH_LM_REL_TOL,
-                                                 double                                 max_iterations = MATH_LM_MAX_ITER)
+ImageResult<typename ImplT::domain_type> levenberg_marquardt( const Least_Squares_Model_Base<ImplT>& least_squares_model,
+                                                              const typename ImplT::domain_type&     seed,
+                                                              const typename ImplT::result_type&     observation,
+                                                              LM_STATUS_CODE&                        status,
+                                                              double                                 abs_tolerance  = MATH_LM_ABS_TOL,
+                                                              double                                 rel_tolerance  = MATH_LM_REL_TOL,
+                                                              double                                 max_iterations = MATH_LM_MAX_ITER)
 {
     // Initialize the status
     status = LM_STATUS_CODE::ERROR_DID_NOT_CONVERGE;
@@ -60,8 +61,8 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
     typename ImplT::result_type error    = model.difference(observation, h);
     double norm_start = error.magnitude();
 
-    tmns::log::debug( "LM: initial guess for the model is ", seed );
-    tmns::log::trace( "LM: starting error ", error );
+    tmns::log::debug( "LM: initial guess for the model is ", seed.to_log_string() );
+    tmns::log::trace( "LM: starting error ", error.to_log_string() );
     tmns::log::debug( "LM: starting norm is: ", norm_start );
 
     // Solution may already be good enough
@@ -77,7 +78,7 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
     {
         bool shortCircuit = false;
         outer_iter++;
-        tmns::log::debug( "LM: outer iteration ", outer_iter, "   x = ", x );
+        tmns::log::debug( "LM: outer iteration ", outer_iter, "   x = ", x.to_log_string() );
 
         // Compute the value, derivative, and hessian of the cost function
         // at the current point.  These remain valid until the parameter
@@ -99,7 +100,7 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
         // Hessian of cost function (using Gauss-Newton approximation)
         MatrixN<double> hessian = Rinv * ( transpose( J ) * J );
 
-        int iterations = 0;
+        int64_t iterations = 0;
         double norm_try = norm_start + 1.0;
         while( norm_try > norm_start )
         {
@@ -125,13 +126,19 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
                 try
                 {
                     // By construction, hessian_lm is symmetric and positive-definite.
-                    delta_x = linalg::solve_symmetric( hessian_lm, del_J );
+                    auto solve_res = linalg::solve_symmetric( hessian_lm, del_J );
+                    delta_x = solve_res.value();
                 }
                 catch ( const std::exception& e )
                 {
                     // If lambda is very small, the matrix becomes numerically
                     // singular. In that case use the more general least_squares solver.
-                    delta_x = linalg::solve( hessian_lm, del_J );
+                    auto solve_res = linalg::solve( hessian_lm, del_J );
+                    if( solve_res.has_error() )
+                    {
+                        return solve_res.error();
+                    }
+                    delta_x = solve_res.value();
                 }
             }
 
@@ -143,8 +150,8 @@ typename ImplT::domain_type levenberg_marquardt( const Least_Squares_Model_Base<
             typename ImplT::result_type error_try = model.difference(observation, h_try);
             norm_try = error_try.magnitude();
 
-            tmns::log::debug( "LM: inner iteration ", iterations, " error is ", error_try );
-            tmns::log::trace( "\tLM: inner iteration ", iterations, " norm is ", norm_try );
+            tmns::log::debug( ADD_CURRENT_LOC(), "LM: inner iteration ", iterations, " error is ", error_try.to_log_string() );
+            tmns::log::trace( ADD_CURRENT_LOC(), "\tLM: inner iteration ", iterations, " norm is ", norm_try );
 
             if( norm_try > norm_start )
             {
@@ -287,7 +294,7 @@ template <typename ImplT,
 typename ImplT::domain_type levenberg_marquardt_fixed( const Least_Squares_Model_Base_Fixed<ImplT, NI, NO>& least_squares_model,
                                                        const typename ImplT::domain_type&                   seed,
                                                        const typename ImplT::result_type&                   observation,
-                                                       int &status,
+                                                       LM_STATUS_CODE&                                      status,
                                                        double abs_tolerance = MATH_LM_ABS_TOL,
                                                        double rel_tolerance = MATH_LM_REL_TOL,
                                                        double max_iterations = MATH_LM_MAX_ITER) {

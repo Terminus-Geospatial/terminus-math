@@ -24,7 +24,7 @@ namespace tmns::coordinate {
  */
 namespace detail {
 
-class Datum_Impl;
+struct Datum_Impl;
 
 } // End of detail namespace
 

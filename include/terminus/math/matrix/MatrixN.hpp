@@ -7,6 +7,7 @@
 
 // Terminus Libraries
 #include "Matrix.hpp"
+#include "Sub_Matrix.hpp"
 
 namespace tmns::math {
 
@@ -104,8 +105,8 @@ class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
         Matrix( const Matrix_Base<OtherMatrixT>& mat )
             : m_data( mat.impl().begin(),
                       mat.impl().end() ),
-              m_rows( mat.rows() ),
-              m_cols( mat.cols() )
+              m_rows( mat.impl().rows() ),
+              m_cols( mat.impl().cols() )
         {
         }
 
@@ -416,12 +417,12 @@ class Matrix<ElementT,0,0> : public Matrix_Base<Matrix<ElementT> >
                 {
                     for( ssize_t k = i-1; k >= 0; --k )
                     {
-                        inverse(k,j) -= buf(k,i) * t;
+                        inverse_mat(k,j) -= buf(k,i) * t;
                     }
                 }
             }}
 
-            return inverse;
+            return inverse_mat;
         }
 
         /**

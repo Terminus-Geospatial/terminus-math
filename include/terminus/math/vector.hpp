@@ -7,4 +7,5 @@
 // Terminus Headers
 #include "vector/Vector.hpp"
 #include "vector/VectorN.hpp"
+#include "vector/Vector_Transpose.hpp"
 #include "vector/Vector_Utilities.hpp"

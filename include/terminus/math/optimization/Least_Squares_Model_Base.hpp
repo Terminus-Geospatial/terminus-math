@@ -103,12 +103,12 @@ class Least_Squares_Model_Base
                 DomainT xi = x;
 
                 // Variable step size, depending on parameter value
-                double epsilon = 1e-7 + fabs(xi(i)*1e-7);
+                double epsilon = 1e-7 + std::fabs( xi(i) * 1e-7 );
                 xi(i) += epsilon;
 
                 // Evaluate function with this step and compute the derivative w.r.t. parameter i
                 VectorN<double> hi = impl().operator()(xi);
-                select_col(H,i) = this->difference(hi,h0)/epsilon;
+                select_col(H,i) = this->difference( hi, h0 ) / epsilon;
             }
             return H;
         }
